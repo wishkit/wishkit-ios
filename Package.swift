@@ -1,4 +1,4 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
@@ -9,9 +9,13 @@ let package = Package(
     products: [
         .library(name: "WishKit", targets: ["WishKit"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/wishkit/wishkit-ios-shared.git", branch: "main")
+    ],
     targets: [
-        .target(name: "WishKit", dependencies: []),
+        .target(name: "WishKit", dependencies: [
+            .product(name: "WishKitShared", package: "wishkit-ios-shared")
+        ]),
         .testTarget(name: "WishKitTests", dependencies: [.target(name: "WishKit")]),
     ]
 )
