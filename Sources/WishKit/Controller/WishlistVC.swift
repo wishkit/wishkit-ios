@@ -26,6 +26,7 @@ final class WishListVC: UIViewController {
     private lazy var switchListControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
+        control.selectedSegmentTintColor = .systemBlue
         control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control
@@ -34,8 +35,8 @@ final class WishListVC: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(WishCell.self, forCellReuseIdentifier: WishCell.identifier)
-//        tableView.dataSource = wishVM
-//        tableView.delegate = wishVM
+        tableView.dataSource = wishVM
+        tableView.delegate = wishVM
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
@@ -57,11 +58,11 @@ final class WishListVC: UIViewController {
 
     private let spinner = UIActivityIndicatorView()
 
-//    private lazy var wishVM: WishVM = {
-//        let wishVM = WishVM()
-//        wishVM.delegate = self
-//        return wishVM
-//    }()
+    private lazy var wishVM: WishVM = {
+        let wishVM = WishVM()
+        wishVM.delegate = self
+        return wishVM
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,16 +77,16 @@ final class WishListVC: UIViewController {
 extension WishListVC {
 
     @objc func switchListAction(_ sender: UISegmentedControl) {
-//        guard let kind = Kind(rawValue: sender.selectedSegmentIndex) else {
-//            printError(self, "Could not get kind when using segmented control.")
-//            return
-//        }
-//
-//        wishVM.showList(of: kind)
+        guard let kind = Kind(rawValue: sender.selectedSegmentIndex) else {
+            printError(self, "Could not get kind when using segmented control.")
+            return
+        }
+
+        wishVM.showList(of: kind)
     }
 
     @objc private func fetchWishList() {
-//        wishVM.fetchWishList()
+        wishVM.fetchWishList()
     }
 
     @objc private func createWishAction() {
@@ -99,7 +100,7 @@ extension WishListVC {
 extension WishListVC {
 
     private func setup() {
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .secondarySystemBackground
         navigationItem.title = "Feature Wishlist"
 
         setupView()
@@ -144,17 +145,17 @@ extension WishListVC {
 
 // MARK: - WishVMDelegate
 
-//extension WishListVC: WishVMDelegate {
-//    func listWasUpdated() {
-//        DispatchQueue.main.async {
-//            self.spinner.stopAnimating()
-//            self.refreshControl.endRefreshing()
-//            self.tableView.reloadData()
-//        }
-//    }
-//
-//    func didSelect(wishResponse: SingleWishResponse) {
+extension WishListVC: WishVMDelegate {
+    func listWasUpdated() {
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+            self.refreshControl.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
+
+    func didSelect(wishResponse: SingleWishResponse) {
 //        let vc = DetailWishVC(wishResponse: wishResponse)
 //        navigationController?.pushViewController(vc, animated: true)
-//    }
-//}
+    }
+}

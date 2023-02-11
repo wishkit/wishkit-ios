@@ -45,8 +45,8 @@ fileprivate enum Kind: String {
   case debug = "🐛"
 }
 
-/// Makes sure in case of "WishListVC" and "WishListVC.Type"
-/// that in both cases "WishListVC" is returned.
+/// Makes sure in case of "WishlistVC" and "WishlistVC.Type"
+/// that in both cases "WishlistVC" is returned.
 fileprivate func cleanUp<T>(type: T) -> String {
   let uncleanedType = String(describing: T.self)
   let typeWordList = uncleanedType.split(separator: ".")

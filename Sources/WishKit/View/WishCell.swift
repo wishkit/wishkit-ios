@@ -12,8 +12,7 @@ final class WishCell: UITableViewCell {
 
     static let identifier = "wishcellid"
 
-
-//    private var singleWishResponse: SingleWishResponse?
+    private var singleWishResponse: SingleWishResponse?
 
     private let containerView = ContainerView()
 
@@ -23,7 +22,7 @@ final class WishCell: UITableViewCell {
 
     private let descriptionLabel = UILabel()
 
-//    var delegate: WishCellDelegate?
+    var delegate: WishCellDelegate?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,20 +35,20 @@ final class WishCell: UITableViewCell {
 
     // MARK: - Public
 
-//    func set(response: SingleWishResponse) {
-//        self.singleWishResponse = response
-//
-//        voteButton.voteCountLabel.text = String(describing: response.votingUsers.count)
-//        titleLabel.text = response.title
-//        descriptionLabel.text = response.description
-//
-//        let userUUID = UUIDManager.getUUID()
-//        if response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID }) {
-//            voteButton.arrowIV.tintColor = .customRed
-//        } else {
-//            voteButton.arrowIV.tintColor = .tertiaryLabel
-//        }
-//    }
+    func set(response: SingleWishResponse) {
+        self.singleWishResponse = response
+
+        voteButton.voteCountLabel.text = String(describing: response.votingUsers.count)
+        titleLabel.text = response.title
+        descriptionLabel.text = response.description
+
+        let userUUID = UUIDManager.getUUID()
+        if response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID }) {
+            voteButton.arrowIV.tintColor = .systemBlue
+        } else {
+            voteButton.arrowIV.tintColor = .tertiaryLabel
+        }
+    }
 
     // MARK: - Setup View
 
@@ -84,7 +83,7 @@ final class WishCell: UITableViewCell {
             size: CGSize(width: 60, height: 0)
         )
 
-//        voteButton.addTarget(self, action: #selector(voteAction), for: .touchUpInside)
+        voteButton.addTarget(self, action: #selector(voteAction), for: .touchUpInside)
     }
 
     private func setupTitleLabel() {
@@ -116,7 +115,7 @@ final class WishCell: UITableViewCell {
 
     // MARK: - Action
 
-//    @objc private func voteAction() {
+    @objc private func voteAction() {
 //        guard let response = singleWishResponse else {
 //            printError(self, "Is missing \(SingleWishResponse.self)")
 //            return
@@ -176,6 +175,6 @@ final class WishCell: UITableViewCell {
 //                }
 //            }
 //        }
-//    }
+    }
 }
 

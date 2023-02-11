@@ -1,5 +1,5 @@
 //
-//  WishKit.swift
+//  Wishlist.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 2/9/23.
@@ -8,10 +8,16 @@
 
 import UIKit
 
-struct WishKit {
+public struct WishList {
+
+    internal static var apiKey = "my-fancy-api-key"
 
     public static var viewController: UIViewController {
         return WishListVC()
+    }
+
+    public static func configure(with apiKey: String) {
+        WishList.apiKey = apiKey
     }
 }
 
