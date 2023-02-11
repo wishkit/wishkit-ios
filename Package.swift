@@ -7,13 +7,11 @@ let package = Package(
         .iOS(.v13)
     ],
     products: [
-        .library(name: "WishKit", targets: ["WishKit"]),
+        .library(name: "WishKit", targets: ["WishKit"])
     ],
     dependencies: [],
     targets: [
         .target(name: "WishKit", dependencies: []),
-        .testTarget(name: "WishKitTests", dependencies: [
-            .target(name: "WishKit"),
-        ]),
+        .testTarget(name: "WishKitTests", dependencies: [.target(name: "WishKit")]),
     ]
 )

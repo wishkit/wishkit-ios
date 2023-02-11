@@ -9,4 +9,5 @@
 struct ListWishResponse: Codable {
 
     let list: [SingleWishResponse]
+    
 }

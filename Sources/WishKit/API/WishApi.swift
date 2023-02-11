@@ -9,7 +9,7 @@
 import Foundation
 
 struct WishApi: RequestCreatable {
-    private static let baseUrl = "\(ProjectSettings.apiUrl)/api/betterworkout"
+    private static let baseUrl = "\(ProjectSettings.apiUrl)/wish"
 
     private static var endpoint: URL? {
         return URL(string: "\(baseUrl)/wish")
