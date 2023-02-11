@@ -8,12 +8,13 @@
 
 
 import UIKit
+import WishKitShared
 
 final class WishVM: NSObject {
 
-  private var approvedWishList: [SingleWishResponse] = []
+  private var approvedWishList: [WishResponse] = []
 
-  private var implementedWishList: [SingleWishResponse] = []
+  private var implementedWishList: [WishResponse] = []
 
   private var currentListKind: WishListVC.Kind = .requested
 
@@ -132,7 +133,7 @@ extension WishVM: UITableViewDataSource {
 
 extension WishVM: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    var wishResponse: SingleWishResponse
+    var wishResponse: WishResponse
 
     switch currentListKind {
     case .requested:

@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import WishKitShared
 
 protocol WishVMDelegate: AnyObject {
 
     func listWasUpdated()
 
-    func didSelect(wishResponse: SingleWishResponse)
+    func didSelect(wishResponse: WishResponse)
 }
 
 extension WishVMDelegate where Self: UIViewController { }

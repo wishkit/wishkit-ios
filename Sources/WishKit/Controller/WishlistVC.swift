@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WishKitShared
 
 final class WishListVC: UIViewController {
     enum Kind: Int {
@@ -154,7 +155,7 @@ extension WishListVC: WishVMDelegate {
         }
     }
 
-    func didSelect(wishResponse: SingleWishResponse) {
+    func didSelect(wishResponse: WishResponse) {
 //        let vc = DetailWishVC(wishResponse: wishResponse)
 //        navigationController?.pushViewController(vc, animated: true)
     }

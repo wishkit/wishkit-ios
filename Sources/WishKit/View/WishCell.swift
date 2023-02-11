@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import WishKitShared
 
 final class WishCell: UITableViewCell {
 
     static let identifier = "wishcellid"
 
-    private var singleWishResponse: SingleWishResponse?
+    private var singleWishResponse: WishResponse?
 
     private let containerView = ContainerView()
 
@@ -35,7 +36,7 @@ final class WishCell: UITableViewCell {
 
     // MARK: - Public
 
-    func set(response: SingleWishResponse) {
+    func set(response: WishResponse) {
         self.singleWishResponse = response
 
         voteButton.voteCountLabel.text = String(describing: response.votingUsers.count)

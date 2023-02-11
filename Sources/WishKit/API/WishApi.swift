@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import WishKitShared
 
 struct WishApi: RequestCreatable {
     private static let baseUrl = "\(ProjectSettings.apiUrl)/wish"
