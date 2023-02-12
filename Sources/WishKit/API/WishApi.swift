@@ -24,12 +24,12 @@ struct WishApi: RequestCreatable {
         return createAuthedGETReuqest(to: url)
     }
 
-//    private static func createWish(_ createRequest: CreateWishRequest) -> URLRequest? {
-//        guard var url = endpoint else { return nil }
-//        url.appendPathComponent("create")
-//        return createAuthedPOSTReuqest(to: url, with: createRequest)
-//    }
-//
+    private static func createWish(_ createRequest: CreateWishRequest) -> URLRequest? {
+        guard var url = endpoint else { return nil }
+        url.appendPathComponent("create")
+        return createAuthedPOSTReuqest(to: url, with: createRequest)
+    }
+
 //    private static func voteWish(_ voteRequest: VoteWishRequest) -> URLRequest? {
 //        guard var url = endpoint else { return nil }
 //        url.appendPathComponent("\(voteRequest.wishId)/vote")
@@ -49,18 +49,18 @@ struct WishApi: RequestCreatable {
         Api.send(request: request) { result in completionHandler(result) }
     }
 
-//    static func createWish(
-//        createRequest: CreateWishRequest,
-//        completionHandler: @escaping (Result<CreateWishResponse, ApiError.Kind>) -> Void
-//    ) {
-//
-//        guard let request = createWish(createRequest) else {
-//            completionHandler(.failure(.couldNotCreatePOSTRequest))
-//            return
-//        }
-//
-//        Api.send(request: request) { result in completionHandler(result) }
-//    }
+    static func createWish(
+        createRequest: CreateWishRequest,
+        completionHandler: @escaping (Result<CreateWishResponse, ApiError.Kind>) -> Void
+    ) {
+
+        guard let request = createWish(createRequest) else {
+            completionHandler(.failure(.couldNotCreatePOSTRequest))
+            return
+        }
+
+        Api.send(request: request) { result in completionHandler(result) }
+    }
 
 //    static func voteWish(
 //        voteRequest: VoteWishRequest,

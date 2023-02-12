@@ -83,7 +83,7 @@ extension WishListVC {
             return
         }
 
-        wishVM.showList(of: kind)
+        wishVM.updateList(to: kind)
     }
 
     @objc private func fetchWishList() {
@@ -91,8 +91,14 @@ extension WishListVC {
     }
 
     @objc private func createWishAction() {
-//        let vc = CreateWishVC()
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = CreateWishVC()
+
+        if let navigationController = navigationController {
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            present(vc, animated: true)
+        }
+
     }
 }
 
@@ -118,7 +124,7 @@ extension WishListVC {
 
     private func setupConstraints() {
         switchListControl.anchor(
-            top: view.topAnchor,
+            top: view.layoutMarginsGuide.topAnchor,
             centerX: view.centerXAnchor,
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )

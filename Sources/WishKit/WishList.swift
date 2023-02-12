@@ -10,7 +10,7 @@ import UIKit
 
 public struct WishList {
 
-    internal static var apiKey = "my-fancy-api-key"
+    static var apiKey = "my-fancy-api-key"
 
     public static var viewController: UIViewController {
         return WishListVC()

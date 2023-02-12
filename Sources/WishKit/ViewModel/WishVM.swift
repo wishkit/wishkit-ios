@@ -84,7 +84,7 @@ extension WishVM {
 // MARK: - Configure
 
 extension WishVM {
-    func showList(of kind: WishListVC.Kind) {
+    func updateList(to kind: WishListVC.Kind) {
         self.currentListKind = kind
 
         guard let delegate = delegate else {

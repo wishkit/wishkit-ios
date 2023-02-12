@@ -28,4 +28,16 @@ struct AlertManager {
         alert.addAction(confirmAction)
         vc.present(alert, animated: true)
     }
+
+
+    /// Displays a message for 1/3 or a second and then dismisses it automatically
+    /// and executes an optional completion handler afterwards.
+    static func showMessage(on vc: UIViewController, message: String, for seconds: Double = 0.35, completionHandler: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        vc.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                vc.dismiss(animated: true, completion: completionHandler)
+            }
+        }
+    }
 }
