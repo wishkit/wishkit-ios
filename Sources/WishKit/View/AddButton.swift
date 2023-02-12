@@ -11,7 +11,9 @@ import UIKit
 final class AddButton: UIButton {
 
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        // By using the same width/height as used with auto layout.
+        // There's no constraint conflicts with `_UITemporaryLayoutWidth`.
+        super.init(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         setupView()
     }
 
