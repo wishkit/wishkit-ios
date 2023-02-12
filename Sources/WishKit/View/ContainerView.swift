@@ -21,11 +21,11 @@ final class ContainerView: UIView {
   }
 
   private func setupView() {
-    backgroundColor = .black
+    backgroundColor = .white
     layer.cornerRadius = 16
     layer.cornerCurve = .continuous
     layer.shadowRadius = 4
-    layer.shadowOpacity = 0.8
+    layer.shadowOpacity = 0.2
     layer.shadowOffset = CGSize(width: 0, height: 3)
     layer.masksToBounds = false
   }
