@@ -45,7 +45,7 @@ final class WishCell: UITableViewCell {
 
         let userUUID = UUIDManager.getUUID()
         if response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID }) {
-            voteButton.arrowIV.tintColor = .systemBlue
+            voteButton.arrowIV.tintColor = .systemGreen
         } else {
             voteButton.arrowIV.tintColor = .tertiaryLabel
         }
@@ -97,7 +97,7 @@ final class WishCell: UITableViewCell {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 15)
         )
 
-//        titleLabel.font = AppFont.largeBold
+        titleLabel.font = .boldSystemFont(ofSize: 20)
     }
 
     private func setupDescriptionLabel() {
@@ -110,8 +110,6 @@ final class WishCell: UITableViewCell {
             trailing: titleLabel.trailingAnchor,
             padding: UIEdgeInsets(top: 5, left: 0, bottom: 15, right: 0)
         )
-
-//        descriptionLabel.font = AppFont.medium
     }
 
     // MARK: - Action

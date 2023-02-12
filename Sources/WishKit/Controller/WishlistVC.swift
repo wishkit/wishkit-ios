@@ -27,7 +27,7 @@ final class WishListVC: UIViewController {
     private lazy var switchListControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
-        control.selectedSegmentTintColor = .systemBlue
+        control.selectedSegmentTintColor = .systemGreen
         control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control
@@ -40,7 +40,7 @@ final class WishListVC: UIViewController {
         tableView.delegate = wishVM
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 80, right: 0)
         tableView.showsVerticalScrollIndicator = false
         return tableView
     }()

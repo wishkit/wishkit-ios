@@ -46,25 +46,25 @@ extension RequestCreatable {
 
     static func createAuthedPOSTReuqest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = createPOSTRequest(to: url, with: body)
-        request.addUUIDstring()
+        request.addAuth()
         return request
     }
 
     static func createAuthedGETReuqest(to url: URL) -> URLRequest {
         var request = createGETRequest(to: url)
-        request.addUUIDstring()
+        request.addAuth()
         return request
     }
 
     static func createAuthedPATCHReuqest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = createPATCHRequest(to: url, with: body)
-        request.addUUIDstring()
+        request.addAuth()
         return request
     }
 
     static func createAuthedDELETERequest(to url: URL) -> URLRequest {
         var request = createDELETERequest(to: url)
-        request.addUUIDstring()
+        request.addAuth()
         return request
     }
 }
@@ -72,9 +72,9 @@ extension RequestCreatable {
 extension URLRequest {
 
     /// Adds User UUID and Bearer token to URLRequest if given.
-    mutating func addUUIDstring() {
+    mutating func addAuth() {
         let uuid = UUIDManager.getUUID()
-        self.setValue(WishList.apiKey, forHTTPHeaderField: "Bearer")
+        self.setValue("Bearer \(WishList.apiKey)", forHTTPHeaderField: "Authorization")
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
     }
 

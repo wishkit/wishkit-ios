@@ -21,7 +21,7 @@ struct WishApi: RequestCreatable {
     private static func fetchWishList() -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("list")
-        return createGETRequest(to: url)
+        return createAuthedGETReuqest(to: url)
     }
 
 //    private static func createWish(_ createRequest: CreateWishRequest) -> URLRequest? {
