@@ -74,7 +74,8 @@ extension URLRequest {
     /// Adds User UUID and Bearer token to URLRequest if given.
     mutating func addAuth() {
         let uuid = UUIDManager.getUUID()
-        self.setValue("Bearer \(WishList.apiKey)", forHTTPHeaderField: "Authorization")
+        let bearerToken = "Bearer \(WishList.apiKey)"
+        self.setValue(bearerToken, forHTTPHeaderField: "Authorization")
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
     }
 

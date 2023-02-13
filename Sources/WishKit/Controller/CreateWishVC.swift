@@ -69,8 +69,10 @@ extension CreateWishVC {
         WishApi.createWish(createRequest: createRequest) { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let response): self.handleCreateSuccess(response: response)
-                case .failure(let error): self.handleApiError(error: error)
+                case .success(let response):
+                    self.handleCreateSuccess(response: response)
+                case .failure(let error):
+                    self.handleApiError(error: error)
                 }
             }
         }
@@ -181,6 +183,7 @@ extension CreateWishVC {
         )
 
         wishTitleTF.addTarget(viewModel, action: #selector(viewModel.titleHasChangedAction), for: .editingChanged)
+        wishTitleTF.backgroundColor = .white
     }
 
     private func setupWishDescriptionSectionLabel() {
@@ -224,6 +227,7 @@ extension CreateWishVC {
 
         wishDescriptionTV.delegate = viewModel
         wishDescriptionTV.font = .systemFont(ofSize: UIFont.labelFontSize)
+        wishDescriptionTV.backgroundColor = .white
     }
 
     private func setupKeyboardManager() {
