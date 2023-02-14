@@ -31,7 +31,6 @@ final class VoteButton: UIButton {
     // MARK: - Setup Medium
 
     private func setupView() {
-        heightAnchor.constraint(equalToConstant: 50).isActive = true
         backgroundColor = .systemGreen
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
@@ -46,11 +45,12 @@ final class VoteButton: UIButton {
         addSubview(stackView)
 
         stackView.anchor(
-            centerY: centerYAnchor,
-            centerX: centerXAnchor
+            top: topAnchor, bottom: bottomAnchor,
+            centerX: centerXAnchor,
+            size: CGSize(width: 0, height: 45)
         )
 
-        stackView.spacing = 5
+        stackView.spacing = 10
         stackView.isUserInteractionEnabled = false
     }
 
