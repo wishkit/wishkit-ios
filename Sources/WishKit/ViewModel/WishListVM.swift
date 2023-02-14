@@ -24,9 +24,12 @@ final class WishListVM: NSObject {
         let userUUID = UUIDManager.getUUID()
 
         // Only list wishes that are either approved or the user created himself.
+
         var list = response.list.filter { wish in
-            (wish.state == .pending && wish.userUUID == userUUID) ||
-            wish.state == .approved
+            let ownPendingWish = (wish.state == .pending && wish.userUUID == userUUID)
+            let approvedWish = wish.state == .approved
+
+            return ownPendingWish || approvedWish
         }
 
         list.sort { $0.votingUsers.count > $1.votingUsers.count }
