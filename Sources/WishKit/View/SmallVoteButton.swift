@@ -28,14 +28,14 @@ final class SmallVoteButton: UIButton {
     }
 
     private func setupView() {
-        setupSmallStackView()
-        setupSmallArrowIV()
-        setupSmallVoteCountLabel()
+        setupStackView()
+        setupArrowIV()
+        setupVoteCountLabel()
     }
 
     // MARK: - Setup Small
 
-    private func setupSmallStackView() {
+    private func setupStackView() {
         addSubview(stackView)
 
         stackView.anchor(
@@ -49,7 +49,7 @@ final class SmallVoteButton: UIButton {
         stackView.isUserInteractionEnabled = false
     }
 
-    private func setupSmallArrowIV() {
+    private func setupArrowIV() {
         let container = UIView()
         stackView.addArrangedSubview(container)
 
@@ -61,7 +61,7 @@ final class SmallVoteButton: UIButton {
         arrowIV.tintColor = .tertiaryLabel
     }
 
-    private func setupSmallVoteCountLabel() {
+    private func setupVoteCountLabel() {
         let container = UIView()
         stackView.addArrangedSubview(container)
 

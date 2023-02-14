@@ -59,8 +59,8 @@ final class WishListVC: UIViewController {
 
     private let spinner = UIActivityIndicatorView()
 
-    private lazy var wishVM: WishVM = {
-        let wishVM = WishVM()
+    private lazy var wishVM: WishListVM = {
+        let wishVM = WishListVM()
         wishVM.delegate = self
         return wishVM
     }()

@@ -115,65 +115,69 @@ final class WishCell: UITableViewCell {
     // MARK: - Action
 
     @objc private func voteAction() {
-//        guard let response = singleWishResponse else {
-//            printError(self, "Is missing \(SingleWishResponse.self)")
-//            return
-//        }
-//
-//        let rootViewController = UIApplication
-//            .shared
-//            .connectedScenes
-//            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-//            .first?
-//            .rootViewController
-//
-//        if let rootViewController = rootViewController, response.state == .implemented {
-//            AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for a wish that is already implemented 😊")
-//            return
-//        }
-//
-//        // Check if own wish.
-//        if response.userUUID == UUIDManager.getUUID() {
-//            printWarning(self, "You cannot vote for your own wish.")
-//
-//            if let rootViewController = rootViewController {
-//                AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for your own wish.")
-//            }
-//
-//            return
-//        }
-//
-//        // Check if already voted.
-//        if response.votingUsers.contains(where: {$0.uuid == UUIDManager.getUUID() }) {
-//            printWarning(self, "You can only vote once.")
-//
-//            if let rootViewController = rootViewController {
-//                AlertManager.confirmMessage(on: rootViewController, message: "You can only vote once.")
-//            }
-//
-//            return
-//        }
-//
-//        let voteRequest = VoteWishRequest(wishId: response.id)
-//
-//        WishApi.voteWish(voteRequest: voteRequest) { result in
-//            switch result {
-//            case .success:
-//                guard let delegate = self.delegate else {
-//                    printError(self, "Delegate is missing.")
-//                    return
-//                }
-//
-//                delegate.voteWasTapped()
-//            case .failure(let error):
-//                printError(self, error.description)
-//                DispatchQueue.main.async {
-//                    if let rootViewController = rootViewController {
-//                        AlertManager.confirmMessage(on: rootViewController, message: error.description)
-//                    }
-//                }
-//            }
-//        }
+        guard let response = singleWishResponse else {
+            printError(self, "Is missing \(WishResponse.self)")
+            return
+        }
+
+        var rootViewController = UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
+
+        if #available(iOS 15, *) {
+            rootViewController = UIApplication
+                .shared
+                .connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first?
+                .rootViewController
+        }
+
+        if let rootViewController = rootViewController, response.state == .implemented {
+            AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for a wish that is already implemented 😊")
+            return
+        }
+
+        // Check if it's the users own wish.
+        if response.userUUID == UUIDManager.getUUID() {
+            printWarning(self, "You cannot vote for your own wish.")
+
+            if let rootViewController = rootViewController {
+                AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for your own wish.")
+            }
+
+            return
+        }
+
+        // Check if the user already voted.
+        if response.votingUsers.contains(where: {$0.uuid == UUIDManager.getUUID() }) {
+            printWarning(self, "You can only vote once.")
+
+            if let rootViewController = rootViewController {
+                AlertManager.confirmMessage(on: rootViewController, message: "You can only vote once.")
+            }
+
+            return
+        }
+
+        let voteRequest = VoteWishRequest(wishId: response.id)
+
+        WishApi.voteWish(voteRequest: voteRequest) { result in
+            switch result {
+            case .success:
+                guard let delegate = self.delegate else {
+                    printError(self, "Delegate is missing.")
+                    return
+                }
+
+                delegate.voteWasTapped()
+            case .failure(let error):
+                printError(self, error.description)
+                DispatchQueue.main.async {
+                    if let rootViewController = rootViewController {
+                        AlertManager.confirmMessage(on: rootViewController, message: error.description)
+                    }
+                }
+            }
+        }
     }
 }
 

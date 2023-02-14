@@ -1,5 +1,5 @@
 //
-//  WishVM.swift
+//  WishListVM.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 2/10/23.
@@ -10,7 +10,7 @@
 import UIKit
 import WishKitShared
 
-final class WishVM: NSObject {
+final class WishListVM: NSObject {
 
     private var approvedWishList: [WishResponse] = []
 
@@ -45,7 +45,7 @@ final class WishVM: NSObject {
 
 // MARK: - Network
 
-extension WishVM {
+extension WishListVM {
     func fetchWishList() {
         WishApi.fetchWishList { response in
             DispatchQueue.main.async {
@@ -83,7 +83,7 @@ extension WishVM {
 
 // MARK: - Configure
 
-extension WishVM {
+extension WishListVM {
     func updateList(to kind: WishListVC.Kind) {
         self.currentListKind = kind
 
@@ -98,7 +98,7 @@ extension WishVM {
 
 // MARK: - UITableViewDataSource
 
-extension WishVM: UITableViewDataSource {
+extension WishListVM: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch currentListKind {
         case .requested:
@@ -131,7 +131,7 @@ extension WishVM: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension WishVM: UITableViewDelegate {
+extension WishListVM: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var wishResponse: WishResponse
 
@@ -153,7 +153,7 @@ extension WishVM: UITableViewDelegate {
 
 // MARK: - WishCellDelegate
 
-extension WishVM: WishCellDelegate {
+extension WishListVM: WishCellDelegate {
     func voteWasTapped() {
         fetchWishList()
     }
