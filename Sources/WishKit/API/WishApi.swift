@@ -30,11 +30,11 @@ struct WishApi: RequestCreatable {
         return createAuthedPOSTReuqest(to: url, with: createRequest)
     }
 
-//    private static func voteWish(_ voteRequest: VoteWishRequest) -> URLRequest? {
-//        guard var url = endpoint else { return nil }
-//        url.appendPathComponent("\(voteRequest.wishId)/vote")
-//        return createAuthedPOSTReuqest(to: url, with: voteRequest)
-//    }
+    private static func voteWish(_ voteRequest: VoteWishRequest) -> URLRequest? {
+        guard var url = endpoint else { return nil }
+        url.appendPathComponent("vote")
+        return createAuthedPOSTReuqest(to: url, with: voteRequest)
+    }
 
     // MARK: - Api Requests
 
@@ -46,7 +46,7 @@ struct WishApi: RequestCreatable {
             return
         }
 
-        Api.send(request: request) { result in completionHandler(result) }
+        Api.send(request: request, completionHandler: completionHandler)
     }
 
     static func createWish(
@@ -59,19 +59,19 @@ struct WishApi: RequestCreatable {
             return
         }
 
-        Api.send(request: request) { result in completionHandler(result) }
+        Api.send(request: request, completionHandler: completionHandler)
     }
 
-//    static func voteWish(
-//        voteRequest: VoteWishRequest,
-//        completionHandler: @escaping (Result<SingleWishResponse, ApiError.Kind>) -> Void
-//    ) {
-//
-//        guard let request = voteWish(voteRequest) else {
-//            completionHandler(.failure(.couldNotCreatePOSTRequest))
-//            return
-//        }
-//
-//        Api.send(request: request) { result in completionHandler(result) }
-//    }
+    static func voteWish(
+        voteRequest: VoteWishRequest,
+        completionHandler: @escaping (Result<WishResponse, ApiError.Kind>) -> Void
+    ) {
+
+        guard let request = voteWish(voteRequest) else {
+            completionHandler(.failure(.couldNotCreatePOSTRequest))
+            return
+        }
+
+        Api.send(request: request, completionHandler: completionHandler)
+    }
 }

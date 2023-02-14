@@ -162,7 +162,12 @@ extension WishListVC: WishVMDelegate {
     }
 
     func didSelect(wishResponse: WishResponse) {
-//        let vc = DetailWishVC(wishResponse: wishResponse)
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = DetailWishVC(wishResponse: wishResponse)
+
+        if let navigationController = navigationController {
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            present(vc, animated: true)
+        }
     }
 }
