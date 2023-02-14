@@ -7,5 +7,6 @@
 //
 
 protocol WishCellDelegate {
+    
     func voteWasTapped()
 }

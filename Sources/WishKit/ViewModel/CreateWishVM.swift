@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  CreateWishVM.swift
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 2/11/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -10,12 +10,17 @@ import UIKit
 import WishKitShared
 
 final class CreateWishVM: NSObject {
+
     var state = State.create(.initial)
+
     weak var delegate: CreateWishVMDelegate?
 
     private var wishTitle = ""
+
     private var wishDescription = ""
+
     private let titleCharLimit = 50
+
     private let descriptionCharLimit = 500
 
     // MARK: - Public
@@ -25,27 +30,33 @@ final class CreateWishVM: NSObject {
         let withinCharacterLimits = wishTitle.count <= titleCharLimit && wishDescription.count <= descriptionCharLimit
 
         switch state {
-        case .create(let change): return change == .hasChanged && withinCharacterLimits && fieldsAreBothNotEmpty
+        case .create(let change):
+            return change == .hasChanged && withinCharacterLimits && fieldsAreBothNotEmpty
         }
     }
 
     func characterCount(of property: Property) -> Int {
         switch property {
-        case .title: return wishTitle.count
-        case .description: return wishDescription.count
+        case .title:
+            return wishTitle.count
+        case .description:
+            return wishDescription.count
         }
     }
 
     func characterLimit(of property: Property) -> Int {
         switch property {
-        case .title: return titleCharLimit
-        case .description: return descriptionCharLimit
+        case .title:
+            return titleCharLimit
+        case .description:
+            return descriptionCharLimit
         }
     }
 
     func makeRequest() -> Request<CreateWishRequest> {
         switch state {
-        case .create(_): return .create(makeCreateRequest())
+        case .create:
+            return .create(makeCreateRequest())
         }
     }
 
@@ -53,7 +64,8 @@ final class CreateWishVM: NSObject {
 
     private func updateState() {
         switch state {
-        case .create(_): state = .create(.hasChanged)
+        case .create:
+            state = .create(.hasChanged)
         }
 
         guard let delegate = delegate else {
@@ -114,4 +126,3 @@ extension CreateWishVM: UITextViewDelegate {
         descriptionHasChangedAction(textView)
     }
 }
-

@@ -24,7 +24,6 @@ final class AddButton: UIButton {
     // MARK: - Setup View
 
     private func setupView() {
-
         let length: CGFloat = 60
         anchor(size: CGSize(width: length, height: length))
 

@@ -29,7 +29,6 @@ struct AlertManager {
         vc.present(alert, animated: true)
     }
 
-
     /// Displays a message for 1/3 or a second and then dismisses it automatically
     /// and executes an optional completion handler afterwards.
     static func showMessage(on vc: UIViewController, message: String, for seconds: Double = 0.35, completionHandler: (() -> Void)? = nil) {

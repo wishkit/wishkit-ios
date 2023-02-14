@@ -11,13 +11,13 @@ import UIKit
 
 final class VoteButton: UIButton {
 
-    let stackView = UIStackView()
+    private let stackView = UIStackView()
 
-    let arrowIV = UIImageView()
+    private let arrowIV = UIImageView()
 
-    let voteCountLabel = UILabel()
+    private let voteCountLabel = UILabel()
 
-    let upvoteLabel = UILabel("UPVOTE")
+    private let upvoteLabel = UILabel("UPVOTE")
 
     override init(frame: CGRect) {
         super.init(frame: frame)

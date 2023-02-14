@@ -8,13 +8,14 @@
 
 import UIKit
 
-protocol TextViewDelegate {
+protocol TextViewDelegate: AnyObject {
+
     func deleteBackward(textField: TextView)
 }
 
 final class TextView: UITextView {
 
-    var textFieldDelegate: TextViewDelegate?
+    weak var textFieldDelegate: TextViewDelegate?
 
     init(padding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)) {
         super.init(frame: .zero, textContainer: nil)

@@ -10,23 +10,22 @@ import UIKit
 
 final class ContainerView: UIView {
 
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    traitCollectionDidChange(nil)
-    setupView()
-  }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
 
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-  private func setupView() {
-    backgroundColor = .white
-    layer.cornerRadius = 16
-    layer.cornerCurve = .continuous
-    layer.shadowRadius = 4
-    layer.shadowOpacity = 0.2
-    layer.shadowOffset = CGSize(width: 0, height: 3)
-    layer.masksToBounds = false
-  }
+    private func setupView() {
+        backgroundColor = .white
+        layer.cornerRadius = 16
+        layer.cornerCurve = .continuous
+        layer.shadowRadius = 4
+        layer.shadowOpacity = 0.2
+        layer.shadowOffset = CGSize(width: 0, height: 3)
+        layer.masksToBounds = false
+    }
 }

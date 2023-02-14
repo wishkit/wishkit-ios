@@ -299,4 +299,3 @@ extension CreateWishVC: CreateWishVMDelegate {
         updateSaveButton()
     }
 }
-
