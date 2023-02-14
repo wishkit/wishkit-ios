@@ -97,7 +97,7 @@ final class WishCell: UITableViewCell {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 15)
         )
 
-        titleLabel.font = .boldSystemFont(ofSize: 20)
+        titleLabel.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
     }
 
     private func setupDescriptionLabel() {
@@ -110,6 +110,8 @@ final class WishCell: UITableViewCell {
             trailing: titleLabel.trailingAnchor,
             padding: UIEdgeInsets(top: 5, left: 0, bottom: 15, right: 0)
         )
+
+        descriptionLabel.font = .systemFont(ofSize: 13)
     }
 
     // MARK: - Action

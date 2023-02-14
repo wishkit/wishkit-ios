@@ -76,7 +76,7 @@ final class DetailWishVC: UIViewController {
         )
 
         wishTitleLabel.numberOfLines = 0
-        wishTitleLabel.font = .boldSystemFont(ofSize: 20)
+        wishTitleLabel.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
         wishTitleLabel.textColor = .black
     }
 
@@ -92,7 +92,7 @@ final class DetailWishVC: UIViewController {
         )
 
         wishDescriptionLabel.numberOfLines = 0
-        wishDescriptionLabel.font = .systemFont(ofSize: UIFont.labelFontSize)
+        wishDescriptionLabel.font = .systemFont(ofSize: 13)
         wishDescriptionLabel.textColor = .black
     }
 

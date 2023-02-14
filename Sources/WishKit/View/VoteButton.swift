@@ -6,7 +6,6 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
-
 import UIKit
 
 final class VoteButton: UIButton {
@@ -15,7 +14,7 @@ final class VoteButton: UIButton {
 
     private let arrowIV = UIImageView()
 
-    private let voteCountLabel = UILabel()
+    let voteCountLabel = UILabel()
 
     private let upvoteLabel = UILabel("UPVOTE")
 
