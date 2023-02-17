@@ -24,7 +24,7 @@ WishKit allows you to provide a native wishlist feature in your app that <b>just
 https://github.com/wishkit/wishkit-ios.git
 ```
 
-2. Import it and configure it with your API Key that you will find in your admin dashboard on [wishkit.io](https://wishkit.io/dashboard)
+2. Import it and configure it with your API Key that you will find in your admin dashboard on <a href="https://wishkit.io/dashboard" target="_blank">wishkit.io</a>
 ```swift
 import WishKit
 
