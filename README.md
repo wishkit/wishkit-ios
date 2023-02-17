@@ -32,3 +32,10 @@ WishList.configure(with: "your_api_key")
 ```swift
 present(WishList.viewController, animated: true)
 ```
+
+<hr/>
+
+### Example Project
+Here is an [Example Project](https://github.com/wishkit/wishkit-ios-example) showcasing how to set it up!
+
+<img src="https://user-images.githubusercontent.com/13883699/219566753-9edbc157-9c69-4f3c-a8a7-8ef80a9bbebd.gif" width="500" />
