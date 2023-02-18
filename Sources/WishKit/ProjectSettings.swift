@@ -9,7 +9,7 @@
 import Foundation
 
 struct ProjectSettings {
-    static var apiUrl = "https://wishkit.io/api"
+    static let apiUrl = "https://wishkit.io/api"
 
     enum Environment {
         case simulator
