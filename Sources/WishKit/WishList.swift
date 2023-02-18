@@ -17,8 +17,9 @@ public struct WishList {
         return WishListVC()
     }
 
-    public static var view: any View {
-        return WishListView()
+    public static var view: some View {
+        WishListView()
+            .ignoresSafeArea(.container)
     }
 
     public static func configure(with apiKey: String) {

@@ -8,14 +8,16 @@
 
 import SwiftUI
 
-struct WishListView: UIViewRepresentable {
-  typealias UIViewType = UIView
-
-  func makeUIView(context: Context) -> UIView {
-    let vc = WishListVC()
-    vc.viewDidLoad()
-    return vc.view
-  }
-
-  func updateUIView(_ uiView: UIView, context: Context) { }
+struct WishListView: UIViewControllerRepresentable {
+    typealias UIViewControllerType = UINavigationController
+    
+    func makeUIViewController(context: Context) -> UIViewControllerType {
+        let vc = WishList.viewController
+        vc.viewDidLoad()
+        // Add nav
+        let nav = UINavigationController(rootViewController: vc)
+        return nav
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 }
