@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public struct WishList {
 
@@ -14,6 +15,10 @@ public struct WishList {
 
     public static var viewController: UIViewController {
         return WishListVC()
+    }
+
+    public static var view: any View {
+        return WishListView()
     }
 
     public static func configure(with apiKey: String) {
