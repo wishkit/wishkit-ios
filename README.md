@@ -25,12 +25,12 @@ https://github.com/wishkit/wishkit-ios.git
 ```swift
 import WishKit
 
-WishList.configure(with: "your_api_key")
+WishKit.configure(with: "your_api_key")
 ```
 
 3. Done! Now you can just present the ViewController.
 ```swift
-present(WishList.viewController, animated: true)
+present(WishKit.viewController, animated: true)
 ```
 
 <hr/>
