@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "wishkit-ios",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v13)
     ],
     products: [
         .library(name: "WishKit", targets: ["WishKit"])
