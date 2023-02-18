@@ -27,7 +27,7 @@ final class WishListVC: UIViewController {
     private lazy var switchListControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
-        control.selectedSegmentTintColor = .systemGreen
+        control.selectedSegmentTintColor = WishKit.theme.primaryColor
         control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control

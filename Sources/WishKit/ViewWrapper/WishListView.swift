@@ -12,7 +12,7 @@ struct WishListView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIViewController
     
     func makeUIViewController(context: Context) -> UIViewControllerType {
-        let vc = WishList.viewController
+        let vc = WishKit.viewController
         vc.viewDidLoad()
         return vc
     }

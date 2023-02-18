@@ -30,7 +30,7 @@ final class VoteButton: UIButton {
     // MARK: - Setup Medium
 
     private func setupView() {
-        backgroundColor = .systemGreen
+        backgroundColor = WishKit.theme.primaryColor
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
 
