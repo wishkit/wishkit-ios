@@ -9,13 +9,7 @@
 import Foundation
 
 struct ProjectSettings {
-    static var apiUrl: String {
-        switch Config.environment {
-        case .simulator: return "http://127.0.0.1:8080/api"
-        case .testFlight: return "http://127.0.0.1:8080/api"
-        case .appStore: return "https://wishkit.io/api"
-        }
-    }
+    static var apiUrl = "https://wishkit.io/api"
 
     enum Environment {
         case simulator
