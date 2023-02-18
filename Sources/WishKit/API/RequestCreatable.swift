@@ -75,7 +75,7 @@ extension URLRequest {
     mutating func addAuth() {
         let uuid = UUIDManager.getUUID()
         let token = WishList.apiKey
-        self.setValue(token, forHTTPHeaderField: "Authorization")
+        self.setValue(token, forHTTPHeaderField: "x-wishkit-api-key")
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
     }
 
