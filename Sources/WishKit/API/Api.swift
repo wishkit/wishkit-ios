@@ -20,7 +20,10 @@ extension Api {
     /// Generic Send Function. You need to specify the Result<T, Error> type to help inferring it.
     /// e.g: Api.send(request: resetRequest) { (result: Result<ResetPasswordResponse, ApiError.Kind>) in ... }
     static func send<T: Decodable>(request: URLRequest, completionHandler: @escaping (Result<T, ApiError.Kind>) -> Void) {
-        print("🌐 API Request to: \(request.url?.absoluteString ?? "nil")")
+        let method = request.httpMethod ?? ""
+
+        print("🌐 API (\(method)) Request to: \(request.url?.absoluteString ?? "nil")")
+        
         URLSession.shared.dataTask(with: request) { data, resp, error in
             // Early return in case of error.
             if let error = error {
