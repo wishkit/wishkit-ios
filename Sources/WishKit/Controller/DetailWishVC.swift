@@ -112,7 +112,7 @@ final class DetailWishVC: UIViewController {
 
     // MARK: - Logic
 
-    private func handleVoteSuccess(response: WishResponse) {
+    private func handleVoteSuccess(response: VoteWishResponse) {
         voteButton.voteCountLabel.text = String(describing: response.votingUsers.count)
     }
 

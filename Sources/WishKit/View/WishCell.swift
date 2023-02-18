@@ -152,7 +152,7 @@ final class WishCell: UITableViewCell {
         }
 
         // Check if the user already voted.
-        if response.votingUsers.contains(where: {$0.uuid == UUIDManager.getUUID() }) {
+        if response.votingUsers.contains(where: { $0.uuid == UUIDManager.getUUID() }) {
             printWarning(self, "You can only vote once.")
 
             if let rootViewController = rootViewController {

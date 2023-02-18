@@ -63,7 +63,7 @@ struct WishApi: RequestCreatable {
 
     static func voteWish(
         voteRequest: VoteWishRequest,
-        completionHandler: @escaping (Result<WishResponse, ApiError.Kind>) -> Void
+        completionHandler: @escaping (Result<VoteWishResponse, ApiError.Kind>) -> Void
     ) {
 
         guard let request = voteWish(voteRequest) else {
