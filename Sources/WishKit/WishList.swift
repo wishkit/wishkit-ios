@@ -18,8 +18,12 @@ public struct WishList {
     }
 
     public static var view: some View {
-        WishListView()
-            .ignoresSafeArea(.container)
+        if #available(iOS 14.0, *) {
+            return WishListView()
+                .ignoresSafeArea(.container)
+        } else {
+            return WishListView()
+        }
     }
 
     public static func configure(with apiKey: String) {

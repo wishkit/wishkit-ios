@@ -9,14 +9,12 @@
 import SwiftUI
 
 struct WishListView: UIViewControllerRepresentable {
-    typealias UIViewControllerType = UINavigationController
+    typealias UIViewControllerType = UIViewController
     
     func makeUIViewController(context: Context) -> UIViewControllerType {
         let vc = WishList.viewController
         vc.viewDidLoad()
-        // Add nav
-        let nav = UINavigationController(rootViewController: vc)
-        return nav
+        return vc
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
