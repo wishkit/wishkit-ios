@@ -13,10 +13,12 @@ public struct WishList {
 
     static var apiKey = "my-fancy-api-key"
 
+    /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
         return WishListVC()
     }
 
+    /// (SwiftUI) The WishList view.
     public static var view: some View {
         if #available(iOS 14.0, *) {
             return WishListView()
