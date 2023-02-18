@@ -13,36 +13,29 @@ final class CreateWishVC: UIViewController {
 
     private var safeArea: UILayoutGuide!
 
-    private let viewModel: CreateWishVM
+    private let viewModel = CreateWishVM()
 
     private let scrollView = UIScrollView()
 
     private let wishTitleSectionLabel = UILabel("Title")
 
+    private let wishTitleCharacterCountLabel = UILabel()
+
     private let wishTitleTF = TextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
 
     private let wishDescriptionSectionLabel = UILabel("Description")
 
-    private let toolbar = UIToolbar()
+    private let wishDescriptionCharacterCountLabel = UILabel()
 
     private let wishDescriptionTV = TextView()
 
-    private let wishDescriptionCharacterCountLabel = UILabel()
+    private let saveButton = UIButton(type: .system)
 
-    private let wishTitleCharacterCountLabel = UILabel()
-
-    init() {
-        self.viewModel = CreateWishVM()
-        super.init(nibName: nil, bundle: nil)
-        self.viewModel.delegate = self
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let toolbar = UIToolbar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.viewModel.delegate = self
         setupView()
     }
 
@@ -57,7 +50,8 @@ final class CreateWishVC: UIViewController {
 extension CreateWishVC {
 
     private func updateSaveButton() {
-        navigationItem.rightBarButtonItem?.isEnabled = viewModel.canSave()
+        saveButton.backgroundColor = viewModel.canSave() ? .systemGreen : .systemGreen.withAlphaComponent(0.66)
+        saveButton.isEnabled = viewModel.canSave()
     }
 
     private func updateCharacterCountLabels() {
@@ -80,13 +74,22 @@ extension CreateWishVC {
 
     private func handleCreateSuccess(response: CreateWishResponse) {
         AlertManager.showMessage(on: self, message: "Successfully created!") {
-            self.navigationController?.popViewController(animated: true)
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true)
+            }
         }
     }
 
     private func handleApiError(error: ApiError.Kind) {
-        AlertManager.showMessage(on: self, message: error.description)
-        self.navigationController?.popViewController(animated: true)
+        AlertManager.showMessage(on: self, message: error.description) {
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true)
+            }
+        }
     }
 }
 
@@ -102,7 +105,6 @@ extension CreateWishVC {
 
         setupKeyboardManager()
         setupKeyboardToolbar()
-        setupNavigation()
 
         setupScrollView()
 
@@ -113,6 +115,8 @@ extension CreateWishVC {
         setupWishDescriptionSectionLabel()
         setupWishDescriptionCharacterCountLabel()
         setupWishDescriptionTV()
+
+        setupSaveButton()
     }
 
     private func setupKeyboardToolbar() {
@@ -123,11 +127,6 @@ extension CreateWishVC {
 
         wishTitleTF.inputAccessoryView = toolbar
         wishDescriptionTV.inputAccessoryView = toolbar
-    }
-
-    private func setupNavigation() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveWishAction))
-        updateSaveButton()
     }
 
     private func setupScrollView() {
@@ -226,6 +225,27 @@ extension CreateWishVC {
 
         wishDescriptionTV.delegate = viewModel
         wishDescriptionTV.font = .systemFont(ofSize: UIFont.labelFontSize)
+    }
+
+    private func setupSaveButton() {
+        scrollView.addSubview(saveButton)
+
+        saveButton.anchor(
+            top: wishDescriptionTV.bottomAnchor,
+            centerX: wishDescriptionTV.centerXAnchor,
+            padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0),
+            size: CGSize(width: 200, height: 45)
+        )
+
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.setTitleColor(.systemGray6, for: .disabled)
+
+        saveButton.layer.cornerRadius = 12
+        saveButton.layer.cornerCurve = .continuous
+        saveButton.addTarget(self, action: #selector(saveWishAction), for: .touchUpInside)
+
+        updateSaveButton()
     }
 
     private func setupKeyboardManager() {

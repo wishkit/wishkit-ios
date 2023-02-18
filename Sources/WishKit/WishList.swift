@@ -20,12 +20,8 @@ public struct WishList {
 
     /// (SwiftUI) The WishList view.
     public static var view: some View {
-        if #available(iOS 14.0, *) {
-            return WishListView()
-                .ignoresSafeArea(.container)
-        } else {
-            return WishListView()
-        }
+        return WishListView()
+            .ignoresSafeArea(.container)
     }
 
     public static func configure(with apiKey: String) {
