@@ -19,7 +19,7 @@ final class TextField: UITextField {
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
         textColor = .label
-        backgroundColor = .systemGray
+        backgroundColor = .tertiarySystemBackground
     }
     
     required init?(coder: NSCoder) {

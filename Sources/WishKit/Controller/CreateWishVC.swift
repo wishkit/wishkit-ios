@@ -183,7 +183,6 @@ extension CreateWishVC {
         )
 
         wishTitleTF.addTarget(viewModel, action: #selector(viewModel.titleHasChangedAction), for: .editingChanged)
-        wishTitleTF.backgroundColor = .white
     }
 
     private func setupWishDescriptionSectionLabel() {
@@ -227,7 +226,6 @@ extension CreateWishVC {
 
         wishDescriptionTV.delegate = viewModel
         wishDescriptionTV.font = .systemFont(ofSize: UIFont.labelFontSize)
-        wishDescriptionTV.backgroundColor = .white
     }
 
     private func setupKeyboardManager() {

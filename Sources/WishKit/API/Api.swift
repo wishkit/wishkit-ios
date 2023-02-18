@@ -23,7 +23,7 @@ extension Api {
         let method = request.httpMethod ?? ""
 
         print("🌐 API (\(method)) Request to: \(request.url?.absoluteString ?? "nil")")
-        
+
         URLSession.shared.dataTask(with: request) { data, resp, error in
             // Early return in case of error.
             if let error = error {

@@ -63,6 +63,8 @@ final class DetailWishVC: UIViewController {
             trailing: view.trailingAnchor,
             padding: UIEdgeInsets(top: 15, left: 15, bottom: 0, right: 15)
         )
+
+        cardView.backgroundColor = .tertiarySystemBackground
     }
 
     private func setupWishTitleLabel() {
@@ -77,7 +79,6 @@ final class DetailWishVC: UIViewController {
 
         wishTitleLabel.numberOfLines = 0
         wishTitleLabel.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
-        wishTitleLabel.textColor = .black
     }
 
     private func setupWishDescriptionLabel() {
@@ -93,7 +94,6 @@ final class DetailWishVC: UIViewController {
 
         wishDescriptionLabel.numberOfLines = 0
         wishDescriptionLabel.font = .systemFont(ofSize: 13)
-        wishDescriptionLabel.textColor = .black
     }
 
     private func setupVoteButton() {

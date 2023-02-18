@@ -22,7 +22,7 @@ final class TextView: UITextView {
 
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
-        backgroundColor = .systemGray
+        backgroundColor = .tertiarySystemBackground
         contentInset = padding
     }
 

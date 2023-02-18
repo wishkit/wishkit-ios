@@ -73,6 +73,8 @@ final class WishCell: UITableViewCell {
             trailing: contentView.trailingAnchor,
             padding: UIEdgeInsets(top: 0, left: 15, bottom: 15, right: 15)
         )
+
+        containerView.backgroundColor = .tertiarySystemBackground
     }
 
     private func setupVoteButton() {
