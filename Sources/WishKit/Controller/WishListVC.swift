@@ -109,9 +109,17 @@ extension WishListVC {
     private func setup() {
         view.backgroundColor = .secondarySystemBackground
         navigationItem.title = "Feature Wishlist"
+        setupTabBar()
 
         setupView()
         setupConstraints()
+    }
+
+    private func setupTabBar() {
+        tabBarItem.image = UIImage(systemName: "lightbulb")
+        tabBarItem.selectedImage = UIImage(systemName: "lightbulb.fill")
+        tabBarItem.title = "Wishlist"
+        tabBarController?.tabBar.tintColor = WishKit.theme.primaryColor
     }
 
     private func setupView() {
@@ -137,10 +145,14 @@ extension WishListVC {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
+
+        let hasTabBarController = tabBarController != nil
+        let bottomPadding: CGFloat = hasTabBarController ? 20 : 0
+
         addWishButton.anchor(
             bottom: view.layoutMarginsGuide.bottomAnchor,
             trailing: view.trailingAnchor,
-            padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
+            padding: UIEdgeInsets(top: 0, left: 0, bottom: bottomPadding, right: 15)
         )
 
         spinner.anchor(
