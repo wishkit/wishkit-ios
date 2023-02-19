@@ -24,14 +24,14 @@ WishKit allows you to provide a native wishlist feature in your app that <b>just
 https://github.com/wishkit/wishkit-ios.git
 ```
 
-2. Import it and configure it with your API Key that you will find in your admin dashboard on <a href="https://wishkit.io/dashboard" target="_blank">wishkit.io</a>
+2. Import and configure it with your API Key. You can find your API key in your admin dashboard on <a href="https://wishkit.io/dashboard" target="_blank">wishkit.io</a>
 ```swift
 import WishKit
 
 WishKit.configure(with: "your_api_key")
 ```
 
-3. Done! Now you can just present the ViewController.
+3. Done! Now you can just present the view controller.
 ```swift
 present(WishKit.viewController, animated: true)
 ```
@@ -56,4 +56,5 @@ WishKit.theme = WishKit.Theme(primaryColor: .systemGreen)
 <h3>
 	<b> Example Project </b>
 </h3>
-Checkout the [Example Project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up the wishlist!
+
+Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up a wishlist!
