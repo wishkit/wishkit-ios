@@ -15,7 +15,10 @@
 WishKit allows you to provide a native wishlist feature in your app that <b>just works ✨</b> <br/>
 </p>
 
-### How To Setup
+<h3>
+	<b> Setup </b>
+</h3>
+
 1. To start using WishKit simply add it as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
@@ -35,7 +38,22 @@ present(WishKit.viewController, animated: true)
 
 <hr/>
 
-### Example Project
-Here is an [Example Project](https://github.com/wishkit/wishkit-ios-example) showcasing how to set it up!
+<h3>
+	<b> Configuration </b>
+</h3>
 
-<img src="https://user-images.githubusercontent.com/13883699/219566753-9edbc157-9c69-4f3c-a8a7-8ef80a9bbebd.gif" width="500" />
+WishKit allows you to configure some of its UI to closer match your apps design.
+
+<b>Primary Color</b>
+
+Change the primary color by assigning a new Theme like so:
+```swift
+WishKit.theme = WishKit.Theme(primaryColor: .systemGreen)
+```
+
+<hr/>
+
+<h3>
+	<b> Example Project </b>
+</h3>
+Checkout the [Example Project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up the wishlist!
