@@ -92,13 +92,13 @@ extension WishListVC {
 
     @objc private func createWishAction() {
         let vc = CreateWishVC()
+        vc.delegate = self
 
         if let navigationController = navigationController {
             navigationController.pushViewController(vc, animated: true)
         } else {
             present(vc, animated: true)
         }
-
     }
 }
 
@@ -145,7 +145,6 @@ extension WishListVC {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
-
         let hasTabBarController = tabBarController != nil
         let bottomPadding: CGFloat = hasTabBarController ? 20 : 0
 
@@ -181,5 +180,14 @@ extension WishListVC: WishVMDelegate {
         } else {
             present(vc, animated: true)
         }
+    }
+}
+
+// MARK: - CreateWishDelegate
+
+extension WishListVC: CreateWishDelegate {
+    func newWishWasSuccessfullyCreated() {
+        spinner.startAnimating()
+        fetchWishList()
     }
 }

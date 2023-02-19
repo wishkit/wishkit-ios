@@ -11,6 +11,8 @@ import WishKitShared
 
 final class CreateWishVC: UIViewController {
 
+    weak var delegate: CreateWishDelegate?
+
     private var safeArea: UILayoutGuide!
 
     private let viewModel = CreateWishVM()
@@ -75,6 +77,12 @@ extension CreateWishVC {
 
     private func handleCreateSuccess(response: CreateWishResponse) {
         AlertManager.showMessage(on: self, message: "Successfully created!") {
+            if let delegate = self.delegate {
+                delegate.newWishWasSuccessfullyCreated()
+            } else {
+                printError(self, "Missing delegate.")
+            }
+
             if let navigationController = self.navigationController {
                 navigationController.popViewController(animated: true)
             } else {
@@ -311,6 +319,8 @@ extension CreateWishVC {
         }
     }
 }
+
+// MARK: - CreateWishVMDelegate
 
 extension CreateWishVC: CreateWishVMDelegate {
     func stateHasChanged() {
