@@ -2,13 +2,13 @@
 <h4 align="center"> In-App Feature Requests. Made Easy. </h2>
 <p align="center">
 	<a href="LICENSE">
-        	<img src="https://img.shields.io/badge/license-MIT-00c573.svg" alt="MIT License">
+        	<img src="https://img.shields.io/badge/License-MIT-00c573.svg" alt="MIT License">
 	</a>
 	<a href="https://swift.org">
-        	<img src="https://img.shields.io/badge/swift-5.6-00c573.svg" alt="Swift 5.6">
+        	<img src="https://img.shields.io/badge/Swift-5.6-00c573.svg" alt="Swift 5.6">
 	</a>
 	<a href="https://twitter.com/mywishkit" target="_blank">
-        	<img src="https://img.shields.io/badge/twitter-@mywishkit-00c573.svg" alt="Twitter">
+        	<img src="https://img.shields.io/badge/Twitter-@mywishkit-00c573.svg" alt="Twitter">
 	</a>
 </p>
 <p align="center">
