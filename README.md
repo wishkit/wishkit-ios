@@ -33,7 +33,15 @@ WishKit.configure(with: "your_api_key")
 
 3. Done! Now you can just present the view controller.
 ```swift
+// UIKit
 present(WishKit.viewController, animated: true)
+
+// SwiftUI
+struct ContentView: View {
+    var body: some View {
+        WishKit.view
+    }
+}
 ```
 
 <hr/>
