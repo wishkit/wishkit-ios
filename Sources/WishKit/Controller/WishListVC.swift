@@ -33,6 +33,15 @@ final class WishListVC: UIViewController {
         return control
     }()
 
+    private let watermarkLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Powered by Wishkit.io"
+        label.font = .boldSystemFont(ofSize: 13)
+        label.textColor = .systemGray2
+        label.textAlignment = .center
+        return label
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(WishCell.self, forCellReuseIdentifier: WishCell.identifier)
@@ -124,6 +133,7 @@ extension WishListVC {
 
     private func setupView() {
         view.addSubview(switchListControl)
+        view.addSubview(watermarkLabel)
         view.addSubview(tableView)
         tableView.addSubview(refreshControl)
         view.addSubview(addWishButton)
@@ -135,6 +145,11 @@ extension WishListVC {
             top: view.layoutMarginsGuide.topAnchor,
             centerX: view.centerXAnchor,
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
+        )
+
+        watermarkLabel.anchor(
+            centerY: addWishButton.centerYAnchor,
+            centerX: view.centerXAnchor
         )
 
         tableView.anchor(
