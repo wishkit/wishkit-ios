@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "wishkit-ios",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v14)
     ],

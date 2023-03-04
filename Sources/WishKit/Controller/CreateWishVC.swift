@@ -246,7 +246,7 @@ extension CreateWishVC {
             size: CGSize(width: 200, height: 45)
         )
 
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle(NSLocalizedString("general.save"), for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.setTitleColor(.systemGray6, for: .disabled)
 

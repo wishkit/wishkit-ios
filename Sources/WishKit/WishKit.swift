@@ -30,4 +30,3 @@ public struct WishKit {
         WishKit.apiKey = apiKey
     }
 }
-
