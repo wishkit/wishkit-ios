@@ -8,17 +8,15 @@
 
 import UIKit
 
-extension WishKit {
-    public struct Theme {
+public struct Theme {
 
-        let primaryColor: UIColor
+    let primaryColor: UIColor
 
-        public init(primaryColor: UIColor) {
-            self.primaryColor = primaryColor
-        }
+    public init(primaryColor: UIColor) {
+        self.primaryColor = primaryColor
+    }
 
-        static func `default`() -> Theme {
-            return Theme(primaryColor: .systemGreen)
-        }
+    static func `default`() -> Theme {
+        return Theme(primaryColor: .systemGreen)
     }
 }
