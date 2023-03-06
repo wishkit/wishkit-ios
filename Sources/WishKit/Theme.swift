@@ -81,6 +81,7 @@ extension Theme {
     }
 }
 #else
+
 extension Theme {
     public struct BadgeTheme {
         let pending: Color
