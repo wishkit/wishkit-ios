@@ -56,7 +56,7 @@ WishKit allows you to configure some of its UI to closer match your apps design.
 
 Change the primary color by assigning a new Theme like so:
 ```swift
-WishKit.theme = WishKit.Theme(primaryColor: .systemGreen)
+WishKit.theme = Theme(primaryColor: .systemGreen)
 ```
 
 <hr/>
