@@ -19,9 +19,17 @@ final class WishCell: UITableViewCell {
 
     private let voteButton = SmallVoteButton()
 
-    private let titleLabel = UILabel()
+    private let titleBadgeStackView = UIStackView()
 
-    private let descriptionLabel = UILabel()
+    private let stackView = UIStackView()
+
+    private let titleLabel = UILabel(font: .boldSystemFont(ofSize: UIFont.labelFontSize))
+
+    private let badgeContainerView = UIView()
+
+    private let badgeView = BadgeView()
+
+    private let descriptionLabel = UILabel(font: .systemFont(ofSize: 13))
 
     var delegate: WishCellDelegate?
 
@@ -33,9 +41,11 @@ final class WishCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public
+// MARK: - Public
 
+extension WishCell {
     func set(response: WishResponse) {
         self.singleWishResponse = response
 
@@ -49,10 +59,15 @@ final class WishCell: UITableViewCell {
         } else {
             voteButton.arrowIV.tintColor = .tertiaryLabel
         }
+
+        badgeView.configure(with: response.state)
+        badgeContainerView.isHidden = !WishKit.configuration.showStatusBadge
     }
+}
 
-    // MARK: - Setup View
+// MARK: - Setup View
 
+extension WishCell {
     private func setupView() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -60,7 +75,8 @@ final class WishCell: UITableViewCell {
         setupContainerView()
         setupVoteButton()
         setupTitleLabel()
-        setupDescriptionLabel()
+        setupBadgeView()
+        setupStackView()
     }
 
     private func setupContainerView() {
@@ -90,34 +106,43 @@ final class WishCell: UITableViewCell {
     }
 
     private func setupTitleLabel() {
-        containerView.addSubview(titleLabel)
+        titleBadgeStackView.addArrangedSubview(titleLabel)
+    }
 
-        titleLabel.anchor(
+    private func setupBadgeView() {
+        badgeContainerView.addSubview(badgeView)
+        badgeContainerView.anchor(size: CGSize(width: 85, height: 0))
+
+        badgeView.anchor(
+            trailing: badgeContainerView.trailingAnchor,
+            centerY: badgeContainerView.centerYAnchor
+        )
+
+        titleBadgeStackView.addArrangedSubview(badgeContainerView)
+    }
+
+    private func setupStackView() {
+        containerView.addSubview(stackView)
+
+        stackView.addArrangedSubview(titleBadgeStackView)
+        stackView.addArrangedSubview(descriptionLabel)
+
+        stackView.axis = .vertical
+        stackView.spacing = 5
+
+        stackView.anchor(
             top: containerView.topAnchor,
             leading: voteButton.trailingAnchor,
-            trailing: containerView.trailingAnchor,
-            padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 15)
-        )
-
-        titleLabel.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
-    }
-
-    private func setupDescriptionLabel() {
-        containerView.addSubview(descriptionLabel)
-
-        descriptionLabel.anchor(
-            top: titleLabel.bottomAnchor,
-            leading: titleLabel.leadingAnchor,
             bottom: containerView.bottomAnchor,
-            trailing: titleLabel.trailingAnchor,
-            padding: UIEdgeInsets(top: 5, left: 0, bottom: 15, right: 0)
+            trailing: containerView.trailingAnchor,
+            padding: UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 15)
         )
-
-        descriptionLabel.font = .systemFont(ofSize: 13)
     }
+}
 
-    // MARK: - Action
+// MARK: - Action
 
+extension WishCell {
     @objc private func voteAction() {
         guard let response = singleWishResponse else {
             printError(self, "Is missing \(WishResponse.self)")
@@ -182,6 +207,7 @@ final class WishCell: UITableViewCell {
                 }
             }
         }
+
     }
 }
 

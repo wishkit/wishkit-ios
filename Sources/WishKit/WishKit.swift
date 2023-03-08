@@ -15,6 +15,8 @@ public struct WishKit {
 
     public static var theme: Theme = .default()
 
+    public static var configuration: Configuration = .default()
+
     /// (UIKit) The WishList viewcontroller.
     public static let viewController: UIViewController = WishListVC()
 

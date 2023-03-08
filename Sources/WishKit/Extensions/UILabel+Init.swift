@@ -19,7 +19,7 @@ extension UILabel {
     ) {
         self.init()
         self.text = text
-        self.textColor = textColor
+        self.textColor = color
         self.font = font
         self.textAlignment = textAlignment
         self.numberOfLines = lineCount
