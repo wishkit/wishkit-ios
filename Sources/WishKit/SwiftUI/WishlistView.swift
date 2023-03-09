@@ -18,7 +18,7 @@ struct WishlistView: View {
     var colorScheme
 
     var body: some View {
-        
+
         if #available(macOS 13.0, *) {
             List(wishlist, id: \.id) { wish in
                 WishView(wish: wish)
@@ -26,13 +26,32 @@ struct WishlistView: View {
             }
             .background(systemBackgroundColor)
             .scrollContentBackground(.hidden)
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    Spacer()
+                    SUIAddButton(buttonAction: createWishAction)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
+                }
+            }
 
         } else {
             List(wishlist, id: \.id) { wish in
                 WishView(wish: wish)
+                    .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
             }
             .background(systemBackgroundColor)
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    Spacer()
+                    SUIAddButton(buttonAction: createWishAction)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
+                }
+            }
         }
+    }
+
+    private func createWishAction() {
+
     }
 
     var systemBackgroundColor: Color {
