@@ -10,6 +10,7 @@ import SwiftUI
 import WishKitShared
 
 struct WishlistView: View {
+
     @State
     var wishlist: [WishResponse] = MockData.wishlist
 
@@ -17,6 +18,7 @@ struct WishlistView: View {
     var colorScheme
 
     var body: some View {
+        
         if #available(macOS 13.0, *) {
             List(wishlist, id: \.id) { wish in
                 WishView(wish: wish)

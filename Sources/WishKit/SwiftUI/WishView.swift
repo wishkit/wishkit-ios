@@ -25,12 +25,12 @@ struct WishView: View {
                 .fill(backgroundColor)
                 .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0)
 
-            HStack(spacing: 10) {
+            HStack {
                 Button(action: voteAction) {
                     VStack(alignment: .center, spacing: 3) {
                         Image(systemName: "triangle.fill")
                             .foregroundColor(.green)
-                        Text("23")
+                        Text(Int.random(in: 3...23).description)
                     }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
                 }.buttonStyle(BorderlessButtonStyle())
 
@@ -39,7 +39,8 @@ struct WishView: View {
                     Text(wish.description)
                         .truncationMode(.tail)
                         .lineLimit(1)
-                }
+                }.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
+                Spacer()
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
         }
