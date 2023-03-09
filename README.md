@@ -54,16 +54,14 @@ WishKit allows you to configure some of its UI.
 
 <b>Primary Color</b>
 
-Change the primary color by assigning a new Theme like so:
 ```swift
 WishKit.theme = Theme(primaryColor: .systemGreen)
 ```
 
 <b>Status Badge</b>
 
-Show the state of a wish with:
 ```swift
-WishKit.configuration = Configuration(showStatusBadge: true)
+WishKit.configuration.showStatusBadge = true
 ```
 
 <hr/>
