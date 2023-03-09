@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class AddButton: UIButton {
@@ -39,3 +40,4 @@ final class AddButton: UIButton {
         layer.shadowOpacity = 0.50
     }
 }
+#endif
