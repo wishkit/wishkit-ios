@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-struct WishListView: UIViewControllerRepresentable {
-    typealias UIViewControllerType = UIViewController
+public struct WishListView: UIViewControllerRepresentable {
+    public typealias UIViewControllerType = UIViewController
     
-    func makeUIViewController(context: Context) -> UIViewControllerType {
+    public func makeUIViewController(context: Context) -> UIViewControllerType {
         let vc = WishKit.viewController
         vc.viewDidLoad()
         return vc
     }
     
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 }
