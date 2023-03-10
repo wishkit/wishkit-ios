@@ -11,11 +11,14 @@ import WishKitShared
 
 struct WishlistView: View {
 
-    @State
-    var wishlist: [WishResponse] = MockData.wishlist
-
     @Environment(\.colorScheme)
     var colorScheme
+
+    @State
+    private var wishlist: [WishResponse] = MockData.wishlist
+
+    @State
+    private var showingSheet = false
 
     var body: some View {
 
@@ -23,7 +26,11 @@ struct WishlistView: View {
             List(wishlist, id: \.id) { wish in
                 WishView(wish: wish)
                     .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                    .onTapGesture {
+                        print("Show details for user")
+                    }
             }
+            .scrollIndicators(.hidden)
             .background(systemBackgroundColor)
             .scrollContentBackground(.hidden)
             .safeAreaInset(edge: .bottom) {
@@ -31,6 +38,10 @@ struct WishlistView: View {
                     Spacer()
                     SUIAddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
+                        .sheet(isPresented: $showingSheet) {
+                            CreateWishView()
+                                .frame(width: 400, height: 400)
+                        }
                 }
             }
 
@@ -45,13 +56,16 @@ struct WishlistView: View {
                     Spacer()
                     SUIAddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
+                        .sheet(isPresented: $showingSheet) {
+                            Text("Create Wish")
+                        }
                 }
             }
         }
     }
 
     private func createWishAction() {
-
+        self.showingSheet.toggle()
     }
 
     var systemBackgroundColor: Color {

@@ -10,6 +10,9 @@ import SwiftUI
 
 struct SUIAddButton: View {
 
+    @State
+    var showingSheet = false
+
     var buttonAction: () -> ()
 
     var body: some View {
@@ -25,6 +28,9 @@ struct SUIAddButton: View {
         .background(WishKit.theme.primaryColor)
         .clipShape(Circle())
         .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
+        .sheet(isPresented: $showingSheet) {
+            Text("Create Wish")
+        }
     }
 
     init(buttonAction: @escaping () -> ()) {
