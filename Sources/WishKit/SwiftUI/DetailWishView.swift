@@ -45,11 +45,12 @@ struct DetailWishView: View {
                     Spacer()
                 }
 
-                Button("Close") {
-                    self.presentationMode.wrappedValue.dismiss()
+                HStack {
+                    WKButton(text: "Upvote", action: { print("🔼 upvote call") })
+                    WKButton(text: "Close", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
+                    .interactiveDismissDisabled()
                 }
-                .interactiveDismissDisabled()
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
             }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  SUIAddButton.swift
+//  WKAddButton.swift
 //  
 //
 //  Created by Martin Lasek on 3/8/23.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SUIAddButton: View {
+struct WKAddButton: View {
 
     @State
     var showingSheet = false

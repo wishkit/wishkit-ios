@@ -18,7 +18,7 @@ struct CreateWishView: View {
     private var wishDescription: String
 
     @State
-    private var isButtonDisabled = false
+    private var isButtonLoading: Bool? = false
 
     private var completion: () -> ()
 
@@ -29,14 +29,12 @@ struct CreateWishView: View {
     }
 
     private func createWishAction() {
-        isButtonDisabled = true
+        isButtonLoading = true
         let request = CreateWishRequest(title: wishTitle, description: wishDescription)
         WishApi.createWish(createRequest: request) { _ in
-            isButtonDisabled = false
+            isButtonLoading = false
             completion()
         }
-
-        // Call wish api to create wish
     }
 
     var body: some View {
@@ -50,18 +48,7 @@ struct CreateWishView: View {
                 .textFieldStyle(.roundedBorder)
                 .padding(EdgeInsets(top: 15, leading: 30, bottom: 10, trailing: 30))
 
-            Button(action: createWishAction) {
-                Text("Save")
-                    .frame(width: 100, height: 30)
-                    .background(WishKit.theme.primaryColor)
-                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
-            }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 100, height: 30)
-                .background(WishKit.theme.primaryColor)
-                .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
-                .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
-                .disabled(isButtonDisabled)
+            WKButton(text: "Save", action: createWishAction, isLoading: $isButtonLoading)
         }
     }
 }

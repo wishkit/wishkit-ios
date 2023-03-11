@@ -39,34 +39,39 @@ struct WishlistView: View {
     var body: some View {
 
         if #available(macOS 13.0, *) {
-            List(wishlist, id: \.id) { wish in
-                Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish)
-                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-                }
+            ZStack {
+                List(wishlist, id: \.id) { wish in
+                    Button(action: { selectedWish = wish }) {
+                        WishView(wish: wish)
+                            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                    }
                     .buttonStyle(PlainButtonStyle())
-            }
-            .sheet(item: $selectedWish) { wish in
-                DetailWishView(title: wish.title, description: wish.description)
-                    .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
-            }
-            .scrollIndicators(.hidden)
-            .background(systemBackgroundColor)
-            .scrollContentBackground(.hidden)
-            .safeAreaInset(edge: .bottom) {
-                HStack {
-                    Spacer()
-                    SUIAddButton(buttonAction: createWishAction)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
-                        .sheet(isPresented: $showingSheet) {
-                            CreateWishView(completion: {
-                                fetchWishList()
-                                showingSheet = false
-                            })
-                                .frame(width: 500, height: 600)
-                        }
                 }
-            }.onAppear(perform: fetchWishList)
+                .sheet(item: $selectedWish) { wish in
+                    DetailWishView(title: wish.title, description: wish.description)
+                        .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                }
+                .scrollIndicators(.hidden)
+                .background(systemBackgroundColor)
+                .scrollContentBackground(.hidden)
+                .onAppear(perform: fetchWishList)
+
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        WKAddButton(buttonAction: createWishAction)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
+                            .sheet(isPresented: $showingSheet) {
+                                CreateWishView(completion: {
+                                    fetchWishList()
+                                    showingSheet = false
+                                })
+                                .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                            }
+                    }
+                }
+            }
 
         } else {
             List(wishlist, id: \.id) { wish in
@@ -77,7 +82,7 @@ struct WishlistView: View {
             .safeAreaInset(edge: .bottom) {
                 HStack {
                     Spacer()
-                    SUIAddButton(buttonAction: createWishAction)
+                    WKAddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
                 }
             }
