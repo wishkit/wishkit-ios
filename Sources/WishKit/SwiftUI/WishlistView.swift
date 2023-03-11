@@ -48,7 +48,7 @@ struct WishlistView: View {
             }
             .sheet(item: $selectedWish) { wish in
                 DetailWishView(title: wish.title, description: wish.description)
-                    .frame(maxWidth: 400, maxHeight: 400)
+                    .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
             }
             .scrollIndicators(.hidden)
             .background(systemBackgroundColor)
@@ -63,7 +63,7 @@ struct WishlistView: View {
                                 fetchWishList()
                                 showingSheet = false
                             })
-                                .frame(width: 400, height: 400)
+                                .frame(width: 500, height: 600)
                         }
                 }
             }.onAppear(perform: fetchWishList)

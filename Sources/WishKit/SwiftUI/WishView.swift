@@ -35,7 +35,10 @@ struct WishView: View {
                 }.buttonStyle(BorderlessButtonStyle())
 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(wish.title).bold()
+                    Text(wish.title)
+                        .bold()
+                        .truncationMode(.tail)
+                        .lineLimit(1)
                     Text(wish.description)
                         .truncationMode(.tail)
                         .lineLimit(1)
@@ -60,9 +63,9 @@ struct WishView: View {
     }
 }
 
-struct WishViewProvider: PreviewProvider {
-
-    static var previews: some View {
-        WishView(wish: MockData.createWish("Legend of Zelda", "One of the greatest games"))
-    }
-}
+//struct WishViewProvider: PreviewProvider {
+//
+//    static var previews: some View {
+//        WishView(wish: MockData.createWish("Legend of Zelda", "One of the greatest games"))
+//    }
+//}

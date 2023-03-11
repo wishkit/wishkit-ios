@@ -13,6 +13,9 @@ struct DetailWishView: View {
     @Environment (\.presentationMode)
     var presentationMode
 
+    @Environment(\.colorScheme)
+    var colorScheme
+
     private var title: String
 
     private var description: String
@@ -24,18 +27,34 @@ struct DetailWishView: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(backgroundColor)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
+                .padding(EdgeInsets(top: 15, leading: 15, bottom: 50, trailing: 15))
 
             VStack {
-                Text(title)
-                Text(description)
+                ScrollView {
+                    VStack {
+                        Text(title)
+                        Text(description)
+                    }
+                }.padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
+
                 Button("Close") {
                     self.presentationMode.wrappedValue.dismiss()
                 }
                 .interactiveDismissDisabled()
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
             }
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            return PrivateTheme.elementBackgroundColor.light
+        case .dark:
+            return PrivateTheme.elementBackgroundColor.dark
         }
     }
 }
