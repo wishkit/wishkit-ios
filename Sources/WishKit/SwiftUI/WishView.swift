@@ -20,6 +20,10 @@ struct WishView: View {
         self.wish = wish
     }
 
+    func hasUserVoted() -> Bool {
+        return wish.votingUsers.contains(where: { user in user.uuid == UUIDManager.getUUID() })
+    }
+
     var body: some View {
         return ZStack {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -29,8 +33,12 @@ struct WishView: View {
             HStack {
                 Button(action: voteAction) {
                     VStack(alignment: .center, spacing: 3) {
-                        Image(systemName: "triangle.fill")
-                            .foregroundColor(.green)
+                        if hasUserVoted() {
+                            Image(systemName: "triangle.fill")
+                                .foregroundColor(WishKit.theme.primaryColor)
+                        } else {
+                            Image(systemName: "triangle.fill")
+                        }
                         Text(wish.votingUsers.count.description)
                     }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
                 }.buttonStyle(BorderlessButtonStyle())
