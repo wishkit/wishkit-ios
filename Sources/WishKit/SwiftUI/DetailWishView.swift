@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import WishKitShared
 
 struct DetailWishView: View {
 
@@ -16,13 +17,10 @@ struct DetailWishView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    private var title: String
+    private var wish: WishResponse
 
-    private var description: String
-
-    public init(title: String, description: String) {
-        self.title = title
-        self.description = description
+    public init(wish: WishResponse) {
+        self.wish = wish
     }
 
     var body: some View {
@@ -30,20 +28,22 @@ struct DetailWishView: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(backgroundColor)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 50, trailing: 15))
+                .padding(EdgeInsets(top: 15, leading: 15, bottom: 80, trailing: 15))
 
             VStack {
                 HStack {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            Text(title).bold().font(.title2)
+                            Text(wish.title).bold().font(.title2)
                             Spacer(minLength: 10)
-                            Text(description)
+                            Text(wish.description)
                         }.frame(alignment: .leading)
                     }
                     .padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
                     Spacer()
                 }
+
+                Text("Votes: \(wish.votingUsers.count)")
 
                 HStack {
                     WKButton(text: "Close", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)

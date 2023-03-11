@@ -81,7 +81,7 @@ struct WishlistView: View {
                 .buttonStyle(PlainButtonStyle())
             }.scrollContentBackgroundCompat(.hidden)
             .sheet(item: $selectedWish) { wish in
-                DetailWishView(title: wish.title, description: wish.description)
+                DetailWishView(wish: wish)
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
             }
             .scrollContentBackgroundCompat(.hidden)
