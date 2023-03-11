@@ -9,26 +9,46 @@
 import SwiftUI
 import WishKitShared
 
+extension WishResponse: Identifiable { }
+
 struct WishlistView: View {
 
     @Environment(\.colorScheme)
     var colorScheme
 
     @State
-    private var wishlist: [WishResponse] = MockData.wishlist
+    private var wishlist: [WishResponse] = []
 
     @State
     private var showingSheet = false
+
+    @State
+    private var selectedWish: WishResponse?
+
+    func fetchWishList() {
+        WishApi.fetchWishList { result in
+            switch result {
+            case .success(let response):
+                self.wishlist = response.list
+            case .failure(let error):
+                printError(self, error.description)
+            }
+        }
+    }
 
     var body: some View {
 
         if #available(macOS 13.0, *) {
             List(wishlist, id: \.id) { wish in
-                WishView(wish: wish)
-                    .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-                    .onTapGesture {
-                        print("Show details for user")
-                    }
+                Button(action: { selectedWish = wish }) {
+                    WishView(wish: wish)
+                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                }
+                    .buttonStyle(PlainButtonStyle())
+            }
+            .sheet(item: $selectedWish) { wish in
+                DetailWishView(title: wish.title, description: wish.description)
+                    .frame(maxWidth: 400, maxHeight: 400)
             }
             .scrollIndicators(.hidden)
             .background(systemBackgroundColor)
@@ -39,11 +59,14 @@ struct WishlistView: View {
                     SUIAddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
                         .sheet(isPresented: $showingSheet) {
-                            CreateWishView()
+                            CreateWishView(completion: {
+                                fetchWishList()
+                                showingSheet = false
+                            })
                                 .frame(width: 400, height: 400)
                         }
                 }
-            }
+            }.onAppear(perform: fetchWishList)
 
         } else {
             List(wishlist, id: \.id) { wish in
@@ -56,9 +79,6 @@ struct WishlistView: View {
                     Spacer()
                     SUIAddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 20))
-                        .sheet(isPresented: $showingSheet) {
-                            Text("Create Wish")
-                        }
                 }
             }
         }
@@ -78,8 +98,8 @@ struct WishlistView: View {
     }
 }
 
-struct WishlistViewPreview: PreviewProvider {
-    static var previews: some View {
-        WishlistView()
-    }
-}
+//struct WishlistViewPreview: PreviewProvider {
+//    static var previews: some View {
+//        WishlistView()
+//    }
+//}
