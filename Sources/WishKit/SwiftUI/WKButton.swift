@@ -13,16 +13,10 @@ struct WKButton: View {
     enum ButtonStyle {
         case primary
         case secondary
-
-        var color: Color {
-            switch self {
-            case .primary:
-                return WishKit.theme.primaryColor
-            case .secondary:
-                return .gray
-            }
-        }
     }
+
+    @Environment(\.colorScheme)
+    var colorScheme
 
     private let text: String
 
@@ -45,6 +39,15 @@ struct WKButton: View {
         _isLoading = isLoading
     }
 
+    func getColor(for style: ButtonStyle) -> Color {
+        switch style {
+        case .primary:
+            return WishKit.theme.primaryColor
+        case .secondary:
+            return backgroundColor
+        }
+    }
+
     var body: some View {
         Button(action: action) {
             if isLoading ?? false {
@@ -53,14 +56,23 @@ struct WKButton: View {
             } else {
                 Text(text)
                     .frame(width: 100, height: 30)
-                    .background(style.color)
+                    .background(getColor(for: style))
                     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
             }
         }
             .buttonStyle(PlainButtonStyle())
             .frame(width: 100, height: 30)
-            .background(style.color)
+            .background(getColor(for: style))
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             .disabled(isLoading ?? false)
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            return PrivateTheme.elementBackgroundColor.light
+        case .dark:
+            return PrivateTheme.elementBackgroundColor.dark
+        }
     }
 }

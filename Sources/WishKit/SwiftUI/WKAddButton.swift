@@ -19,6 +19,7 @@ struct WKAddButton: View {
         Button(action: buttonAction) {
             Image(systemName: "plus")
                 .frame(width: 45, height: 45)
+                .foregroundColor(.white)
                 .background(WishKit.theme.primaryColor)
                 .clipShape(Circle())
         }
