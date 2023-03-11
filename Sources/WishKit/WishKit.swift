@@ -25,7 +25,7 @@ public struct WishKit {
     public static let viewController: UIViewController = WishListVC()
     #endif
     /// (SwiftUI) The WishList view.
-    public static let view: some View = WishlistView()
+    public static let view: some View = WishlistContainer()
 
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey

@@ -78,6 +78,7 @@ struct CreateWishView: View {
 
                     TextEditor(text: $description)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
+                        .lineSpacing(3)
                 }
 
             }

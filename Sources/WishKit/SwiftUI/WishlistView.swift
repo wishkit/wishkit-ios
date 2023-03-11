@@ -16,8 +16,8 @@ struct WishlistView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    @State
-    private var wishlist: [WishResponse] = []
+    @StateObject
+    private var wishModel = WishModel()
 
     @State
     private var showingSheet = false
@@ -25,22 +25,11 @@ struct WishlistView: View {
     @State
     private var selectedWish: WishResponse?
 
-    func fetchWishList() {
-        WishApi.fetchWishList { result in
-            switch result {
-            case .success(let response):
-                self.wishlist = response.list
-            case .failure(let error):
-                printError(self, error.description)
-            }
-        }
-    }
-
     var body: some View {
 
         if #available(macOS 13.0, *) {
             ZStack {
-                List(wishlist, id: \.id) { wish in
+                List(wishModel.wishlist, id: \.id) { wish in
                     Button(action: { selectedWish = wish }) {
                         WishView(wish: wish)
                             .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
@@ -54,7 +43,7 @@ struct WishlistView: View {
                 .scrollIndicators(.hidden)
                 .background(systemBackgroundColor)
                 .scrollContentBackground(.hidden)
-                .onAppear(perform: fetchWishList)
+                .onAppear(perform: wishModel.fetchList)
 
                 VStack {
                     Spacer()
@@ -64,7 +53,7 @@ struct WishlistView: View {
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
                             .sheet(isPresented: $showingSheet) {
                                 CreateWishView(completion: {
-                                    fetchWishList()
+                                    wishModel.fetchList()
                                     showingSheet = false
                                 })
                                 .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
@@ -74,7 +63,7 @@ struct WishlistView: View {
             }
 
         } else {
-            List(wishlist, id: \.id) { wish in
+            List(wishModel.wishlist, id: \.id) { wish in
                 WishView(wish: wish)
                     .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
             }

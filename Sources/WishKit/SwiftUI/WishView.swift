@@ -10,10 +10,11 @@ import SwiftUI
 import WishKitShared
 
 struct WishView: View {
-    let wish: WishResponse
 
     @Environment(\.colorScheme)
     var colorScheme
+
+    private let wish: WishResponse
 
     init(wish: WishResponse) {
         self.wish = wish
@@ -30,7 +31,7 @@ struct WishView: View {
                     VStack(alignment: .center, spacing: 3) {
                         Image(systemName: "triangle.fill")
                             .foregroundColor(.green)
-                        Text(Int.random(in: 3...23).description)
+                        Text(wish.votingUsers.count.description)
                     }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
                 }.buttonStyle(BorderlessButtonStyle())
 
@@ -62,10 +63,3 @@ struct WishView: View {
         }
     }
 }
-
-//struct WishViewProvider: PreviewProvider {
-//
-//    static var previews: some View {
-//        WishView(wish: MockData.createWish("Legend of Zelda", "One of the greatest games"))
-//    }
-//}
