@@ -33,12 +33,17 @@ struct DetailWishView: View {
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 50, trailing: 15))
 
             VStack {
-                ScrollView {
-                    VStack {
-                        Text(title)
-                        Text(description)
+                HStack {
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            Text(title).bold().font(.title2)
+                            Spacer(minLength: 10)
+                            Text(description)
+                        }.frame(alignment: .leading)
                     }
-                }.padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
+                    .padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
+                    Spacer()
+                }
 
                 Button("Close") {
                     self.presentationMode.wrappedValue.dismiss()
