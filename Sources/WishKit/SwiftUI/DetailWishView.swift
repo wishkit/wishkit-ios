@@ -46,9 +46,9 @@ struct DetailWishView: View {
                 }
 
                 HStack {
-                    WKButton(text: "Upvote", action: { print("🔼 upvote call") })
                     WKButton(text: "Close", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
                     .interactiveDismissDisabled()
+                    WKButton(text: "Upvote", action: { print("🔼 upvote call") })
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
             }

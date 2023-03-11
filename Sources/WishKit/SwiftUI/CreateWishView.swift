@@ -9,28 +9,42 @@
 import SwiftUI
 import WishKitShared
 
+// Removes default background color and allows custom color for TextEditor
+extension NSTextView {
+    open override var frame: CGRect {
+        didSet {
+            backgroundColor = .clear
+            drawsBackground = true
+        }
+    }
+}
+
 struct CreateWishView: View {
 
-    @State
-    private var wishTitle: String
+    @Environment (\.presentationMode)
+    var presentationMode
+
+    @Environment(\.colorScheme)
+    var colorScheme
 
     @State
-    private var wishDescription: String
+    private var title: String = ""
+
+    @State
+    private var description: String = ""
 
     @State
     private var isButtonLoading: Bool? = false
 
     private var completion: () -> ()
 
-    init(completion: @escaping () -> (), title: String = "", description: String = "") {
+    init(completion: @escaping () -> ()) {
         self.completion = completion
-        self.wishTitle = title
-        self.wishDescription = description
     }
 
     private func createWishAction() {
         isButtonLoading = true
-        let request = CreateWishRequest(title: wishTitle, description: wishDescription)
+        let request = CreateWishRequest(title: title, description: description)
         WishApi.createWish(createRequest: request) { _ in
             isButtonLoading = false
             completion()
@@ -39,16 +53,42 @@ struct CreateWishView: View {
 
     var body: some View {
         VStack {
-            TextField("Title of the wish..", text: $wishTitle)
-                .padding(EdgeInsets(top: 15, leading: 30, bottom: 10, trailing: 30))
-                .textFieldStyle(.roundedBorder)
+            VStack {
+                TextField("Title of the wish..", text: $title)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .frame(height: 35)
+                    .padding([.horizontal], 10)
+                    .background(backgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
 
-            TextField("Description of the wish..", text: $wishDescription)
-                .lineLimit(8)
-                .textFieldStyle(.roundedBorder)
-                .padding(EdgeInsets(top: 15, leading: 30, bottom: 10, trailing: 30))
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(backgroundColor)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 
-            WKButton(text: "Save", action: createWishAction, isLoading: $isButtonLoading)
+                    TextEditor(text: $description)
+                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
+                }
+
+            }
+
+            HStack {
+                WKButton(text: "Cancel", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
+                .interactiveDismissDisabled()
+                WKButton(text: "Save", action: createWishAction, isLoading: $isButtonLoading)
+            }
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            return PrivateTheme.elementBackgroundColor.light
+        case .dark:
+            return PrivateTheme.elementBackgroundColor.dark
         }
     }
 }
