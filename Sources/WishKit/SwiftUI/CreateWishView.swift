@@ -36,6 +36,9 @@ struct CreateWishView: View {
     @State
     private var isButtonLoading: Bool? = false
 
+    @State
+    private var showAlert: Bool = false
+
     private var completion: () -> ()
 
     init(completion: @escaping () -> ()) {
@@ -43,6 +46,11 @@ struct CreateWishView: View {
     }
 
     private func createWishAction() {
+        if title.isEmpty || description.isEmpty {
+            showAlert = true
+            return
+        }
+
         isButtonLoading = true
         let request = CreateWishRequest(title: title, description: description)
         WishApi.createWish(createRequest: request) { _ in
@@ -80,6 +88,10 @@ struct CreateWishView: View {
                 WKButton(text: "Save", action: createWishAction, isLoading: $isButtonLoading)
             }
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        }.alert(String("Info"), isPresented: $showAlert) {
+            Button("Ok", role: .cancel) { }
+        } message: {
+            Text("Title/Description cannot be empty.")
         }
     }
 
