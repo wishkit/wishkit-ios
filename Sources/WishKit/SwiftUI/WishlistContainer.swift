@@ -7,25 +7,26 @@
 //
 
 import SwiftUI
+import WishKitShared
 
 struct WishlistContainer: View {
 
     @State
-    private var listType = 0
+    private var listType: WishState = .approved
 
     var body: some View {
 
         VStack {
             Picker(selection: $listType, content: {
-                Text("Approved").tag(0)
-                Text("Implemented").tag(1)
+                Text("Approved").tag(WishState.approved)
+                Text("Implemented").tag(WishState.implemented)
             }, label: {
                 EmptyView()
             })
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
-            WishlistView()
+            WishlistView(listType: $listType)
         }
     }
 }
