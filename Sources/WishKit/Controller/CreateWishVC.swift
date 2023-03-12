@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 import WishKitShared
 
@@ -52,7 +53,7 @@ final class CreateWishVC: UIViewController {
 extension CreateWishVC {
 
     private func updateSaveButton() {
-        let backgroundColor = WishKit.theme.primaryColor
+        let backgroundColor = UIColor(WishKit.theme.primaryColor)
         saveButton.backgroundColor = viewModel.canSave() ? backgroundColor : backgroundColor.withAlphaComponent(0.66)
         saveButton.isEnabled = viewModel.canSave()
     }
@@ -328,3 +329,4 @@ extension CreateWishVC: CreateWishVMDelegate {
         updateSaveButton()
     }
 }
+#endif

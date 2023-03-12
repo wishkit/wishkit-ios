@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class VoteButton: UIButton {
@@ -30,7 +31,7 @@ final class VoteButton: UIButton {
     // MARK: - Setup Medium
 
     private func setupView() {
-        backgroundColor = WishKit.theme.primaryColor
+        backgroundColor = UIColor(WishKit.theme.primaryColor)
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
 
@@ -83,3 +84,4 @@ final class VoteButton: UIButton {
         voteCountLabel.adjustsFontSizeToFitWidth = true
     }
 }
+#endif

@@ -5,7 +5,7 @@
 //  Created by Martin Lasek on 3/8/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
 import WishKitShared
 
@@ -64,3 +64,4 @@ extension BadgeView {
         )
     }
 }
+#endif

@@ -6,7 +6,10 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
+#endif
+
 import SwiftUI
 
 public struct WishKit {
@@ -17,14 +20,21 @@ public struct WishKit {
 
     public static var configuration: Configuration = .default()
 
+    #if canImport(UIKit)
     /// (UIKit) The WishList viewcontroller.
     public static let viewController: UIViewController = WishListVC()
-
+    #endif
+    
     /// (SwiftUI) The WishList view.
-    public static let view: some View = WishListView().ignoresSafeArea(.container)
+    public static var view: some View {
+        #if os(macOS)
+            return WishlistContainer()
+        #else
+            return WishListView()
+        #endif
+    }
 
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
     }
 }
-

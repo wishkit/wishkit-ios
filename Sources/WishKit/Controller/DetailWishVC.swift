@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 import WishKitShared
 
@@ -150,4 +151,4 @@ final class DetailWishVC: UIViewController {
         }
     }
 }
-
+#endif

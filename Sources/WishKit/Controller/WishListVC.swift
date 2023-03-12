@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 import WishKitShared
 
@@ -27,7 +28,7 @@ final class WishListVC: UIViewController {
     private lazy var switchListControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
-        control.selectedSegmentTintColor = WishKit.theme.primaryColor
+        control.selectedSegmentTintColor = UIColor(WishKit.theme.primaryColor)
         control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control
@@ -128,7 +129,7 @@ extension WishListVC {
         tabBarItem.image = UIImage(systemName: "lightbulb")
         tabBarItem.selectedImage = UIImage(systemName: "lightbulb.fill")
         tabBarItem.title = "Wishlist"
-        tabBarController?.tabBar.tintColor = WishKit.theme.primaryColor
+        tabBarController?.tabBar.tintColor = UIColor(WishKit.theme.primaryColor)
     }
 
     private func setupView() {
@@ -206,3 +207,4 @@ extension WishListVC: CreateWishDelegate {
         fetchWishList()
     }
 }
+#endif

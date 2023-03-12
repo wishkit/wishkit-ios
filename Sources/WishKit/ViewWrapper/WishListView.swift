@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if os(iOS)
 import SwiftUI
 
 public struct WishListView: UIViewControllerRepresentable {
@@ -19,3 +20,4 @@ public struct WishListView: UIViewControllerRepresentable {
     
     public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 }
+#endif

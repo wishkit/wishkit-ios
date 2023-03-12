@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class SmallVoteButton: UIButton {
@@ -74,3 +75,4 @@ final class SmallVoteButton: UIButton {
         voteCountLabel.textAlignment = .center
     }
 }
+#endif

@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class ContainerView: UIView {
@@ -29,3 +30,4 @@ final class ContainerView: UIView {
         layer.masksToBounds = false
     }
 }
+#endif

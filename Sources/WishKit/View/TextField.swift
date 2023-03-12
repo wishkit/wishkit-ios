@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class TextField: UITextField {
@@ -42,3 +43,4 @@ extension TextField {
         return bounds.inset(by: padding)
     }
 }
+#endif

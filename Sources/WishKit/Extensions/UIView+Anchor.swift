@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 extension UIView {
@@ -21,7 +22,6 @@ extension UIView {
         size: CGSize = .zero,
         additional: [NSLayoutConstraint]? = nil
     ) {
-
         translatesAutoresizingMaskIntoConstraints = false
 
         var constraints: [NSLayoutConstraint] = []
@@ -65,3 +65,4 @@ extension UIView {
         NSLayoutConstraint.activate(constraints)
     }
 }
+#endif
