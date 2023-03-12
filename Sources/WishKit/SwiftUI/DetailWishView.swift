@@ -11,16 +11,60 @@ import WishKitShared
 
 struct DetailWishView: View {
 
+    enum AlertReason {
+        case alreadyVoted
+        case alreadyImplemented
+        case voteReturnedError(String)
+        case none
+    }
+
     @Environment (\.presentationMode)
     var presentationMode
 
     @Environment(\.colorScheme)
     var colorScheme
 
+    @State
+    private var showAlert: Bool = false
+
+    @State
+    private var alertReason: AlertReason = .none
+
     private var wish: WishResponse
 
-    public init(wish: WishResponse) {
+    private var voteCompletion: () -> ()
+
+    public init(wish: WishResponse, voteCompletion: @escaping () -> ()) {
         self.wish = wish
+        self.voteCompletion = voteCompletion
+    }
+
+    func vote() {
+        let userUUID = UUIDManager.getUUID()
+
+        if wish.state == .implemented {
+            alertReason = .alreadyImplemented
+            showAlert = true
+            return
+        }
+
+        if wish.votingUsers.contains(where: { user in user.uuid == userUUID }) {
+            alertReason = .alreadyVoted
+            showAlert = true
+            return
+        }
+
+        let request = VoteWishRequest(wishId: wish.id)
+        WishApi.voteWish(voteRequest: request) { result in
+            switch result {
+            case .success:
+                self.presentationMode.wrappedValue.dismiss()
+                voteCompletion()
+            case .failure(let error):
+                alertReason = .voteReturnedError(error.localizedDescription)
+                showAlert = true
+            }
+        }
     }
 
     var body: some View {
@@ -48,10 +92,24 @@ struct DetailWishView: View {
                 HStack {
                     WKButton(text: "Close", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
                     .interactiveDismissDisabled()
-                    WKButton(text: "Upvote", action: { print("🔼 upvote call") })
+                    WKButton(text: "Upvote", action: vote)
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
             }
+        }.alert(String("Info"), isPresented: $showAlert) {
+            Button("Ok", role: .cancel) { }
+        } message: {
+            switch alertReason {
+            case .alreadyVoted:
+                Text("You can only vote once.")
+            case .alreadyImplemented:
+                Text("You can not vote for a wish that is already implemented.")
+            case .voteReturnedError(let error):
+                Text("Something went wrong during your vote. Try again later.\n\n\(error)")
+            case .none:
+                Text("You can not vote for this wish.")
+            }
+
         }
     }
 

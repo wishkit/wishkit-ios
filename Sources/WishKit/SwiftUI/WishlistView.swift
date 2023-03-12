@@ -84,14 +84,14 @@ struct WishlistView: View {
         ZStack {
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish, voteCompletion: wishModel.fetchList )
+                    WishView(wish: wish, voteCompletion: wishModel.fetchList)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
             }
             .scrollContentBackgroundCompat(.hidden)
             .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
-                DetailWishView(wish: wish)
+                DetailWishView(wish: wish, voteCompletion: wishModel.fetchList)
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
             }
             .scrollContentBackgroundCompat(.hidden)

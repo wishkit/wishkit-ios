@@ -14,7 +14,7 @@ struct WishView: View {
     enum AlertReason {
         case alreadyVoted
         case alreadyImplemented
-        case voteReturnedError
+        case voteReturnedError(String)
         case none
     }
 
@@ -27,7 +27,7 @@ struct WishView: View {
     @State
     private var alertReason: AlertReason = .none
 
-    private let wish: WishResponse
+    private var wish: WishResponse
 
     private let voteCompletion: () -> ()
 
@@ -58,10 +58,10 @@ struct WishView: View {
         let request = VoteWishRequest(wishId: wish.id)
         WishApi.voteWish(voteRequest: request) { result in
             switch result {
-            case .success(let success):
+            case .success:
                 voteCompletion()
-            case .failure(let failure):
-                alertReason = .voteReturnedError
+            case .failure(let error):
+                alertReason = .voteReturnedError(error.localizedDescription)
                 showAlert = true
             }
         }
@@ -106,8 +106,8 @@ struct WishView: View {
                 Text("You can only vote once.")
             case .alreadyImplemented:
                 Text("You can not vote for a wish that is already implemented.")
-            case .voteReturnedError:
-                Text("Something went wrong during your vote. Try again later..")
+            case .voteReturnedError(let error):
+                Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             case .none:
                 Text("You can not vote for this wish.")
             }
