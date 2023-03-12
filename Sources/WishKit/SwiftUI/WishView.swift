@@ -9,6 +9,7 @@
 import SwiftUI
 import WishKitShared
 
+#if os(macOS)
 struct WishView: View {
 
     enum AlertReason {
@@ -124,3 +125,4 @@ struct WishView: View {
         }
     }
 }
+#endif

@@ -31,8 +31,7 @@ final class AddButton: UIButton {
         let image = UIImage(systemName: "plus")
         setImage(image, for: .normal)
         imageView?.tintColor = .white
-        backgroundColor = WishKit.theme.primaryColor
-
+        backgroundColor = UIColor(WishKit.theme.primaryColor)
         layer.cornerRadius = length/2
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowColor = UIColor.black.withAlphaComponent(0.8).cgColor

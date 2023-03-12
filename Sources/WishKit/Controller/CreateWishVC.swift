@@ -53,7 +53,7 @@ final class CreateWishVC: UIViewController {
 extension CreateWishVC {
 
     private func updateSaveButton() {
-        let backgroundColor = WishKit.theme.primaryColor
+        let backgroundColor = UIColor(WishKit.theme.primaryColor)
         saveButton.backgroundColor = viewModel.canSave() ? backgroundColor : backgroundColor.withAlphaComponent(0.66)
         saveButton.isEnabled = viewModel.canSave()
     }

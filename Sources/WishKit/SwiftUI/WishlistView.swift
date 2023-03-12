@@ -9,6 +9,7 @@
 import SwiftUI
 import WishKitShared
 
+#if os(macOS)
 extension WishResponse: Identifiable { }
 
 extension View {
@@ -126,9 +127,4 @@ struct WishlistView: View {
         }
     }
 }
-
-//struct WishlistViewPreview: PreviewProvider {
-//    static var previews: some View {
-//        WishlistView()
-//    }
-//}
+#endif

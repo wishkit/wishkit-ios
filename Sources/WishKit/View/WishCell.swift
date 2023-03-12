@@ -56,7 +56,7 @@ extension WishCell {
 
         let userUUID = UUIDManager.getUUID()
         if response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID }) {
-            voteButton.arrowIV.tintColor = WishKit.theme.primaryColor
+            voteButton.arrowIV.tintColor = UIColor(WishKit.theme.primaryColor)
         } else {
             voteButton.arrowIV.tintColor = .tertiaryLabel
         }

@@ -10,6 +10,8 @@ import SwiftUI
 import WishKitShared
 
 // Removes default background color and allows custom color for TextEditor
+
+#if os(macOS)
 extension NSTextView {
     open override var frame: CGRect {
         didSet {
@@ -105,3 +107,4 @@ struct CreateWishView: View {
         }
     }
 }
+#endif

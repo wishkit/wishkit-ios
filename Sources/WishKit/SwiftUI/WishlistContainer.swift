@@ -9,6 +9,7 @@
 import SwiftUI
 import WishKitShared
 
+#if os(macOS)
 struct WishlistContainer: View {
 
     @State
@@ -62,3 +63,4 @@ struct WishlistContainer: View {
         }
     }
 }
+#endif
