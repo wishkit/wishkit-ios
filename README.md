@@ -67,6 +67,17 @@ WishKit.configuration.showStatusBadge = true
 <hr/>
 
 <h3>
+	<b> Platforms </b>
+</h3>
+
+<ul>
+	<li>iOS 14+</li>
+	<li>macOS 12+</li>
+</ul>
+
+<hr/>
+
+<h3>
 	<b> Example Project </b>
 </h3>
 
