@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 import WishKitShared
 
 // Removes default background color and allows custom color for TextEditor
@@ -61,6 +62,21 @@ struct CreateWishView: View {
         }
     }
 
+    func keepTitleAndTextWithinLimit() {
+        let titleLimit = 50
+        let descriptionLimit = 500
+
+        if title.count > titleLimit {
+            title = String(title.prefix(titleLimit))
+        }
+
+        if description.count > descriptionLimit {
+            description = String(description.prefix(descriptionLimit))
+        }
+
+
+    }
+
     var body: some View {
         VStack {
             VStack {
@@ -68,7 +84,7 @@ struct CreateWishView: View {
                     Text("Title")
                         .font(.system(size: 10))
                     Spacer()
-                    Text("0/50")
+                    Text("\(title.count)/50")
                         .font(.system(size: 10))
                 }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
 
@@ -79,12 +95,13 @@ struct CreateWishView: View {
                     .background(backgroundColor)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
+                    .onReceive(Just(title)) { _ in keepTitleAndTextWithinLimit() }
 
                 HStack {
                     Text("Description")
                         .font(.system(size: 10))
                     Spacer()
-                    Text("0/500")
+                    Text("\(description.count)/500")
                         .font(.system(size: 10))
                 }.padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
 
@@ -97,6 +114,7 @@ struct CreateWishView: View {
                     TextEditor(text: $description)
                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 20))
                         .lineSpacing(3)
+                        .onReceive(Just(description)) { _ in keepTitleAndTextWithinLimit() }
                 }
 
             }
