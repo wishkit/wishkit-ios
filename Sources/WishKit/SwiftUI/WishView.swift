@@ -14,6 +14,7 @@ struct WishView: View {
     enum AlertReason {
         case alreadyVoted
         case alreadyImplemented
+        case voteReturnedError
         case none
     }
 
@@ -28,11 +29,11 @@ struct WishView: View {
 
     private let wish: WishResponse
 
-    private let voteAction: () -> ()
+    private let voteCompletion: () -> ()
 
-    init(wish: WishResponse, voteAction: @escaping () -> ()) {
+    init(wish: WishResponse, voteCompletion: @escaping () -> ()) {
         self.wish = wish
-        self.voteAction = voteAction
+        self.voteCompletion = voteCompletion
     }
 
     func hasUserVoted() -> Bool {
@@ -54,7 +55,16 @@ struct WishView: View {
             return
         }
 
-        voteAction()
+        let request = VoteWishRequest(wishId: wish.id)
+        WishApi.voteWish(voteRequest: request) { result in
+            switch result {
+            case .success(let success):
+                voteCompletion()
+            case .failure(let failure):
+                alertReason = .voteReturnedError
+                showAlert = true
+            }
+        }
     }
 
     var body: some View {
@@ -96,6 +106,8 @@ struct WishView: View {
                 Text("You can only vote once.")
             case .alreadyImplemented:
                 Text("You can not vote for a wish that is already implemented.")
+            case .voteReturnedError:
+                Text("Something went wrong during your vote. Try again later..")
             case .none:
                 Text("You can not vote for this wish.")
             }

@@ -72,14 +72,19 @@ struct WishlistView: View {
     }
 
     func voteAction() {
+        
         print("⬆️ Voting..")
+    }
+
+    private func createWishAction() {
+        self.showingSheet.toggle()
     }
 
     var body: some View {
         ZStack {
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish, voteAction: voteAction)
+                    WishView(wish: wish, voteCompletion: wishModel.fetchList )
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -110,10 +115,6 @@ struct WishlistView: View {
                 }
             }
         }
-    }
-
-    private func createWishAction() {
-        self.showingSheet.toggle()
     }
 
     var systemBackgroundColor: Color {
