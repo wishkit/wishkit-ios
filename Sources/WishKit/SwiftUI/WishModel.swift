@@ -18,7 +18,7 @@ final class WishModel: ObservableObject {
     @Published
     var implementedWishlist: [WishResponse] = []
 
-    func fetchList() {
+    func fetchList(completion: (() -> ())? = nil) {
         WishApi.fetchWishList { result in
             switch result {
             case .success(let response):
@@ -29,13 +29,17 @@ final class WishModel: ObservableObject {
             case .failure(let error):
                 printError(self, error.description)
             }
+
+            completion?()
         }
+    }
+
+    func fetchList() {
+        fetchList(completion: nil)
     }
 
     private func updateApprovedWishlist(with list: [WishResponse]) {
         let userUUID = UUIDManager.getUUID()
-
-        // Only list wishes that are either approved or the user created himself.
 
         var filteredList = list.filter { wish in
             let ownPendingWish = (wish.state == .pending && wish.userUUID == userUUID)
