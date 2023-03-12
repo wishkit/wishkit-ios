@@ -71,16 +71,21 @@ struct WishlistView: View {
         }
     }
 
+    func voteAction() {
+        print("⬆️ Voting..")
+    }
+
     var body: some View {
         ZStack {
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish)
+                    WishView(wish: wish, voteAction: voteAction)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
-            }.scrollContentBackgroundCompat(.hidden)
-            .sheet(item: $selectedWish) { wish in
+            }
+            .scrollContentBackgroundCompat(.hidden)
+            .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                 DetailWishView(wish: wish)
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
             }

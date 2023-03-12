@@ -11,17 +11,50 @@ import WishKitShared
 
 struct WishView: View {
 
+    enum AlertReason {
+        case alreadyVoted
+        case alreadyImplemented
+        case none
+    }
+
     @Environment(\.colorScheme)
     var colorScheme
 
+    @State
+    private var showAlert: Bool = false
+
+    @State
+    private var alertReason: AlertReason = .none
+
     private let wish: WishResponse
 
-    init(wish: WishResponse) {
+    private let voteAction: () -> ()
+
+    init(wish: WishResponse, voteAction: @escaping () -> ()) {
         self.wish = wish
+        self.voteAction = voteAction
     }
 
     func hasUserVoted() -> Bool {
         return wish.votingUsers.contains(where: { user in user.uuid == UUIDManager.getUUID() })
+    }
+
+    func vote() {
+        let userUUID = UUIDManager.getUUID()
+
+        if wish.state == .implemented {
+            alertReason = .alreadyImplemented
+            showAlert = true
+            return
+        }
+
+        if wish.votingUsers.contains(where: { user in user.uuid == userUUID }) {
+            alertReason = .alreadyVoted
+            showAlert = true
+            return
+        }
+
+        voteAction()
     }
 
     var body: some View {
@@ -31,7 +64,7 @@ struct WishView: View {
                 .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0)
 
             HStack {
-                Button(action: voteAction) {
+                Button(action: vote) {
                     VStack(alignment: .center, spacing: 3) {
                         if hasUserVoted() {
                             Image(systemName: "triangle.fill")
@@ -55,11 +88,19 @@ struct WishView: View {
                 Spacer()
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+        }.alert(String("Info"), isPresented: $showAlert) {
+            Button("Ok", role: .cancel) { }
+        } message: {
+            switch alertReason {
+            case .alreadyVoted:
+                Text("You can only vote once.")
+            case .alreadyImplemented:
+                Text("You can not vote for a wish that is already implemented.")
+            case .none:
+                Text("You can not vote for this wish.")
+            }
+
         }
-    }
-
-    func voteAction() {
-
     }
 
     var backgroundColor: Color {
