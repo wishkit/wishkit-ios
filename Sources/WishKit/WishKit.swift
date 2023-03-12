@@ -24,6 +24,7 @@ public struct WishKit {
     /// (UIKit) The WishList viewcontroller.
     public static let viewController: UIViewController = WishListVC()
     #endif
+    
     /// (SwiftUI) The WishList view.
     public static var view: some View {
         #if os(macOS)

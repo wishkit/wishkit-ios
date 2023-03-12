@@ -64,13 +64,29 @@ struct CreateWishView: View {
     var body: some View {
         VStack {
             VStack {
+                HStack {
+                    Text("Title")
+                        .font(.system(size: 10))
+                    Spacer()
+                    Text("0/50")
+                        .font(.system(size: 10))
+                }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
+
                 TextField("Title of the wish..", text: $title)
                     .textFieldStyle(PlainTextFieldStyle())
                     .frame(height: 35)
                     .padding([.horizontal], 10)
                     .background(backgroundColor)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
+                    .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
+
+                HStack {
+                    Text("Description")
+                        .font(.system(size: 10))
+                    Spacer()
+                    Text("0/500")
+                        .font(.system(size: 10))
+                }.padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
 
                 ZStack {
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -79,7 +95,7 @@ struct CreateWishView: View {
                         .padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 
                     TextEditor(text: $description)
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
+                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 20))
                         .lineSpacing(3)
                 }
 
