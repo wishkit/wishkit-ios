@@ -49,8 +49,8 @@ struct WishlistView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    @StateObject
-    var wishModel = WishModel()
+    @ObservedObject
+    var wishModel: WishModel
 
     @State
     var showingSheet = false

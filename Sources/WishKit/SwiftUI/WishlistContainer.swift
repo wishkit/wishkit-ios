@@ -18,8 +18,8 @@ struct WishlistContainer: View {
     @State
     private var isRefreshing = false
 
-    @StateObject
-    var wishModel = WishModel()
+    @ObservedObject
+    var wishModel: WishModel
 
     func refreshList() {
         isRefreshing = true
@@ -59,7 +59,7 @@ struct WishlistContainer: View {
                 }
             }
 
-            WishlistView(listType: $listType)
+            WishlistView(wishModel: wishModel, listType: $listType)
         }
     }
 }
