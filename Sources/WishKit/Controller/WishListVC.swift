@@ -129,7 +129,6 @@ extension WishListVC {
         tabBarItem.image = UIImage(systemName: "lightbulb")
         tabBarItem.selectedImage = UIImage(systemName: "lightbulb.fill")
         tabBarItem.title = "Wishlist"
-        tabBarController?.tabBar.tintColor = UIColor(WishKit.theme.primaryColor)
     }
 
     private func setupView() {
