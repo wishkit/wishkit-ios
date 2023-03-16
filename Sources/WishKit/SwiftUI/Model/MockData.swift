@@ -10,14 +10,35 @@ import WishKitShared
 import Foundation
 
 struct MockData {
-    static let wishlist = [
-        createWish("Transformation Challenge", "It would be awesome to be able to take a picture after every workout and after 30 days it creates a video out of them."),
-        createWish("Toki is so fluffy", "Oh, awesome to be able to after every workout 30 days it creates take a picture and after a video out of them."),
-        createWish("Reach for the sky", "Toy Story is Landon's favorite movie."),
-        createWish("The Firm", "I haven't seen that one yet. It's on my list now."),
-        createWish("TopGun Maverick", "Probably the best film of 2022. A must watch."),
-        createWish("Vanilla Sky", "A great movie from the early 2000s that has a unique charm.")
-    ]
+    static var wishlist: [WishResponse] {
+        let wishlist = [
+            createWish("📸 Transformation Challenge", "It would be awesome to be able to take a picture after every workout and after 30 days it creates a video out of them."),
+            createWish("🎥 Exercise Video Example.", "When doing an exercise it would be great if I could see a video example that shows me how to do it properly"),
+            createWish("Health App Connection.", "If this app would also let Health App know about your exercises then this would be awesome!"),
+            createWish("Browser exercise list", "I would like to see exercises in a list and be able to chose from then when creating my workouts instead of coming up with them myself."),
+            createWish("📈 Statistics of my workout", "Seeing a chart that displays how disciplined I was this week and also how many calories I have burned would be great."),
+            createWish("⌚️ Apple Watch App", "Having the app also on the Apple Watch would be super convenient. Especially when I want to pause a workout or so.")
+        ]
+
+        var votes = 123
+        return wishlist.map({ wish in
+            var shadowWish = wish
+            var ul = [UserResponse(uuid: UUID())]
+            for _ in 1...votes {
+                ul.append(UserResponse(uuid: UUID()))
+            }
+
+            votes -= Int.random(in: 1...7)
+            return WishResponse(
+                id: shadowWish.id,
+                userUUID: shadowWish.userUUID,
+                title: shadowWish.title,
+                description: shadowWish.description,
+                state: .approved,
+                votingUsers: ul
+            )
+        })
+    }
 
     static func createWish(_ title: String, _ description: String) -> WishResponse {
         WishResponse(
