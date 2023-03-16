@@ -15,6 +15,8 @@
 WishKit allows you to provide a native wishlist in your app that <b>just works ✨</b> <br/>
 </p>
 
+<img src="Resources/banner-min.png" />
+
 <h3>
 	<b> Setup </b>
 </h3>
