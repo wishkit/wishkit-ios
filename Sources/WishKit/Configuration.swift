@@ -10,13 +10,24 @@ public struct Configuration {
 
     public var showStatusBadge: Bool
 
+    /// Enables the control to switch between 'Requested' and 'Implemented'.
+    public var showSegmentedControl: Bool
+
+    @available(*, deprecated, message: "Use 'init(showStatusBadge: showSegmentedControl:)' instead.")
     public init(showStatusBadge: Bool) {
         self.showStatusBadge = showStatusBadge
+        self.showSegmentedControl = true
+    }
+
+    public init(showStatusBadge: Bool, showSegmentedControl: Bool) {
+        self.showStatusBadge = showStatusBadge
+        self.showSegmentedControl = showSegmentedControl
     }
 
     public static func `default`() -> Configuration {
         return Configuration(
-            showStatusBadge: false
+            showStatusBadge: false,
+            showSegmentedControl: true
         )
     }
 }

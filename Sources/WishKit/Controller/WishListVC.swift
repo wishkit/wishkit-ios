@@ -25,6 +25,16 @@ final class WishListVC: UIViewController {
         }
     }
 
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        return stackView
+    }()
+
+    private let switchContainer = UIView()
+
     private lazy var switchListControl: UISegmentedControl = {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
@@ -43,8 +53,8 @@ final class WishListVC: UIViewController {
         return label
     }()
 
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
+    private lazy var tableView: TableView = {
+        let tableView = TableView()
         tableView.register(WishCell.self, forCellReuseIdentifier: WishCell.identifier)
         tableView.dataSource = wishVM
         tableView.delegate = wishVM
@@ -77,6 +87,8 @@ final class WishListVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        applyWishKitConfiguration()
+        
         setup()
         spinner.startAnimating()
         fetchWishList()
@@ -112,6 +124,14 @@ extension WishListVC {
     }
 }
 
+// MARK: - WishKit Configuration
+
+extension WishListVC {
+    func applyWishKitConfiguration() {
+        switchContainer.isHidden = !WishKit.configuration.showSegmentedControl
+    }
+}
+
 // MARK: - Setup
 
 extension WishListVC {
@@ -132,32 +152,36 @@ extension WishListVC {
     }
 
     private func setupView() {
-        view.addSubview(switchListControl)
         view.addSubview(watermarkLabel)
-        view.addSubview(tableView)
-        tableView.addSubview(refreshControl)
-        view.addSubview(addWishButton)
         view.addSubview(spinner)
+        view.addSubview(stackView)
+        view.addSubview(addWishButton)
+
+        switchContainer.addSubview(switchListControl)
+        stackView.addArrangedSubview(switchContainer)
+        stackView.addArrangedSubview(tableView)
+        tableView.addSubview(refreshControl)
     }
 
     private func setupConstraints() {
-        switchListControl.anchor(
+
+        stackView.anchor(
             top: view.layoutMarginsGuide.topAnchor,
-            centerX: view.centerXAnchor,
+            leading: view.leadingAnchor,
+            bottom: view.bottomAnchor,
+            trailing: view.trailingAnchor
+        )
+
+        switchListControl.anchor(
+            top: switchContainer.topAnchor,
+            bottom: switchContainer.bottomAnchor,
+            centerX: switchContainer.centerXAnchor,
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
         watermarkLabel.anchor(
             centerY: addWishButton.centerYAnchor,
             centerX: view.centerXAnchor
-        )
-
-        tableView.anchor(
-            top: switchListControl.bottomAnchor,
-            leading: view.leadingAnchor,
-            bottom: view.bottomAnchor,
-            trailing: view.trailingAnchor,
-            padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
         let hasTabBarController = tabBarController != nil
