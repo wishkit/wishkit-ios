@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 /// A dynamicly growing UITableView
@@ -21,3 +22,4 @@ final class TableView: UITableView {
     return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height - 1)
   }
 }
+#endif
