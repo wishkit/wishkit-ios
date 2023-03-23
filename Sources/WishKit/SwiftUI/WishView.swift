@@ -41,6 +41,19 @@ struct WishView: View {
         return wish.votingUsers.contains(where: { user in user.uuid == UUIDManager.getUUID() })
     }
 
+    func badgeColor(for wishState: WishState) -> Color {
+        switch wishState {
+        case .pending:
+            return WishKit.theme.badgeColor.pending
+        case .approved:
+            return WishKit.theme.badgeColor.approved
+        case .implemented:
+            return WishKit.theme.badgeColor.implemented
+        case .rejected:
+            return WishKit.theme.badgeColor.rejected
+        }
+    }
+
     func vote() {
         let userUUID = UUIDManager.getUUID()
 
@@ -88,10 +101,28 @@ struct WishView: View {
                 }.buttonStyle(BorderlessButtonStyle())
 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(wish.title)
-                        .bold()
-                        .truncationMode(.tail)
-                        .lineLimit(1)
+
+                    if WishKit.configuration.showStatusBadge {
+                        HStack {
+                            Text(wish.title)
+                                .bold()
+                                .truncationMode(.tail)
+                                .lineLimit(1)
+                            Spacer()
+                            Text(wish.state.rawValue.uppercased())
+                                .opacity(0.8)
+                                .font(.system(size: 10, weight: .medium))
+                                .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
+                                .background(badgeColor(for: wish.state))
+                                .cornerRadius(6)
+                        }
+                    } else {
+                        Text(wish.title)
+                            .bold()
+                            .truncationMode(.tail)
+                            .lineLimit(1)
+                    }
+                    
                     Text(wish.description)
                         .truncationMode(.tail)
                         .lineLimit(1)
