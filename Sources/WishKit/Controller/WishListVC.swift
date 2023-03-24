@@ -50,6 +50,7 @@ final class WishListVC: UIViewController {
         label.font = .boldSystemFont(ofSize: 13)
         label.textColor = .systemGray2
         label.textAlignment = .center
+        label.isHidden = true
         return label
     }()
 
@@ -208,6 +209,7 @@ extension WishListVC: WishVMDelegate {
             self.spinner.stopAnimating()
             self.refreshControl.endRefreshing()
             self.tableView.reloadData()
+            self.watermarkLabel.isHidden = !self.wishVM.shouldShowWatermark
         }
     }
 

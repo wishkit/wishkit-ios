@@ -18,6 +18,8 @@ final class WishListVM: NSObject {
 
     private var currentListKind: WishListVC.Kind = .requested
 
+    var shouldShowWatermark: Bool = false
+
     weak var delegate: WishVMDelegate?
 
     private func setApprovedWishlist(using response: ListWishResponse) {
@@ -65,6 +67,8 @@ extension WishListVM {
     private func handleFetchSuccess(response: ListWishResponse) {
         setApprovedWishlist(using: response)
         setImplementedWishlist(using: response)
+
+        shouldShowWatermark = response.shouldShowWatermark
 
         guard let delegate = delegate else {
             printError(self, "Delegate is missing.")
