@@ -112,7 +112,7 @@ struct CreateWishView: View {
                         .padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 
                     TextEditor(text: $description)
-                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 20))
+                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
                         .lineSpacing(3)
                         .onReceive(Just(description)) { _ in keepTitleAndTextWithinLimit() }
                 }
