@@ -83,6 +83,7 @@ struct WishlistView: View {
 
     var body: some View {
         ZStack {
+
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
                     WishView(wish: wish, voteCompletion: wishModel.fetchList)
@@ -97,8 +98,16 @@ struct WishlistView: View {
             }
             .scrollContentBackgroundCompat(.hidden)
             .scrollIndicatorsCompat(.hidden)
-            .background(systemBackgroundColor)
             .onAppear(perform: wishModel.fetchList)
+
+            if wishModel.shouldShowWatermark {
+                VStack {
+                    Spacer()
+                    Text("Powered by WishKit.io")
+                        .opacity(0.33)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
+                }.zIndex(0)
+            }
 
             VStack {
                 Spacer()
@@ -115,7 +124,7 @@ struct WishlistView: View {
                         }
                 }
             }
-        }
+        }.background(systemBackgroundColor)
     }
 
     var systemBackgroundColor: Color {

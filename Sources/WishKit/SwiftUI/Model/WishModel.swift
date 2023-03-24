@@ -18,6 +18,9 @@ final class WishModel: ObservableObject {
     @Published
     var implementedWishlist: [WishResponse] = []
 
+    @Published
+    var shouldShowWatermark: Bool = false
+
     func fetchList(completion: (() -> ())? = nil) {
         WishApi.fetchWishList { result in
             switch result {
@@ -25,6 +28,7 @@ final class WishModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.updateApprovedWishlist(with: response.list)
                     self.updateImplementedWishlist(with: response.list)
+                    self.shouldShowWatermark = response.shouldShowWatermark
                 }
             case .failure(let error):
                 printError(self, error.description)
