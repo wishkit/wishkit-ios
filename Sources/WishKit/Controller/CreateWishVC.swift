@@ -92,8 +92,8 @@ extension CreateWishVC {
         }
     }
 
-    private func handleApiError(error: ApiError.Kind) {
-        AlertManager.showMessage(on: self, message: error.description) {
+    private func handleApiError(error: ApiError) {
+        AlertManager.showMessage(on: self, message: error.reason.description) {
             if let navigationController = self.navigationController {
                 navigationController.popViewController(animated: true)
             } else {

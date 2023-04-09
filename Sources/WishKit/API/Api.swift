@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import WishKitShared
 
 struct Api: RequestCreatable {
     enum Version: String {
@@ -14,26 +15,32 @@ struct Api: RequestCreatable {
     }
 }
 
+enum ApiResult<Success, Error> {
+    case success(Success)
+    case failure(Error)
+}
+
 // MARK: - Generic Send Functions
 
 extension Api {
     /// Generic Send Function. You need to specify the Result<T, Error> type to help inferring it.
     /// e.g: Api.send(request: resetRequest) { (result: Result<ResetPasswordResponse, ApiError.Kind>) in ... }
-    static func send<T: Decodable>(request: URLRequest, completionHandler: @escaping (Result<T, ApiError.Kind>) -> Void) {
+    static func send<T: Decodable>(request: URLRequest, completionHandler: @escaping (ApiResult<T, ApiError>) -> Void) {
         let method = request.httpMethod ?? ""
 
-        print("🌐 API (\(method)) Request to: \(request.url?.absoluteString ?? "nil")")
+        print("🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
 
         URLSession.shared.dataTask(with: request) { data, resp, error in
             // Early return in case of error.
             if let error = error {
-                print(error.localizedDescription)
-                completionHandler(.failure(.noConnectionToTheServer))
+                printError(self, error.localizedDescription)
+                completionHandler(.failure(ApiError(reason: .requestResultedInError)))
                 return
             }
 
             guard let data = data else {
-                completionHandler(.failure(.unKnown))
+                printError(self, "data was nil.")
+                completionHandler(.failure(ApiError(reason: .unknown)))
                 return
             }
 
@@ -45,17 +52,14 @@ extension Api {
                 return
             }
 
-            if let backendError = try? decoder.decode(ApiError.Backend.self, from: data) {
-                let error = ApiError.Kind(rawValue: backendError.reason) ?? ApiError.Kind.unKnown
-                if error == .unKnown {
-                    printError(self, "Could not decode error. Error: \(backendError.reason).")
-                }
-                completionHandler(.failure(error))
+            if let apiError = try? decoder.decode(ApiError.self, from: data) {
+                printError(self, "\(apiError.reason.description).")
+                completionHandler(.failure(apiError))
                 return
             }
 
-            print(String(data: data, encoding: .utf8) ?? "")
-            completionHandler(.failure(ApiError.Kind.couldNotDecodeBackendResponse))
+            printError(self, String(data: data, encoding: .utf8) ?? "")
+            completionHandler(.failure(ApiError(reason: .couldNotDecodeBackendResponse)))
         }.resume()
     }
 }

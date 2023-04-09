@@ -31,7 +31,7 @@ final class WishModel: ObservableObject {
                     self.shouldShowWatermark = response.shouldShowWatermark
                 }
             case .failure(let error):
-                printError(self, error.description)
+                printError(self, error.reason.description)
             }
 
             completion?()

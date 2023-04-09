@@ -200,10 +200,10 @@ extension WishCell {
 
                 delegate.voteWasTapped()
             case .failure(let error):
-                printError(self, error.description)
+                printError(self, error.reason.description)
                 DispatchQueue.main.async {
                     if let rootViewController = rootViewController {
-                        AlertManager.confirmMessage(on: rootViewController, message: error.description)
+                        AlertManager.confirmMessage(on: rootViewController, message: error.reason.description)
                     }
                 }
             }

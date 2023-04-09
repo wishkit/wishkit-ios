@@ -38,10 +38,10 @@ struct WishApi: RequestCreatable {
     // MARK: - Api Requests
 
     static func fetchWishList(
-        completionHandler: @escaping (Result<ListWishResponse, ApiError.Kind>) -> Void
+        completionHandler: @escaping (ApiResult<ListWishResponse, ApiError>) -> Void
     ) {
         guard let request = fetchWishList() else {
-            completionHandler(.failure(.couldNotCreatePOSTRequest))
+            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 
@@ -50,11 +50,11 @@ struct WishApi: RequestCreatable {
 
     static func createWish(
         createRequest: CreateWishRequest,
-        completionHandler: @escaping (Result<CreateWishResponse, ApiError.Kind>) -> Void
+        completionHandler: @escaping (ApiResult<CreateWishResponse, ApiError>) -> Void
     ) {
 
         guard let request = createWish(createRequest) else {
-            completionHandler(.failure(.couldNotCreatePOSTRequest))
+            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 
@@ -63,11 +63,11 @@ struct WishApi: RequestCreatable {
 
     static func voteWish(
         voteRequest: VoteWishRequest,
-        completionHandler: @escaping (Result<VoteWishResponse, ApiError.Kind>) -> Void
+        completionHandler: @escaping (ApiResult<VoteWishResponse, ApiError>) -> Void
     ) {
 
         guard let request = voteWish(voteRequest) else {
-            completionHandler(.failure(.couldNotCreatePOSTRequest))
+            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 

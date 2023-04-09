@@ -78,13 +78,13 @@ extension WishListVM {
         delegate.listWasUpdated()
     }
 
-    private func handleFetchFailure(error: ApiError.Kind) {
+    private func handleFetchFailure(error: ApiError) {
         guard let delegate = delegate, let vc = delegate as? UIViewController else {
             printError(self, "Delegate is missing.")
             return
         }
 
-        AlertManager.confirmMessage(on: vc, message: error.description)
+        AlertManager.confirmMessage(on: vc, message: error.reason.description)
     }
 }
 

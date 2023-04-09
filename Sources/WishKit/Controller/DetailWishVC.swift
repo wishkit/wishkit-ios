@@ -117,8 +117,8 @@ final class DetailWishVC: UIViewController {
         voteButton.voteCountLabel.text = String(describing: response.votingUsers.count)
     }
 
-    private func handleVoteError(error: ApiError.Kind) {
-        AlertManager.confirmMessage(on: self, message: error.description)
+    private func handleVoteError(error: ApiError) {
+        AlertManager.confirmMessage(on: self, message: error.reason.description)
     }
 
     // MARK: - Action
