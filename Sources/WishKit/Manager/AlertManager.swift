@@ -13,8 +13,8 @@ struct AlertManager {
 
     /// Displays a message and either executes action on "Confirm" or cancels it on "Cancel".
     static func confirmAction(on vc: UIViewController, message: String, action: @escaping () -> Void) {
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in action() }
+        let cancelAction = UIAlertAction(title: WishKit.configuration.localization.cancel, style: .destructive)
+        let confirmAction = UIAlertAction(title: WishKit.configuration.localization.confirm, style: .default) { _ in action() }
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alertController.addAction(cancelAction)
         alertController.addAction(confirmAction)
@@ -23,9 +23,9 @@ struct AlertManager {
 
     /// Displays a message and dismisses on tapping "Ok".
     static func confirmMessage(on vc: UIViewController, message: String) {
-        let title = "Info"
+        let title = WishKit.configuration.localization.info
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let confirmAction = UIAlertAction(title: "OK", style: .default)
+        let confirmAction = UIAlertAction(title: WishKit.configuration.localization.ok, style: .default)
         alert.addAction(confirmAction)
         vc.present(alert, animated: true)
     }

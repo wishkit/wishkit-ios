@@ -30,7 +30,7 @@ struct WKAddButton: View {
         .clipShape(Circle())
         .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
         .sheet(isPresented: $showingSheet) {
-            Text("Create Wish")
+            Text(WishKit.configuration.localization.createWish)
         }
     }
 
@@ -47,5 +47,4 @@ struct RoundButtonStyle: ButtonStyle {
             .foregroundColor(configuration.isPressed ? .white.opacity(0.66) : .white)
             .background(WishKit.theme.primaryColor)
     }
-
 }

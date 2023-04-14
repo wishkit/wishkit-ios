@@ -130,18 +130,18 @@ struct WishView: View {
                 Spacer()
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-        }.alert(String("Info"), isPresented: $showAlert) {
-            Button("Ok", role: .cancel) { }
+        }.alert(String(WishKit.configuration.localization.info), isPresented: $showAlert) {
+            Button(WishKit.configuration.localization.ok, role: .cancel) { }
         } message: {
             switch alertReason {
             case .alreadyVoted:
-                Text("You can only vote once.")
+                Text(WishKit.configuration.localization.youCanOnlyVoteOnce)
             case .alreadyImplemented:
-                Text("You can not vote for a wish that is already implemented.")
+                Text(WishKit.configuration.localization.youCanNotVoteForAnImplementedWish)
             case .voteReturnedError(let error):
                 Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             case .none:
-                Text("You can not vote for this wish.")
+                Text(WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
             }
 
         }

@@ -72,11 +72,6 @@ struct WishlistView: View {
         }
     }
 
-    func voteAction() {
-        
-        print("⬆️ Voting..")
-    }
-
     private func createWishAction() {
         self.showingSheet.toggle()
     }
@@ -103,7 +98,7 @@ struct WishlistView: View {
             if wishModel.shouldShowWatermark {
                 VStack {
                     Spacer()
-                    Text("Powered by WishKit.io")
+                    Text("\(WishKit.configuration.localization.poweredBy) WishKit.io")
                         .opacity(0.33)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
                 }.zIndex(0)

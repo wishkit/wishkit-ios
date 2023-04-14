@@ -162,16 +162,16 @@ extension WishCell {
         }
 
         if let rootViewController = rootViewController, response.state == .implemented {
-            AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for a wish that is already implemented 😊")
+            AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanNotVoteForAnImplementedWish)
             return
         }
 
         // Check if it's the users own wish.
         if response.userUUID == UUIDManager.getUUID() {
-            printWarning(self, "You cannot vote for your own wish.")
+            printWarning(self, WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
 
             if let rootViewController = rootViewController {
-                AlertManager.confirmMessage(on: rootViewController, message: "You cannot vote for your own wish.")
+                AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
             }
 
             return
@@ -179,10 +179,10 @@ extension WishCell {
 
         // Check if the user already voted.
         if response.votingUsers.contains(where: { $0.uuid == UUIDManager.getUUID() }) {
-            printWarning(self, "You can only vote once.")
+            printWarning(self, WishKit.configuration.localization.youCanOnlyVoteOnce)
 
             if let rootViewController = rootViewController {
-                AlertManager.confirmMessage(on: rootViewController, message: "You can only vote once.")
+                AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanOnlyVoteOnce)
             }
 
             return

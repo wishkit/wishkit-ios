@@ -18,9 +18,9 @@ final class WishListVC: UIViewController {
         var title: String {
             switch self {
             case .requested:
-                return "Requested"
+                return WishKit.configuration.localization.requested
             case .implemented:
-                return "Implemented"
+                return WishKit.configuration.localization.implemented
             }
         }
     }
@@ -46,7 +46,7 @@ final class WishListVC: UIViewController {
 
     private let watermarkLabel: UILabel = {
         let label = UILabel()
-        label.text = "Powered by Wishkit.io"
+        label.text = "\(WishKit.configuration.localization.poweredBy) Wishkit.io"
         label.font = .boldSystemFont(ofSize: 13)
         label.textColor = .systemGray2
         label.textAlignment = .center
@@ -139,7 +139,7 @@ extension WishListVC {
 
     private func setup() {
         view.backgroundColor = .secondarySystemBackground
-        navigationItem.title = "Feature Wishlist"
+        navigationItem.title = WishKit.configuration.localization.featureWishlist
         setupTabBar()
 
         setupView()
@@ -149,7 +149,7 @@ extension WishListVC {
     private func setupTabBar() {
         tabBarItem.image = UIImage(systemName: "lightbulb")
         tabBarItem.selectedImage = UIImage(systemName: "lightbulb.fill")
-        tabBarItem.title = "Wishlist"
+        tabBarItem.title = WishKit.configuration.localization.wishlist
     }
 
     private func setupView() {

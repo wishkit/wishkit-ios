@@ -52,7 +52,7 @@ final class DetailWishVC: UIViewController {
     }
 
     private func setupNavigation() {
-        navigationItem.title = "Detail"
+        navigationItem.title = WishKit.configuration.localization.detail
     }
 
     private func setupCardView() {
@@ -127,13 +127,13 @@ final class DetailWishVC: UIViewController {
 
         // Check if it'syour own wish.
         if wishResponse.userUUID == UUIDManager.getUUID() {
-            AlertManager.confirmMessage(on: self, message: "You cannot vote for your own wish.")
+            AlertManager.confirmMessage(on: self, message: WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
             return
         }
 
         // Check if you already voted.
         if wishResponse.votingUsers.contains(where: {$0.uuid == UUIDManager.getUUID() }) {
-            AlertManager.confirmMessage(on: self, message: "You can only vote once.")
+            AlertManager.confirmMessage(on: self, message: WishKit.configuration.localization.youCanOnlyVoteOnce)
             return
         }
 

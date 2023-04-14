@@ -47,11 +47,11 @@ extension UIView {
         }
 
         if let centerX = centerX {
-            constraints.append(centerXAnchor.constraint(equalTo: centerX))
+            constraints.append(centerXAnchor.constraint(equalTo: centerX, constant: padding.left + padding.right))
         }
 
         if let centerY = centerY {
-            constraints.append(centerYAnchor.constraint(equalTo: centerY))
+            constraints.append(centerYAnchor.constraint(equalTo: centerY, constant: padding.top + padding.bottom))
         }
 
         if size.width != 0 {

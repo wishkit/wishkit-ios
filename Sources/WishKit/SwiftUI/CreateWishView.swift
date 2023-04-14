@@ -73,22 +73,20 @@ struct CreateWishView: View {
         if description.count > descriptionLimit {
             description = String(description.prefix(descriptionLimit))
         }
-
-
     }
 
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                    Text("Title")
+                    Text(WishKit.configuration.localization.title)
                         .font(.system(size: 10))
                     Spacer()
                     Text("\(title.count)/50")
                         .font(.system(size: 10))
                 }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
 
-                TextField("Title of the wish..", text: $title)
+                TextField(WishKit.configuration.localization.titleOfWish, text: $title)
                     .textFieldStyle(PlainTextFieldStyle())
                     .frame(height: 35)
                     .padding([.horizontal], 10)
@@ -98,7 +96,7 @@ struct CreateWishView: View {
                     .onReceive(Just(title)) { _ in keepTitleAndTextWithinLimit() }
 
                 HStack {
-                    Text("Description")
+                    Text(WishKit.configuration.localization.description)
                         .font(.system(size: 10))
                     Spacer()
                     Text("\(description.count)/500")
@@ -120,15 +118,15 @@ struct CreateWishView: View {
             }
 
             HStack {
-                WKButton(text: "Cancel", action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
+                WKButton(text: WishKit.configuration.localization.cancel, action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
                 .interactiveDismissDisabled()
-                WKButton(text: "Save", action: createWishAction, isLoading: $isButtonLoading)
+                WKButton(text: WishKit.configuration.localization.save, action: createWishAction, isLoading: $isButtonLoading)
             }
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-        }.alert(String("Info"), isPresented: $showAlert) {
-            Button("Ok", role: .cancel) { }
+        }.alert(String(WishKit.configuration.localization.info), isPresented: $showAlert) {
+            Button(WishKit.configuration.localization.ok, role: .cancel) { }
         } message: {
-            Text("Title/Description cannot be empty.")
+            Text(WishKit.configuration.localization.titleDescriptionCannotBeEmpty)
         }
     }
 

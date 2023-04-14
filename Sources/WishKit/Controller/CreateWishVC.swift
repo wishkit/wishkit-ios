@@ -20,13 +20,13 @@ final class CreateWishVC: UIViewController {
 
     private let scrollView = UIScrollView()
 
-    private let wishTitleSectionLabel = UILabel("Title")
+    private let wishTitleSectionLabel = UILabel(WishKit.configuration.localization.title)
 
     private let wishTitleCharacterCountLabel = UILabel()
 
     private let wishTitleTF = TextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
 
-    private let wishDescriptionSectionLabel = UILabel("Description")
+    private let wishDescriptionSectionLabel = UILabel(WishKit.configuration.localization.description)
 
     private let wishDescriptionCharacterCountLabel = UILabel()
 
@@ -77,7 +77,7 @@ extension CreateWishVC {
     }
 
     private func handleCreateSuccess(response: CreateWishResponse) {
-        AlertManager.showMessage(on: self, message: "Successfully created!") {
+        AlertManager.showMessage(on: self, message: "\(WishKit.configuration.localization.successfullyCreated)!") {
             if let delegate = self.delegate {
                 delegate.newWishWasSuccessfullyCreated()
             } else {
@@ -131,7 +131,7 @@ extension CreateWishVC {
 
     private func setupKeyboardToolbar() {
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+        let done = UIBarButtonItem(title: WishKit.configuration.localization.done, style: .plain, target: self, action: #selector(dismissKeyboard))
         toolbar.items = [flexSpace, done]
         toolbar.sizeToFit()
 
@@ -247,7 +247,7 @@ extension CreateWishVC {
             size: CGSize(width: 200, height: 45)
         )
 
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle(WishKit.configuration.localization.save, for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.setTitleColor(.systemGray6, for: .disabled)
 
