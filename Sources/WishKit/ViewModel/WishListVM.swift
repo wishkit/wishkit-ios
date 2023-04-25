@@ -84,6 +84,8 @@ extension WishListVM {
             return
         }
 
+        delegate.listWasUpdated()
+        
         AlertManager.confirmMessage(on: vc, message: error.reason.description)
     }
 }

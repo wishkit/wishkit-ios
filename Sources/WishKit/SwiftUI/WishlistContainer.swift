@@ -36,11 +36,11 @@ struct WishlistContainer: View {
     var body: some View {
         VStack {
 
-            if WishKit.configuration.showSegmentedControl {
+            if WishKit.config.showSegmentedControl {
                 ZStack {
                     Picker(selection: $listType, content: {
-                        Text(WishKit.configuration.localization.requested).tag(WishState.approved)
-                        Text(WishKit.configuration.localization.implemented).tag(WishState.implemented)
+                        Text(WishKit.config.localization.requested).tag(WishState.approved)
+                        Text(WishKit.config.localization.implemented).tag(WishState.implemented)
                     }, label: {
                         EmptyView()
                     })

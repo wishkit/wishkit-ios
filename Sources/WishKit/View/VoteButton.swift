@@ -17,7 +17,7 @@ final class VoteButton: UIButton {
 
     let voteCountLabel = UILabel()
 
-    private let upvoteLabel = UILabel(WishKit.configuration.localization.upvote.uppercased())
+    private let upvoteLabel = UILabel(WishKit.config.localization.upvote.uppercased())
 
     override init(frame: CGRect) {
         super.init(frame: frame)

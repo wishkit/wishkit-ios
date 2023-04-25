@@ -22,7 +22,7 @@ struct MockData {
 
         var votes = 123
         return wishlist.map({ wish in
-            var shadowWish = wish
+            let shadowWish = wish
             var ul = [UserResponse(uuid: UUID())]
             for _ in 1...votes {
                 ul.append(UserResponse(uuid: UUID()))

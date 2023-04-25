@@ -98,7 +98,7 @@ struct WishlistView: View {
             if wishModel.shouldShowWatermark {
                 VStack {
                     Spacer()
-                    Text("\(WishKit.configuration.localization.poweredBy) WishKit.io")
+                    Text("\(WishKit.config.localization.poweredBy) WishKit.io")
                         .opacity(0.33)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
                 }.zIndex(0)

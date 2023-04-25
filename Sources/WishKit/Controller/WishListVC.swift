@@ -18,9 +18,9 @@ final class WishListVC: UIViewController {
         var title: String {
             switch self {
             case .requested:
-                return WishKit.configuration.localization.requested
+                return WishKit.config.localization.requested
             case .implemented:
-                return WishKit.configuration.localization.implemented
+                return WishKit.config.localization.implemented
             }
         }
     }
@@ -46,7 +46,7 @@ final class WishListVC: UIViewController {
 
     private let watermarkLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(WishKit.configuration.localization.poweredBy) Wishkit.io"
+        label.text = "\(WishKit.config.localization.poweredBy) Wishkit.io"
         label.font = .boldSystemFont(ofSize: 13)
         label.textColor = .systemGray2
         label.textAlignment = .center
@@ -88,8 +88,8 @@ final class WishListVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyWishKitConfiguration()
-        
+        applyWishKitConfig()
+
         setup()
         spinner.startAnimating()
         fetchWishList()
@@ -125,11 +125,16 @@ extension WishListVC {
     }
 }
 
-// MARK: - WishKit Configuration
+// MARK: - WishKit config
 
 extension WishListVC {
-    func applyWishKitConfiguration() {
-        switchContainer.isHidden = !WishKit.configuration.showSegmentedControl
+    func applyWishKitConfig() {
+        switch WishKit.config.segmentedControl {
+        case .show:
+            switchContainer.isHidden = false
+        case .hide:
+            switchContainer.isHidden = true
+        }
     }
 }
 
@@ -139,7 +144,7 @@ extension WishListVC {
 
     private func setup() {
         view.backgroundColor = .secondarySystemBackground
-        navigationItem.title = WishKit.configuration.localization.featureWishlist
+        navigationItem.title = WishKit.config.localization.featureWishlist
         setupTabBar()
 
         setupView()
@@ -147,9 +152,9 @@ extension WishListVC {
     }
 
     private func setupTabBar() {
-        tabBarItem.image = UIImage(systemName: "lightbulb")
-        tabBarItem.selectedImage = UIImage(systemName: "lightbulb.fill")
-        tabBarItem.title = WishKit.configuration.localization.wishlist
+        tabBarItem.image = WishKit.config.tabBar.image
+        tabBarItem.selectedImage = WishKit.config.tabBar.selectedImage
+        tabBarItem.title = WishKit.config.localization.wishlist
     }
 
     private func setupView() {
@@ -165,7 +170,6 @@ extension WishListVC {
     }
 
     private func setupConstraints() {
-
         stackView.anchor(
             top: view.layoutMarginsGuide.topAnchor,
             leading: view.leadingAnchor,
@@ -186,8 +190,16 @@ extension WishListVC {
         )
 
         let hasTabBarController = tabBarController != nil
-        let bottomPadding: CGFloat = hasTabBarController ? 20 : 0
+        var bottomPadding: CGFloat = hasTabBarController ? 20 : 0
 
+        switch WishKit.config.button.addButton.bottomPadding {
+        case .small:
+            ()
+        case .medium:
+            bottomPadding = bottomPadding + 5
+        case .large:
+            bottomPadding = bottomPadding + 15
+        }
         addWishButton.anchor(
             bottom: view.layoutMarginsGuide.bottomAnchor,
             trailing: view.trailingAnchor,

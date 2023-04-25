@@ -102,7 +102,7 @@ struct WishView: View {
 
                 VStack(alignment: .leading, spacing: 5) {
 
-                    if WishKit.configuration.showStatusBadge {
+                    if WishKit.config.showStatusBadge {
                         HStack {
                             Text(wish.title)
                                 .bold()
@@ -130,18 +130,18 @@ struct WishView: View {
                 Spacer()
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-        }.alert(String(WishKit.configuration.localization.info), isPresented: $showAlert) {
-            Button(WishKit.configuration.localization.ok, role: .cancel) { }
+        }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
+            Button(WishKit.config.localization.ok, role: .cancel) { }
         } message: {
             switch alertReason {
             case .alreadyVoted:
-                Text(WishKit.configuration.localization.youCanOnlyVoteOnce)
+                Text(WishKit.config.localization.youCanOnlyVoteOnce)
             case .alreadyImplemented:
-                Text(WishKit.configuration.localization.youCanNotVoteForAnImplementedWish)
+                Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
             case .voteReturnedError(let error):
                 Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             case .none:
-                Text(WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
+                Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
             }
 
         }

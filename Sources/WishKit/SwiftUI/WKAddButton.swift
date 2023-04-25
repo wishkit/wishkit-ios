@@ -1,6 +1,6 @@
 //
 //  WKAddButton.swift
-//  
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 3/8/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -30,7 +30,7 @@ struct WKAddButton: View {
         .clipShape(Circle())
         .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
         .sheet(isPresented: $showingSheet) {
-            Text(WishKit.configuration.localization.createWish)
+            Text(WishKit.config.localization.createWish)
         }
     }
 

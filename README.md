@@ -63,7 +63,7 @@ WishKit.theme = Theme(primaryColor: .systemGreen)
 <b>Status Badge</b>
 
 ```swift
-WishKit.configuration.showStatusBadge = true
+WishKit.config.statusBadge = .show
 ```
 
 <hr/>

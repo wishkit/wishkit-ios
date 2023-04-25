@@ -62,7 +62,13 @@ extension WishCell {
         }
 
         badgeView.configure(with: response.state)
-        badgeContainerView.isHidden = !WishKit.configuration.showStatusBadge
+
+        switch WishKit.config.statusBadge {
+        case .show:
+            badgeContainerView.isHidden = false
+        case .hide:
+            badgeContainerView.isHidden = true
+        }
     }
 }
 
@@ -162,16 +168,16 @@ extension WishCell {
         }
 
         if let rootViewController = rootViewController, response.state == .implemented {
-            AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanNotVoteForAnImplementedWish)
+            AlertManager.confirmMessage(on: rootViewController, message: WishKit.config.localization.youCanNotVoteForAnImplementedWish)
             return
         }
 
         // Check if it's the users own wish.
         if response.userUUID == UUIDManager.getUUID() {
-            printWarning(self, WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
+            printWarning(self, WishKit.config.localization.youCanNotVoteForYourOwnWish)
 
             if let rootViewController = rootViewController {
-                AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
+                AlertManager.confirmMessage(on: rootViewController, message: WishKit.config.localization.youCanNotVoteForYourOwnWish)
             }
 
             return
@@ -179,10 +185,10 @@ extension WishCell {
 
         // Check if the user already voted.
         if response.votingUsers.contains(where: { $0.uuid == UUIDManager.getUUID() }) {
-            printWarning(self, WishKit.configuration.localization.youCanOnlyVoteOnce)
+            printWarning(self, WishKit.config.localization.youCanOnlyVoteOnce)
 
             if let rootViewController = rootViewController {
-                AlertManager.confirmMessage(on: rootViewController, message: WishKit.configuration.localization.youCanOnlyVoteOnce)
+                AlertManager.confirmMessage(on: rootViewController, message: WishKit.config.localization.youCanOnlyVoteOnce)
             }
 
             return

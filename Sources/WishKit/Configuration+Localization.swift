@@ -1,6 +1,6 @@
 //
 //  Configuration+Localization.swift
-//  
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 4/13/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -10,57 +10,57 @@ extension Configuration {
 
     public struct Localizaton {
 
-        public let requested: String
+        public var requested: String
 
-        public let pending: String
+        public var pending: String
 
-        public let approved: String
+        public var approved: String
 
-        public let implemented: String
+        public var implemented: String
 
-        public let wishlist: String
+        public var wishlist: String
 
-        public let save: String
+        public var save: String
 
-        public let title: String
+        public var title: String
 
-        public let description: String
+        public var description: String
 
-        public let upvote: String
+        public var upvote: String
 
-        public let info: String
+        public var info: String
 
-        public let youCanOnlyVoteOnce: String
+        public var youCanOnlyVoteOnce: String
 
-        public let youCanNotVoteForAnImplementedWish: String
+        public var youCanNotVoteForAnImplementedWish: String
 
-        public let youCanNotVoteForYourOwnWish: String
+        public var youCanNotVoteForYourOwnWish: String
 
-        public let poweredBy: String
+        public var poweredBy: String
 
-        public let successfullyCreated: String
+        public var successfullyCreated: String
 
-        public let done: String
+        public var done: String
 
-        public let detail: String
+        public var detail: String
 
-        public let featureWishlist: String
+        public var featureWishlist: String
 
-        public let confirm: String
+        public var confirm: String
 
-        public let cancel: String
+        public var cancel: String
 
-        public let ok: String
+        public var ok: String
 
-        public let titleOfWish: String
+        public var titleOfWish: String
 
-        public let titleDescriptionCannotBeEmpty: String
+        public var titleDescriptionCannotBeEmpty: String
 
-        public let votes: String
+        public var votes: String
 
-        public let close: String
+        public var close: String
 
-        public let createWish: String
+        public var createWish: String
 
         public init(
             requested: String = Localizaton.default().requested,

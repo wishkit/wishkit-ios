@@ -18,16 +18,12 @@ public struct Theme {
 
     public var badgeColor: BadgeTheme
 
-    public init(
-        primaryColor: Color,
+    init(
+        primaryColor: Color = Theme.systemGreen,
         badgeColor: BadgeTheme = .default()
     ) {
         self.primaryColor = primaryColor
         self.badgeColor = badgeColor
-    }
-
-    public static func `default`() -> Theme {
-        return Theme(primaryColor: Theme.systemGreen)
     }
 
     #if os(macOS)
@@ -58,19 +54,23 @@ struct PrivateTheme {
 #if canImport(UIKit)
 extension Theme {
     public struct BadgeTheme {
-        let pending: UIColor
-        let approved: UIColor
-        let implemented: UIColor
-        let rejected: UIColor
 
-        public init(pending: UIColor, approved: UIColor, implemented: UIColor, rejected: UIColor) {
+        public var pending: UIColor
+
+        public var approved: UIColor
+
+        public var implemented: UIColor
+
+        public var rejected: UIColor
+
+        init(pending: UIColor, approved: UIColor, implemented: UIColor, rejected: UIColor) {
             self.pending = pending
             self.approved = approved
             self.implemented = implemented
             self.rejected = rejected
         }
 
-        public static func `default`() -> BadgeTheme {
+        static func `default`() -> BadgeTheme {
             return BadgeTheme(
                 pending: .systemYellow.withAlphaComponent(0.3),
                 approved: .systemBlue.withAlphaComponent(0.3),
@@ -84,19 +84,23 @@ extension Theme {
 
 extension Theme {
     public struct BadgeTheme {
-        let pending: Color
-        let approved: Color
-        let implemented: Color
-        let rejected: Color
 
-        public init(pending: Color, approved: Color, implemented: Color, rejected: Color) {
+        var pending: Color
+
+        var approved: Color
+
+        var implemented: Color
+
+        var rejected: Color
+
+        init(pending: Color, approved: Color, implemented: Color, rejected: Color) {
             self.pending = pending
             self.approved = approved
             self.implemented = implemented
             self.rejected = rejected
         }
 
-        public static func `default`() -> BadgeTheme {
+        static func `default`() -> BadgeTheme {
             return BadgeTheme(
                 pending: .yellow.opacity(0.3),
                 approved: .blue.opacity(0.3),

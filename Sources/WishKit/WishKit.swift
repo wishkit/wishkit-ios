@@ -16,13 +16,15 @@ public struct WishKit {
 
     static var apiKey = "my-fancy-api-key"
 
-    public static var theme: Theme = .default()
+    public static var theme = Theme()
 
-    public static var configuration: Configuration = .default()
+    public static var config = Configuration()
 
     #if canImport(UIKit)
     /// (UIKit) The WishList viewcontroller.
-    public static let viewController: UIViewController = WishListVC()
+    public static var viewController: UIViewController {
+        return WishListVC()
+    }
     #endif
     
     /// (SwiftUI) The WishList view.

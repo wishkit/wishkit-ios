@@ -88,27 +88,27 @@ struct DetailWishView: View {
                     Spacer()
                 }
 
-                Text("\(WishKit.configuration.localization.votes): \(wish.votingUsers.count)")
+                Text("\(WishKit.config.localization.votes): \(wish.votingUsers.count)")
 
                 HStack {
-                    WKButton(text: WishKit.configuration.localization.close, action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
+                    WKButton(text: WishKit.config.localization.close, action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
                     .interactiveDismissDisabled()
-                    WKButton(text: WishKit.configuration.localization.upvote, action: vote)
+                    WKButton(text: WishKit.config.localization.upvote, action: vote)
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
             }
-        }.alert(String(WishKit.configuration.localization.info), isPresented: $showAlert) {
-            Button(WishKit.configuration.localization.ok, role: .cancel) { }
+        }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
+            Button(WishKit.config.localization.ok, role: .cancel) { }
         } message: {
             switch alertReason {
             case .alreadyVoted:
-                Text(WishKit.configuration.localization.youCanOnlyVoteOnce)
+                Text(WishKit.config.localization.youCanOnlyVoteOnce)
             case .alreadyImplemented:
-                Text(WishKit.configuration.localization.youCanNotVoteForAnImplementedWish)
+                Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
             case .voteReturnedError(let error):
                 Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             case .none:
-                Text(WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
+                Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
             }
 
         }

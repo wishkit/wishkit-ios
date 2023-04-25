@@ -52,7 +52,7 @@ final class DetailWishVC: UIViewController {
     }
 
     private func setupNavigation() {
-        navigationItem.title = WishKit.configuration.localization.detail
+        navigationItem.title = WishKit.config.localization.detail
     }
 
     private func setupCardView() {
@@ -62,7 +62,7 @@ final class DetailWishVC: UIViewController {
             top: view.layoutMarginsGuide.topAnchor,
             leading: view.leadingAnchor,
             trailing: view.trailingAnchor,
-            padding: UIEdgeInsets(top: 15, left: 15, bottom: 0, right: 15)
+            padding: UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
         )
 
         cardView.backgroundColor = .tertiarySystemBackground
@@ -127,13 +127,13 @@ final class DetailWishVC: UIViewController {
 
         // Check if it'syour own wish.
         if wishResponse.userUUID == UUIDManager.getUUID() {
-            AlertManager.confirmMessage(on: self, message: WishKit.configuration.localization.youCanNotVoteForYourOwnWish)
+            AlertManager.confirmMessage(on: self, message: WishKit.config.localization.youCanNotVoteForYourOwnWish)
             return
         }
 
         // Check if you already voted.
         if wishResponse.votingUsers.contains(where: {$0.uuid == UUIDManager.getUUID() }) {
-            AlertManager.confirmMessage(on: self, message: WishKit.configuration.localization.youCanOnlyVoteOnce)
+            AlertManager.confirmMessage(on: self, message: WishKit.config.localization.youCanOnlyVoteOnce)
             return
         }
 
