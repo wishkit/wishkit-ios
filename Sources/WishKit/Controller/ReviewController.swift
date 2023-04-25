@@ -6,6 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 final class ReviewController: UIViewController {
@@ -18,3 +19,4 @@ final class ReviewController: UIViewController {
         return view
     }()
 }
+#endif

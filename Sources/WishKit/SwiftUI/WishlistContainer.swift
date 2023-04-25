@@ -35,35 +35,31 @@ struct WishlistContainer: View {
 
     var body: some View {
         VStack {
+            switch WishKit.config.segmentedControl {
+            case .show:
+                segmentedControlView
+            case .hide:
+                noSegmentedControlView
+            }
 
-            if WishKit.config.showSegmentedControl {
-                ZStack {
-                    Picker(selection: $listType, content: {
-                        Text(WishKit.config.localization.requested).tag(WishState.approved)
-                        Text(WishKit.config.localization.implemented).tag(WishState.implemented)
-                    }, label: {
-                        EmptyView()
-                    })
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding()
-                    .frame(maxWidth: 300)
+            WishlistView(wishModel: wishModel, listType: $listType)
+            
+        }.background(systemBackgroundColor)
+    }
 
-                    HStack {
-                        Button(action: refreshList) {
-                            if isRefreshing {
-                                ProgressView()
-                                    .scaleEffect(0.4)
-                                    .progressViewStyle(CircularProgressViewStyle())
-                            } else {
-                                Image(systemName: "arrow.clockwise")
-                            }
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .frame(width: 20, height: 20)
-                        .padding(EdgeInsets(top: 0, leading: 315, bottom: 0, trailing: 0))
-                    }
-                }
-            } else {
+    var segmentedControlView: some View {
+        ZStack {
+            Picker(selection: $listType, content: {
+                Text(WishKit.config.localization.requested).tag(WishState.approved)
+                Text(WishKit.config.localization.implemented).tag(WishState.implemented)
+            }, label: {
+                EmptyView()
+            })
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            .frame(maxWidth: 300)
+
+            HStack {
                 Button(action: refreshList) {
                     if isRefreshing {
                         ProgressView()
@@ -75,12 +71,24 @@ struct WishlistContainer: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .frame(width: 20, height: 20)
-                .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
+                .padding(EdgeInsets(top: 0, leading: 315, bottom: 0, trailing: 0))
             }
+        }
+    }
 
-            WishlistView(wishModel: wishModel, listType: $listType)
-            
-        }.background(systemBackgroundColor)
+    var noSegmentedControlView: some View {
+        Button(action: refreshList) {
+            if isRefreshing {
+                ProgressView()
+                    .scaleEffect(0.4)
+                    .progressViewStyle(CircularProgressViewStyle())
+            } else {
+                Image(systemName: "arrow.clockwise")
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .frame(width: 20, height: 20)
+        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
     }
 
     var systemBackgroundColor: Color {

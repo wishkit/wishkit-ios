@@ -102,7 +102,8 @@ struct WishView: View {
 
                 VStack(alignment: .leading, spacing: 5) {
 
-                    if WishKit.config.showStatusBadge {
+                    switch WishKit.config.statusBadge {
+                    case .show:
                         HStack {
                             Text(wish.title)
                                 .bold()
@@ -116,7 +117,7 @@ struct WishView: View {
                                 .background(badgeColor(for: wish.state))
                                 .cornerRadius(6)
                         }
-                    } else {
+                    case .hide:
                         Text(wish.title)
                             .bold()
                             .truncationMode(.tail)
