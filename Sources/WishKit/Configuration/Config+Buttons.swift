@@ -9,11 +9,11 @@
 extension Configuration {
     public struct Buttons {
 
-        public let segmentedControl: SegmentedControl
+        public var segmentedControl: SegmentedControl
 
         public var addButton: AddButton
 
-        public let voteButton: VoteButton
+        public var voteButton: VoteButton
 
         init(
             segmentedControl: SegmentedControl = SegmentedControl(),
