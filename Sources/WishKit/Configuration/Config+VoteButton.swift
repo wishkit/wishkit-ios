@@ -1,5 +1,5 @@
 //
-//  Config+AddButton.swift
+//  Config+VoteButton.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 4/25/23.
@@ -13,26 +13,12 @@ import UIKit
 #endif
 
 extension Configuration {
-    public struct AddButton {
+    public struct VoteButton {
 
         #if os(macOS)
         public var tintColor: Color = Color.white
         #elseif canImport(UIKit)
         public var tintColor: UIColor = .label
         #endif
-
-        public var bottomPadding: Padding
-
-        init(bottomPadding: Padding = .small) {
-            self.bottomPadding = bottomPadding
-        }
-    }
-}
-
-extension Configuration.AddButton {
-    public enum Padding {
-        case small
-        case medium
-        case large
     }
 }

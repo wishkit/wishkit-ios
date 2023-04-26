@@ -60,7 +60,7 @@ struct WishlistContainer: View {
             .frame(maxWidth: 300)
 
             HStack {
-                Button(action: refreshList) {
+                Buttons(action: refreshList) {
                     if isRefreshing {
                         ProgressView()
                             .scaleEffect(0.4)
@@ -77,7 +77,7 @@ struct WishlistContainer: View {
     }
 
     var noSegmentedControlView: some View {
-        Button(action: refreshList) {
+        Buttons(action: refreshList) {
             if isRefreshing {
                 ProgressView()
                     .scaleEffect(0.4)

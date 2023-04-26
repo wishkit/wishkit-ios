@@ -39,7 +39,7 @@ final class WishListVC: UIViewController {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
         control.selectedSegmentTintColor = UIColor(WishKit.theme.primaryColor)
-        control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: WishKit.config.buttons.segmentedControl.tintColor], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control
     }()
@@ -73,9 +73,9 @@ final class WishListVC: UIViewController {
     }()
 
     private lazy var addWishButton: AddButton = {
-        let button = AddButton()
-        button.addTarget(self, action: #selector(createWishAction), for: .touchUpInside)
-        return button
+        let buttons = AddButton()
+        buttons.addTarget(self, action: #selector(createWishAction), for: .touchUpInside)
+        return buttons
     }()
 
     private let spinner = UIActivityIndicatorView()
@@ -129,7 +129,7 @@ extension WishListVC {
 
 extension WishListVC {
     func applyWishKitConfig() {
-        switch WishKit.config.segmentedControl {
+        switch WishKit.config.buttons.segmentedControl.display {
         case .show:
             switchContainer.isHidden = false
         case .hide:
@@ -192,7 +192,7 @@ extension WishListVC {
         let hasTabBarController = tabBarController != nil
         var bottomPadding: CGFloat = hasTabBarController ? 20 : 0
 
-        switch WishKit.config.button.addButton.bottomPadding {
+        switch WishKit.config.buttons.addButton.bottomPadding {
         case .small:
             ()
         case .medium:

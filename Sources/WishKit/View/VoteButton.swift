@@ -75,7 +75,7 @@ final class VoteButton: UIButton {
 
     private func setupUpVoteLabel() {
         stackView.addArrangedSubview(upvoteLabel)
-        upvoteLabel.textColor = .white
+        upvoteLabel.textColor = WishKit.config.buttons.voteButton.tintColor
     }
 
     private func setupVoteCountLabel() {

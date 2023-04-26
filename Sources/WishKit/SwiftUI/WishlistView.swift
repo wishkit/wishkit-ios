@@ -80,7 +80,7 @@ struct WishlistView: View {
         ZStack {
 
             List(getList(), id: \.id) { wish in
-                Button(action: { selectedWish = wish }) {
+                Buttons(action: { selectedWish = wish }) {
                     WishView(wish: wish, voteCompletion: wishModel.fetchList)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }

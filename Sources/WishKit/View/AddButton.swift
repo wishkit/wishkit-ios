@@ -8,6 +8,7 @@
 
 #if canImport(UIKit)
 import UIKit
+import SwiftUI
 
 final class AddButton: UIButton {
 
@@ -30,7 +31,7 @@ final class AddButton: UIButton {
 
         let image = UIImage(systemName: "plus")
         setImage(image, for: .normal)
-        imageView?.tintColor = .white
+        imageView?.tintColor = WishKit.config.buttons.addButton.tintColor
         backgroundColor = UIColor(WishKit.theme.primaryColor)
         layer.cornerRadius = length/2
         layer.shadowOffset = CGSize(width: 0, height: 3)

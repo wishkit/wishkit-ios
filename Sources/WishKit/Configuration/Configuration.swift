@@ -11,25 +11,20 @@ public struct Configuration {
     /// Hides/Shows the status badge of a wish e.g. "Approved" or "Implemented".
     public var statusBadge: Display
 
-    /// Hides/Shows the segmented control to switch between 'Requested' and 'Implemented'.
-    public var segmentedControl: Display
-
     public var localization: Localizaton
 
-    public var button = Configuration.Button()
+    public var buttons = Configuration.Buttons()
 
     public var tabBar = TabBar()
 
     init(
         showStatusBadge: Display = .hide,
-        showSegmentedControl: Display = .show,
-        button: Configuration.Button = .init(),
+        button: Configuration.Buttons = .init(),
         localization: Localizaton = .default()
     ) {
         self.statusBadge = showStatusBadge
-        self.segmentedControl = showSegmentedControl
         self.localization = localization
-        self.button = button
+        self.buttons = button
     }
 }
 

@@ -88,7 +88,7 @@ struct WishView: View {
                 .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0)
 
             HStack {
-                Button(action: vote) {
+                Buttons(action: vote) {
                     VStack(alignment: .center, spacing: 3) {
                         if hasUserVoted() {
                             Image(systemName: "triangle.fill")
@@ -132,7 +132,7 @@ struct WishView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
         }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
-            Button(WishKit.config.localization.ok, role: .cancel) { }
+            Buttons(WishKit.config.localization.ok, role: .cancel) { }
         } message: {
             switch alertReason {
             case .alreadyVoted:
