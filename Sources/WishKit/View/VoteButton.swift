@@ -17,7 +17,7 @@ final class VoteButton: UIButton {
 
     let voteCountLabel = UILabel()
 
-    private let upvoteLabel = UILabel(WishKit.config.localization.upvote.uppercased())
+    private let upvoteLabel = UILabel(WishKit.config.localization.upvote)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,7 +64,7 @@ final class VoteButton: UIButton {
         let config = UIImage.SymbolConfiguration(font: .systemFont(ofSize: 14), scale: .medium)
         let image = UIImage(systemName: "arrowtriangle.up.fill")?.withConfiguration(config).withRenderingMode(.alwaysTemplate)
         arrowIV.image = image
-        arrowIV.tintColor = .white
+        arrowIV.tintColor = WishKit.config.buttons.voteButton.tintColor
 
         arrowIV.anchor(
             leading: container.leadingAnchor,
@@ -80,7 +80,7 @@ final class VoteButton: UIButton {
 
     private func setupVoteCountLabel() {
         stackView.addArrangedSubview(voteCountLabel)
-        voteCountLabel.textColor = .white
+        voteCountLabel.textColor = WishKit.config.buttons.voteButton.tintColor
         voteCountLabel.adjustsFontSizeToFitWidth = true
     }
 }

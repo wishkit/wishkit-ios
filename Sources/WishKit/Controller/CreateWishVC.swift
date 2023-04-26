@@ -53,9 +53,9 @@ final class CreateWishVC: UIViewController {
 extension CreateWishVC {
 
     private func updateSaveButton() {
-        let backgroundColor = UIColor(WishKit.theme.primaryColor)
-        saveButton.backgroundColor = viewModel.canSave() ? backgroundColor : backgroundColor.withAlphaComponent(0.66)
+        saveButton.backgroundColor = UIColor(WishKit.theme.primaryColor)
         saveButton.isEnabled = viewModel.canSave()
+        saveButton.layer.opacity = viewModel.canSave() ? 1 : 2/3
     }
 
     private func updateCharacterCountLabels() {
@@ -248,8 +248,7 @@ extension CreateWishVC {
         )
 
         saveButton.setTitle(WishKit.config.localization.save, for: .normal)
-        saveButton.setTitleColor(.white, for: .normal)
-        saveButton.setTitleColor(.systemGray6, for: .disabled)
+        saveButton.setTitleColor(WishKit.config.buttons.voteButton.tintColor, for: .normal)
 
         saveButton.layer.cornerRadius = 12
         saveButton.layer.cornerCurve = .continuous
