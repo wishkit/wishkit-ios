@@ -169,6 +169,19 @@ extension WishListVC {
 
     private func setup() {
         navigationItem.title = WishKit.config.localization.featureWishlist
+
+        if let color = WishKit.theme.tertiaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            view.backgroundColor = .secondarySystemBackground
+        }
+
         setupTabBar()
 
         setupView()

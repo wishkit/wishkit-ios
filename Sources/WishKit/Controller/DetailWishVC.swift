@@ -94,7 +94,17 @@ final class DetailWishVC: UIViewController {
     // MARK: - Setup View
 
     private func setupView() {
-        view.backgroundColor = .secondarySystemBackground
+        if let color = WishKit.theme.tertiaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            view.backgroundColor = .secondarySystemBackground
+        }
 
         setupNavigation()
         setupCardView()

@@ -108,7 +108,30 @@ extension CreateWishVC {
 extension CreateWishVC {
     private func setupView() {
         safeArea = view.layoutMarginsGuide
-        view.backgroundColor = .secondarySystemBackground
+
+        if let color = WishKit.theme.tertiaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            view.backgroundColor = .secondarySystemBackground
+        }
+
+        if let color = WishKit.theme.secondaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                wishTitleTF.backgroundColor = UIColor(color.light)
+                wishDescriptionTV.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                wishTitleTF.backgroundColor = UIColor(color.dark)
+                wishDescriptionTV.backgroundColor = UIColor(color.dark)
+            }
+        }
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
