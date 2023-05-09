@@ -194,11 +194,14 @@ extension WishListVC {
     }
 
     private func setupConstraints() {
+        let topPadding: CGFloat = WishKit.config.buttons.segmentedControl.display == .hide ? 30 : 0
+
         stackView.anchor(
             top: view.layoutMarginsGuide.topAnchor,
             leading: view.leadingAnchor,
             bottom: view.bottomAnchor,
-            trailing: view.trailingAnchor
+            trailing: view.trailingAnchor,
+            padding: UIEdgeInsets(top: topPadding, left: 0, bottom: 0, right: 0)
         )
 
         switchListControl.anchor(
