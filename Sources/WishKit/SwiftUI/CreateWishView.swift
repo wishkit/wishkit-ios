@@ -124,7 +124,7 @@ struct CreateWishView: View {
             }
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
-            Buttons(WishKit.config.localization.ok, role: .cancel) { }
+            Button(WishKit.config.localization.ok, role: .cancel) { }
         } message: {
             Text(WishKit.config.localization.titleDescriptionCannotBeEmpty)
         }
@@ -133,8 +133,16 @@ struct CreateWishView: View {
     var backgroundColor: Color {
         switch colorScheme {
         case .light:
+            if let color = WishKit.theme.secondaryColor {
+                return color.light
+            }
+
             return PrivateTheme.elementBackgroundColor.light
         case .dark:
+            if let color = WishKit.theme.secondaryColor {
+                return color.dark
+            }
+
             return PrivateTheme.elementBackgroundColor.dark
         }
     }

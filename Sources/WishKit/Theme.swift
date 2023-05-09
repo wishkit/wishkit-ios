@@ -16,14 +16,23 @@ public struct Theme {
 
     public var primaryColor: Color
 
+    public var secondaryColor: Scheme?
+
+    public var tertiaryColor: Scheme?
+
+    /// The badge that shows the state of a wish.
     public var badgeColor: BadgeTheme
 
     init(
         primaryColor: Color = Theme.systemGreen,
-        badgeColor: BadgeTheme = .default()
+        badgeColor: BadgeTheme = .default(),
+        secondaryColor: Scheme? = nil,
+        tertiaryColor: Scheme? = nil
     ) {
         self.primaryColor = primaryColor
         self.badgeColor = badgeColor
+        self.secondaryColor = secondaryColor
+        self.tertiaryColor = tertiaryColor
     }
 
     #if os(macOS)
@@ -111,3 +120,15 @@ extension Theme {
     }
 }
 #endif
+
+extension Theme {
+    public struct Scheme {
+        var light: Color
+        var dark: Color
+
+        public init(light: Color, dark: Color) {
+            self.light = light
+            self.dark = dark
+        }
+    }
+}

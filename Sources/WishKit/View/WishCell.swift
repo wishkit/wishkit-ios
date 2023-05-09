@@ -42,6 +42,23 @@ final class WishCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let color = WishKit.theme.secondaryColor,
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        if previousTraitCollection.userInterfaceStyle == .light {
+            containerView.backgroundColor = UIColor(color.dark)
+        }
+
+        if previousTraitCollection.userInterfaceStyle == .dark {
+            containerView.backgroundColor = UIColor(color.light)
+        }
+    }
 }
 
 // MARK: - Public
@@ -97,7 +114,17 @@ extension WishCell {
             padding: UIEdgeInsets(top: 0, left: 15, bottom: 15, right: 15)
         )
 
-        containerView.backgroundColor = .tertiarySystemBackground
+        if let color = WishKit.theme.secondaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                containerView.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                containerView.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            containerView.backgroundColor = .tertiarySystemBackground
+        }
     }
 
     private func setupVoteButton() {

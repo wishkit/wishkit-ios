@@ -94,6 +94,31 @@ final class WishListVC: UIViewController {
         spinner.startAnimating()
         fetchWishList()
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let color = WishKit.theme.tertiaryColor,
+            let previousTraitCollection = previousTraitCollection
+        else {
+            view.backgroundColor = .secondarySystemBackground
+            return
+        }
+
+        // Needed this case where it's the same, there's a weird behaviour otherwise.
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(color.light)
+            } else if previousTraitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(color.light)
+            } else if previousTraitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(color.dark)
+            }
+        }
+    }
 }
 
 // MARK: - Action
@@ -143,7 +168,6 @@ extension WishListVC {
 extension WishListVC {
 
     private func setup() {
-        view.backgroundColor = .secondarySystemBackground
         navigationItem.title = WishKit.config.localization.featureWishlist
         setupTabBar()
 

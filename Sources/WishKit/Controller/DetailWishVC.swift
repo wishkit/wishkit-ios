@@ -39,6 +39,58 @@ final class DetailWishVC: UIViewController {
         setupView()
     }
 
+    // MARK: - Dark Mode
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        if let color = WishKit.theme.secondaryColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    cardView.backgroundColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    cardView.backgroundColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    cardView.backgroundColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    cardView.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+
+        if let color = WishKit.theme.tertiaryColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+    }
+
     // MARK: - Setup View
 
     private func setupView() {
@@ -65,7 +117,17 @@ final class DetailWishVC: UIViewController {
             padding: UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
         )
 
-        cardView.backgroundColor = .tertiarySystemBackground
+        if let color = WishKit.theme.secondaryColor {
+            if traitCollection.userInterfaceStyle == .light {
+                cardView.backgroundColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                cardView.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            cardView.backgroundColor = .tertiarySystemBackground
+        }
     }
 
     private func setupWishTitleLabel() {

@@ -35,7 +35,7 @@ struct WishlistContainer: View {
 
     var body: some View {
         VStack {
-            switch WishKit.config.segmentedControl {
+            switch WishKit.config.buttons.segmentedControl.display {
             case .show:
                 segmentedControlView
             case .hide:
@@ -43,6 +43,7 @@ struct WishlistContainer: View {
             }
 
             WishlistView(wishModel: wishModel, listType: $listType)
+                .background(systemBackgroundColor)
             
         }.background(systemBackgroundColor)
     }
@@ -60,7 +61,7 @@ struct WishlistContainer: View {
             .frame(maxWidth: 300)
 
             HStack {
-                Buttons(action: refreshList) {
+                Button(action: refreshList) {
                     if isRefreshing {
                         ProgressView()
                             .scaleEffect(0.4)
@@ -77,7 +78,7 @@ struct WishlistContainer: View {
     }
 
     var noSegmentedControlView: some View {
-        Buttons(action: refreshList) {
+        Button(action: refreshList) {
             if isRefreshing {
                 ProgressView()
                     .scaleEffect(0.4)
@@ -94,8 +95,16 @@ struct WishlistContainer: View {
     var systemBackgroundColor: Color {
         switch colorScheme {
         case .light:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
             return PrivateTheme.systemBackgroundColor.light
         case .dark:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.dark
+            }
+
             return PrivateTheme.systemBackgroundColor.dark
         }
     }

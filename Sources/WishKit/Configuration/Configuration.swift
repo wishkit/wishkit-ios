@@ -19,12 +19,12 @@ public struct Configuration {
 
     init(
         showStatusBadge: Display = .hide,
-        button: Configuration.Buttons = .init(),
+        buttons: Configuration.Buttons = .init(),
         localization: Localizaton = .default()
     ) {
         self.statusBadge = showStatusBadge
         self.localization = localization
-        self.buttons = button
+        self.buttons = buttons
     }
 }
 

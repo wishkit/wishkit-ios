@@ -328,4 +328,62 @@ extension CreateWishVC: CreateWishVMDelegate {
         updateSaveButton()
     }
 }
+
+// MARK: - Dark Mode
+
+extension CreateWishVC {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        if let color = WishKit.theme.secondaryColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    wishTitleTF.backgroundColor = UIColor(color.light)
+                    wishDescriptionTV.backgroundColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    wishTitleTF.backgroundColor = UIColor(color.dark)
+                    wishDescriptionTV.backgroundColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    wishTitleTF.backgroundColor = UIColor(color.dark)
+                    wishDescriptionTV.backgroundColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    wishTitleTF.backgroundColor = UIColor(color.light)
+                    wishDescriptionTV.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+        
+        if let color = WishKit.theme.tertiaryColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+    }
+}
 #endif

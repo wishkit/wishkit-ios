@@ -80,7 +80,7 @@ struct WishlistView: View {
         ZStack {
 
             List(getList(), id: \.id) { wish in
-                Buttons(action: { selectedWish = wish }) {
+                Button(action: { selectedWish = wish }) {
                     WishView(wish: wish, voteCompletion: wishModel.fetchList)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
@@ -90,6 +90,7 @@ struct WishlistView: View {
             .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                 DetailWishView(wish: wish, voteCompletion: wishModel.fetchList)
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                    .background(backgroundColor)
             }
             .scrollContentBackgroundCompat(.hidden)
             .scrollIndicatorsCompat(.hidden)
@@ -116,17 +117,26 @@ struct WishlistView: View {
                                 showingSheet = false
                             })
                             .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                            .background(backgroundColor)
                         }
                 }
             }
-        }.background(systemBackgroundColor)
+        }
     }
 
-    var systemBackgroundColor: Color {
+    var backgroundColor: Color {
         switch colorScheme {
         case .light:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
             return PrivateTheme.systemBackgroundColor.light
         case .dark:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.dark
+            }
+
             return PrivateTheme.systemBackgroundColor.dark
         }
     }
