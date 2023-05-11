@@ -51,12 +51,23 @@ final class WishCell: UITableViewCell {
             return
         }
 
-        if previousTraitCollection.userInterfaceStyle == .light {
-            containerView.backgroundColor = UIColor(color.dark)
-        }
+        // Needed this case where it's the same, there's a weird behaviour otherwise.
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                containerView.backgroundColor = UIColor(color.light)
+            }
 
-        if previousTraitCollection.userInterfaceStyle == .dark {
-            containerView.backgroundColor = UIColor(color.light)
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                containerView.backgroundColor = UIColor(color.dark)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                containerView.backgroundColor = UIColor(color.dark)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                containerView.backgroundColor = UIColor(color.light)
+            }
         }
     }
 }
