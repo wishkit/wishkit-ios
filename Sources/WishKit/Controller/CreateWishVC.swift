@@ -36,6 +36,16 @@ final class CreateWishVC: UIViewController {
 
     private let toolbar = UIToolbar()
 
+    private let doneContainer = UIView()
+
+    private lazy var doneButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(WishKit.config.localization.done, for: .normal)
+        button.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+        button.layer.opacity = 0
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel.delegate = self
@@ -45,6 +55,7 @@ final class CreateWishVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         wishTitleTF.becomeFirstResponder()
+        updateDoneButton()
     }
 }
 
@@ -109,6 +120,30 @@ extension CreateWishVC {
     private func setupView() {
         safeArea = view.layoutMarginsGuide
 
+        setupTheme()
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+
+        setupKeyboardManager()
+        setupKeyboardToolbar()
+
+        setupScrollView()
+
+        setupDoneButton()
+
+        setupWishTitleSectionLabel()
+        setupWishTitleCharacterCountLabel()
+        setupWishTitleTV()
+
+        setupWishDescriptionSectionLabel()
+        setupWishDescriptionCharacterCountLabel()
+        setupWishDescriptionTV()
+
+        setupSaveButton()
+    }
+
+    private func setupTheme() {
         if let color = WishKit.theme.tertiaryColor {
             if traitCollection.userInterfaceStyle == .light {
                 view.backgroundColor = UIColor(color.light)
@@ -132,24 +167,6 @@ extension CreateWishVC {
                 wishDescriptionTV.backgroundColor = UIColor(color.dark)
             }
         }
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-
-        setupKeyboardManager()
-        setupKeyboardToolbar()
-
-        setupScrollView()
-
-        setupWishTitleSectionLabel()
-        setupWishTitleCharacterCountLabel()
-        setupWishTitleTV()
-
-        setupWishDescriptionSectionLabel()
-        setupWishDescriptionCharacterCountLabel()
-        setupWishDescriptionTV()
-
-        setupSaveButton()
     }
 
     private func setupKeyboardToolbar() {
@@ -160,6 +177,25 @@ extension CreateWishVC {
 
         wishTitleTF.inputAccessoryView = toolbar
         wishDescriptionTV.inputAccessoryView = toolbar
+    }
+
+    private func setupDoneButton() {
+        scrollView.addSubview(doneContainer)
+        doneContainer.addSubview(doneButton)
+
+        doneContainer.anchor(
+            top: scrollView.topAnchor,
+            trailing: view.trailingAnchor,
+            size: CGSize(width: 0, height: 35)
+        )
+
+        doneButton.anchor(
+            top: doneContainer.topAnchor,
+            leading: doneContainer.leadingAnchor,
+            bottom: doneContainer.bottomAnchor,
+            trailing: doneContainer.trailingAnchor,
+            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 65)
+        )
     }
 
     private func setupScrollView() {
@@ -180,7 +216,7 @@ extension CreateWishVC {
         scrollView.addSubview(wishTitleSectionLabel)
 
         wishTitleSectionLabel.anchor(
-            top: scrollView.topAnchor,
+            top: doneContainer.bottomAnchor,
             leading: safeArea.leadingAnchor,
             trailing: safeArea.trailingAnchor,
             padding: UIEdgeInsets(top: 15, left: 7, bottom: 0, right: 0)
@@ -301,6 +337,10 @@ extension CreateWishVC {
 
 extension CreateWishVC {
 
+    @objc private func dismissAction() {
+        dismiss(animated: true)
+    }
+
     @objc func adjustForKeyboard(notification: Notification) {
         guard
             let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
@@ -312,7 +352,7 @@ extension CreateWishVC {
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
         if notification.name == UIResponder.keyboardWillHideNotification {
-            scrollView.contentInset = .zero
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
         } else {
             scrollView.contentInset = UIEdgeInsets(
                 top: 0,
@@ -339,6 +379,31 @@ extension CreateWishVC {
         switch request {
         case .create(let createRequest):
             sendCreateRequest(createRequest)
+        }
+    }
+}
+
+// MARK: - Landscape
+
+extension CreateWishVC {
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateDoneButton()
+    }
+
+    func updateDoneButton() {
+        guard let bounds = view.window?.screen.bounds else {
+            return
+        }
+
+        if bounds.width > bounds.height {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 1
+            }
+        } else {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 0
+            }
         }
     }
 }

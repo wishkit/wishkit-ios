@@ -11,19 +11,6 @@ import UIKit
 import WishKitShared
 
 final class WishListVC: UIViewController {
-    enum Kind: Int {
-        case requested = 0
-        case implemented = 1
-
-        var title: String {
-            switch self {
-            case .requested:
-                return WishKit.config.localization.requested
-            case .implemented:
-                return WishKit.config.localization.implemented
-            }
-        }
-    }
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -31,6 +18,16 @@ final class WishListVC: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 15
         return stackView
+    }()
+
+    private let doneContainer = UIView()
+
+    private lazy var doneButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(WishKit.config.localization.done, for: .normal)
+        button.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+        button.layer.opacity = 0
+        return button
     }()
 
     private let switchContainer = UIView()
@@ -95,6 +92,12 @@ final class WishListVC: UIViewController {
         fetchWishList()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        updateDoneButton()
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         guard
             let color = WishKit.theme.tertiaryColor,
@@ -148,6 +151,10 @@ extension WishListVC {
             present(vc, animated: true)
         }
     }
+
+    @objc private func dismissAction() {
+        dismiss(animated: true)
+    }
 }
 
 // MARK: - WishKit config
@@ -200,7 +207,12 @@ extension WishListVC {
         view.addSubview(stackView)
         view.addSubview(addWishButton)
 
+        doneContainer.addSubview(doneButton)
+        view.addSubview(doneContainer)
+
         switchContainer.addSubview(switchListControl)
+
+        stackView.setCustomSpacing(0, after: doneContainer)
         stackView.addArrangedSubview(switchContainer)
         stackView.addArrangedSubview(tableView)
         tableView.addSubview(refreshControl)
@@ -210,12 +222,31 @@ extension WishListVC {
         let topPadding: CGFloat = WishKit.config.buttons.segmentedControl.display == .hide ? 30 : 0
 
         stackView.anchor(
-            top: view.layoutMarginsGuide.topAnchor,
+            top: view.topAnchor,
             leading: view.leadingAnchor,
             bottom: view.bottomAnchor,
             trailing: view.trailingAnchor,
             padding: UIEdgeInsets(top: topPadding, left: 0, bottom: 0, right: 0)
         )
+
+        let spacing: CGFloat = WishKit.config.buttons.segmentedControl.display == .hide ? 0 : 10
+
+        doneContainer.anchor(
+            top: view.topAnchor,
+            trailing: view.trailingAnchor,
+            padding: UIEdgeInsets(top: spacing, left: 0, bottom: 0, right: 0),
+            size: CGSize(width: 0, height: 35)
+        )
+
+        doneButton.anchor(
+            top: doneContainer.topAnchor,
+            leading: doneContainer.leadingAnchor,
+            bottom: doneContainer.bottomAnchor,
+            trailing: doneContainer.trailingAnchor,
+            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 65)
+        )
+
+        switchContainer.anchor(size: CGSize(width: 0, height: 50))
 
         switchListControl.anchor(
             top: switchContainer.topAnchor,
@@ -234,12 +265,13 @@ extension WishListVC {
 
         switch WishKit.config.buttons.addButton.bottomPadding {
         case .small:
-            ()
+            break
         case .medium:
             bottomPadding = bottomPadding + 5
         case .large:
             bottomPadding = bottomPadding + 15
         }
+
         addWishButton.anchor(
             bottom: view.layoutMarginsGuide.bottomAnchor,
             trailing: view.trailingAnchor,
@@ -250,6 +282,31 @@ extension WishListVC {
             centerY: view.centerYAnchor,
             centerX: view.centerXAnchor
         )
+    }
+}
+
+// MARK: - Landscape
+
+extension WishListVC {
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateDoneButton()
+    }
+
+    func updateDoneButton() {
+        guard let bounds = view.window?.screen.bounds else {
+            return
+        }
+
+        if bounds.width > bounds.height {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 1
+            }
+        } else {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 0
+            }
+        }
     }
 }
 
@@ -282,6 +339,24 @@ extension WishListVC: CreateWishDelegate {
     func newWishWasSuccessfullyCreated() {
         spinner.startAnimating()
         fetchWishList()
+    }
+}
+
+// MARK: - Enum
+
+extension WishListVC {
+    enum Kind: Int {
+        case requested = 0
+        case implemented = 1
+
+        var title: String {
+            switch self {
+            case .requested:
+                return WishKit.config.localization.requested
+            case .implemented:
+                return WishKit.config.localization.implemented
+            }
+        }
     }
 }
 #endif

@@ -12,6 +12,16 @@ import WishKitShared
 
 final class DetailWishVC: UIViewController {
 
+    private let doneContainer = UIView()
+
+    private lazy var doneButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(WishKit.config.localization.done, for: .normal)
+        button.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+        button.layer.opacity = 0
+        return button
+    }()
+
     private let cardView = ContainerView()
 
     private let wishResponse: WishResponse
@@ -37,6 +47,11 @@ final class DetailWishVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateDoneButton()
     }
 
     // MARK: - Dark Mode
@@ -107,6 +122,7 @@ final class DetailWishVC: UIViewController {
         }
 
         setupNavigation()
+        setupDoneButton()
         setupCardView()
         setupWishTitleLabel()
         setupWishDescriptionLabel()
@@ -117,14 +133,33 @@ final class DetailWishVC: UIViewController {
         navigationItem.title = WishKit.config.localization.detail
     }
 
+    private func setupDoneButton() {
+        view.addSubview(doneContainer)
+        doneContainer.addSubview(doneButton)
+
+        doneContainer.anchor(
+            top: view.layoutMarginsGuide.topAnchor,
+            trailing: view.trailingAnchor,
+            size: CGSize(width: 0, height: 35)
+        )
+
+        doneButton.anchor(
+            top: doneContainer.topAnchor,
+            leading: doneContainer.leadingAnchor,
+            bottom: doneContainer.bottomAnchor,
+            trailing: doneContainer.trailingAnchor,
+            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 65)
+        )
+    }
+
     private func setupCardView() {
         view.addSubview(cardView)
 
         cardView.anchor(
-            top: view.layoutMarginsGuide.topAnchor,
-            leading: view.leadingAnchor,
-            trailing: view.trailingAnchor,
-            padding: UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
+            top: doneContainer.bottomAnchor,
+            leading: view.layoutMarginsGuide.leadingAnchor,
+            trailing: view.layoutMarginsGuide.trailingAnchor,
+            padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         )
 
         if let color = WishKit.theme.secondaryColor {
@@ -195,6 +230,10 @@ final class DetailWishVC: UIViewController {
 
     // MARK: - Action
 
+    @objc private func dismissAction() {
+        dismiss(animated: true)
+    }
+
     @objc private func voteAction() {
 
         // Check if it'syour own wish.
@@ -219,6 +258,31 @@ final class DetailWishVC: UIViewController {
                 case .failure(let error):
                     self.handleVoteError(error: error)
                 }
+            }
+        }
+    }
+}
+
+// MARK: - Landscape
+
+extension DetailWishVC {
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateDoneButton()
+    }
+
+    func updateDoneButton() {
+        guard let bounds = view.window?.screen.bounds else {
+            return
+        }
+
+        if bounds.width > bounds.height {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 1
+            }
+        } else {
+            UIView.animate(withDuration: 1/6) {
+                self.doneButton.layer.opacity = 0
             }
         }
     }
