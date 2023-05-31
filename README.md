@@ -17,70 +17,147 @@ WishKit allows you to provide a native wishlist in your app that <b>just works â
 
 <img src="Resources/banner-min.png" />
 
-<h3>
-	<b> Setup </b>
-</h3>
+## Index
+- [Setup (UIKit)](#uikit)
+- [Setup (SwiftUI)](#swiftui)
+- [Theming](#theming)
+- [Control UI Elements](#ui-elements)
+- [Localization](#localization)
 
-1. To start using WishKit simply add it as a dependency in Xcode.
+# UIKit
+
+## 1. Add WishKit as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
 
-2. Import and configure it with your API Key. You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>
+## 2. Configure WishKit with your API Key.
+###### You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>.
 ```swift
+import UIKit
 import WishKit
 
-WishKit.configure(with: "your_api_key")
-```
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
-3. Done! Now you can just present the view controller.
-```swift
-// UIKit
-present(WishKit.viewController, animated: true)
-
-// SwiftUI
-struct ContentView: View {
-    var body: some View {
-        WishKit.view
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+	WishKit.configure(with: "your_api_key")
+        return true
     }
+    
+    ...
 }
 ```
 
-<hr/>
-
-<h3>
-	<b> Configuration </b>
-</h3>
-
-WishKit allows you to configure some of its UI.
-
-<b>Primary Color</b>
-
+## 3. Now you can present the WishKit viewController.
 ```swift
-WishKit.theme = Theme(primaryColor: .systemGreen)
+import UIKit
+import WishKit
+
+class HomeViewController: UIViewController {
+  ...
+  
+  @objc func buttonTapped() {
+    present(WishKit.viewController, animated: true)  
+  }
+}
 ```
 
-<b>Status Badge</b>
+---
+
+# SwiftUI
+
+## 1. Add WishKit as a dependency in Xcode.
+```
+https://github.com/wishkit/wishkit-ios.git
+```
+
+## 2. Configure WishKit with your API Key in the first view.
+###### You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>.
+```swift
+import UIKit
+import WishKit
+
+struct ContentView: View {
+
+  init() {
+    WishKit.configure(with: "your-api-key")
+  }
+  
+  ...
+}
+```
+
+## 3. Now use the view wherever you want!
+```swift
+import UIKit
+import WishKit
+
+struct ContentView: View {
+
+  init() {
+    WishKit.configure(with: "your-api-key")
+  }
+
+  var body: some View {
+    WishKit.view
+  }
+}
+```
+
+---
+
+# Theming
+#### You can theme WishKit to fit your apps color. ðŸŽ¨
 
 ```swift
+// This is for the Add-Button, Segmented Control, and Vote-Button.
+WishKit.theme.primaryColor = .yellow
+
+// Set the secondary color (this is for the cells and text fields).
+WishKit.theme.secondaryColor = Theme.Scheme(light: .orange, dark: .red)
+
+// Set the tertiary color (this is for the background).
+WishKit.theme.tertiaryColor = Theme.Scheme(light: .gray, dark: .black)
+
+```
+
+---
+
+# UI Elements
+#### You can control some WishKit UI elements.
+
+```swift
+// Show the status badge of a wish (e.g. pending, approved, etc.).
 WishKit.config.statusBadge = .show
+
+// Hide the segmented control.
+WishKit.config.buttons.segmentedControl.display = .hide
+
+// Position the Add-Button.
+WishKit.config.buttons.addButton.bottomPadding = .large
+
 ```
 
-<hr/>
+---
 
-<h3>
-	<b> Platforms </b>
-</h3>
+# Localization
+#### Localize any text used by WishKit by overriding default values.
 
-<ul>
-	<li>iOS 14+</li>
-	<li>macOS 12+</li>
-</ul>
+```swift
+// Override the segmented control text to the german word for "Requested".
+WishKit.config.localization.requested = "Angefragt"
 
-<hr/>
+// You can also assign NSLocalizedString.
+WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment: "")
+```
 
-<h3>
-	<b> Example Project </b>
-</h3>
+### **Platforms**
 
+- iOS 14+
+- macOS 12+
+
+---
+
+### **Example Project**
 Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up a wishlist!
