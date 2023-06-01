@@ -62,7 +62,7 @@ class HomeViewController: UIViewController {
   }
 }
 ```
-
+###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you present the viewController.
 ---
 
 # SwiftUI
@@ -75,7 +75,7 @@ https://github.com/wishkit/wishkit-ios.git
 ## 2. Configure WishKit with your API Key in the first view.
 ###### You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>.
 ```swift
-import UIKit
+import SwiftUI
 import WishKit
 
 struct ContentView: View {
@@ -90,7 +90,7 @@ struct ContentView: View {
 
 ## 3. Now use the view wherever you want!
 ```swift
-import UIKit
+import SwiftUI
 import WishKit
 
 struct ContentView: View {
@@ -104,6 +104,7 @@ struct ContentView: View {
   }
 }
 ```
+###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you use the view.
 
 ---
 
