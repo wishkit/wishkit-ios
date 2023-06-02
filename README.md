@@ -12,7 +12,7 @@
 	</a>
 </p>
 <p align="center">
-WishKit allows you to provide a native wishlist in your app that <b>just works ✨</b> <br/>
+WishKit allows your users to request and vote on features in your app that <b>just works ✨</b> <br/>
 </p>
 
 <img src="Resources/banner-min.png" />
