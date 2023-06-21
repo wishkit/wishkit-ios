@@ -17,8 +17,6 @@ public struct Configuration {
 
     public var tabBar = TabBar()
 
-    public var cell = Cell()
-
     init(
         statusBadgeDisplay: Display = .hide,
         localization: Localizaton = .default()

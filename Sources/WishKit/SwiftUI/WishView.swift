@@ -106,6 +106,7 @@ struct WishView: View {
                     case .show:
                         HStack {
                             Text(wish.title)
+                                .foregroundColor(WishKit.theme.textColor)
                                 .bold()
                                 .truncationMode(.tail)
                                 .lineLimit(1)
@@ -119,12 +120,14 @@ struct WishView: View {
                         }
                     case .hide:
                         Text(wish.title)
+                            .foregroundColor(WishKit.theme.textColor)
                             .bold()
                             .truncationMode(.tail)
                             .lineLimit(1)
                     }
                     
                     Text(wish.description)
+                        .foregroundColor(WishKit.theme.textColor)
                         .truncationMode(.tail)
                         .lineLimit(1)
                 }.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))

@@ -26,16 +26,20 @@ public struct Theme {
     /// The badge that shows the state of a wish.
     public var badgeColor: BadgeTheme
 
+    public var textColor: Color
+
     init(
         primaryColor: Color = Theme.systemGreen,
         badgeColor: BadgeTheme = .default(),
         secondaryColor: Scheme? = nil,
-        tertiaryColor: Scheme? = nil
+        tertiaryColor: Scheme? = nil,
+        textColor: Color = .primary
     ) {
         self.primaryColor = primaryColor
         self.badgeColor = badgeColor
         self.secondaryColor = secondaryColor
         self.tertiaryColor = tertiaryColor
+        self.textColor = textColor
     }
 
     #if os(macOS)

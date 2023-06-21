@@ -79,9 +79,13 @@ struct DetailWishView: View {
                 HStack {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            Text(wish.title).bold().font(.title2)
+                            Text(wish.title)
+                                .foregroundColor(WishKit.theme.textColor)
+                                .bold()
+                                .font(.title2)
                             Spacer(minLength: 10)
                             Text(wish.description)
+                                .foregroundColor(WishKit.theme.textColor)
                         }.frame(alignment: .leading)
                     }
                     .padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
