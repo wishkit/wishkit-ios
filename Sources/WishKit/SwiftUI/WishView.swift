@@ -106,7 +106,7 @@ struct WishView: View {
                     case .show:
                         HStack {
                             Text(wish.title)
-                                .foregroundColor(WishKit.theme.textColor)
+                                .foregroundColor(textColor)
                                 .bold()
                                 .truncationMode(.tail)
                                 .lineLimit(1)
@@ -120,14 +120,14 @@ struct WishView: View {
                         }
                     case .hide:
                         Text(wish.title)
-                            .foregroundColor(WishKit.theme.textColor)
+                            .foregroundColor(textColor)
                             .bold()
                             .truncationMode(.tail)
                             .lineLimit(1)
                     }
                     
                     Text(wish.description)
-                        .foregroundColor(WishKit.theme.textColor)
+                        .foregroundColor(textColor)
                         .truncationMode(.tail)
                         .lineLimit(1)
                 }.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
@@ -165,6 +165,23 @@ struct WishView: View {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.textColor?.light {
+                return color
+            }
+
+            return .primary
+        case .dark:
+            if let color = WishKit.theme.textColor?.dark {
+                return color
+            }
+
+            return .primary
         }
     }
 }

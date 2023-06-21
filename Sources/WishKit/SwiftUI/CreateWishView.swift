@@ -87,7 +87,7 @@ struct CreateWishView: View {
                 }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
 
                 TextField(WishKit.config.localization.titleOfWish, text: $title)
-                    .foregroundColor(WishKit.theme.textColor)
+                    .foregroundColor(textColor)
                     .textFieldStyle(PlainTextFieldStyle())
                     .frame(height: 35)
                     .padding([.horizontal], 10)
@@ -111,7 +111,7 @@ struct CreateWishView: View {
                         .padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 
                     TextEditor(text: $description)
-                        .foregroundColor(WishKit.theme.textColor)
+                        .foregroundColor(textColor)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
                         .lineSpacing(3)
                         .onReceive(Just(description)) { _ in keepTitleAndTextWithinLimit() }
@@ -146,6 +146,23 @@ struct CreateWishView: View {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.textColor?.light {
+                return color
+            }
+
+            return .primary
+        case .dark:
+            if let color = WishKit.theme.textColor?.dark {
+                return color
+            }
+
+            return .primary
         }
     }
 }

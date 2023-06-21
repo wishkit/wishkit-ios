@@ -80,12 +80,12 @@ struct DetailWishView: View {
                     ScrollView {
                         VStack(alignment: .leading) {
                             Text(wish.title)
-                                .foregroundColor(WishKit.theme.textColor)
+                                .foregroundColor(textColor)
                                 .bold()
                                 .font(.title2)
                             Spacer(minLength: 10)
                             Text(wish.description)
-                                .foregroundColor(WishKit.theme.textColor)
+                                .foregroundColor(textColor)
                         }.frame(alignment: .leading)
                     }
                     .padding(EdgeInsets(top: 30, leading: 30, bottom: 20, trailing: 30))
@@ -132,6 +132,23 @@ struct DetailWishView: View {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.textColor?.light {
+                return color
+            }
+
+            return .primary
+        case .dark:
+            if let color = WishKit.theme.textColor?.dark {
+                return color
+            }
+
+            return .primary
         }
     }
 }
