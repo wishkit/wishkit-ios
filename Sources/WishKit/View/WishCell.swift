@@ -45,28 +45,56 @@ final class WishCell: UITableViewCell {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         guard
-            let color = WishKit.theme.secondaryColor,
             let previousTraitCollection = previousTraitCollection
         else {
             return
         }
 
-        // Needed this case where it's the same, there's a weird behaviour otherwise.
-        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
-            if previousTraitCollection.userInterfaceStyle == .light {
-                containerView.backgroundColor = UIColor(color.light)
-            }
+        // ContainerView
+        if let color = WishKit.theme.secondaryColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    containerView.backgroundColor = UIColor(color.light)
+                }
 
-            if previousTraitCollection.userInterfaceStyle == .dark {
-                containerView.backgroundColor = UIColor(color.dark)
-            }
-        } else {
-            if previousTraitCollection.userInterfaceStyle == .light {
-                containerView.backgroundColor = UIColor(color.dark)
-            }
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    containerView.backgroundColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    containerView.backgroundColor = UIColor(color.dark)
+                }
 
-            if previousTraitCollection.userInterfaceStyle == .dark {
-                containerView.backgroundColor = UIColor(color.light)
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    containerView.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+
+        // Title & Description
+        if let color = WishKit.theme.textColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    titleLabel.textColor = UIColor(color.light)
+                    descriptionLabel.textColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    titleLabel.textColor = UIColor(color.dark)
+                    descriptionLabel.textColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    titleLabel.textColor = UIColor(color.dark)
+                    descriptionLabel.textColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    titleLabel.textColor = UIColor(color.light)
+                    descriptionLabel.textColor = UIColor(color.light)
+                }
             }
         }
     }
@@ -112,6 +140,8 @@ extension WishCell {
         setupTitleLabel()
         setupBadgeView()
         setupStackView()
+
+        setupTheme()
     }
 
     private func setupContainerView() {
@@ -151,8 +181,6 @@ extension WishCell {
     }
 
     private func setupTitleLabel() {
-        titleLabel.textColor = UIColor(WishKit.theme.textColor)
-        descriptionLabel.textColor = UIColor(WishKit.theme.textColor)
         titleBadgeStackView.addArrangedSubview(titleLabel)
     }
 
@@ -184,6 +212,24 @@ extension WishCell {
             trailing: containerView.trailingAnchor,
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 15)
         )
+    }
+
+    // MARK: - WishKit Color
+
+    private func setupTheme() {
+
+        // Title & Description
+        if let color = WishKit.theme.textColor {
+            if traitCollection.userInterfaceStyle == .light {
+                titleLabel.textColor = UIColor(color.light)
+                descriptionLabel.textColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                titleLabel.textColor = UIColor(color.dark)
+                descriptionLabel.textColor = UIColor(color.dark)
+            }
+        }
     }
 }
 

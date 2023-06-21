@@ -156,6 +156,7 @@ extension CreateWishVC {
             view.backgroundColor = .secondarySystemBackground
         }
 
+        // Background
         if let color = WishKit.theme.secondaryColor {
             if traitCollection.userInterfaceStyle == .light {
                 wishTitleTF.backgroundColor = UIColor(color.light)
@@ -165,6 +166,19 @@ extension CreateWishVC {
             if traitCollection.userInterfaceStyle == .dark {
                 wishTitleTF.backgroundColor = UIColor(color.dark)
                 wishDescriptionTV.backgroundColor = UIColor(color.dark)
+            }
+        }
+
+        // Title & Description
+        if let color = WishKit.theme.textColor {
+            if traitCollection.userInterfaceStyle == .light {
+                wishTitleTF.textColor = UIColor(color.light)
+                wishDescriptionTV.textColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                wishTitleTF.textColor = UIColor(color.dark)
+                wishDescriptionTV.textColor = UIColor(color.dark)
             }
         }
     }
@@ -251,7 +265,6 @@ extension CreateWishVC {
         )
 
         wishTitleTF.addTarget(viewModel, action: #selector(viewModel.titleHasChangedAction), for: .editingChanged)
-        wishTitleTF.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupWishDescriptionSectionLabel() {
@@ -295,7 +308,6 @@ extension CreateWishVC {
 
         wishDescriptionTV.delegate = viewModel
         wishDescriptionTV.font = .systemFont(ofSize: UIFont.labelFontSize)
-        wishDescriptionTV.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupSaveButton() {
@@ -471,6 +483,32 @@ extension CreateWishVC {
 
                 if previousTraitCollection.userInterfaceStyle == .dark {
                     view.backgroundColor = UIColor(color.light)
+                }
+            }
+        }
+
+        // Title & Description
+        if let color = WishKit.theme.textColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    wishTitleTF.textColor = UIColor(color.light)
+                    wishDescriptionTV.textColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    wishTitleTF.textColor = UIColor(color.dark)
+                    wishDescriptionTV.textColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    wishTitleTF.textColor = UIColor(color.dark)
+                    wishDescriptionTV.textColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    wishTitleTF.textColor = UIColor(color.light)
+                    wishDescriptionTV.textColor = UIColor(color.light)
                 }
             }
         }

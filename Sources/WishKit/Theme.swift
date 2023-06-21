@@ -23,17 +23,18 @@ public struct Theme {
     /// This is for the background color of the view/ViewController.
     public var tertiaryColor: Scheme?
 
-    /// The badge that shows the state of a wish.
+    /// The badge that shows the state of a feature.
     public var badgeColor: BadgeTheme
 
-    public var textColor: Color
+    /// The color of the title and description of a feature.
+    public var textColor: Scheme?
 
     init(
         primaryColor: Color = Theme.systemGreen,
         badgeColor: BadgeTheme = .default(),
         secondaryColor: Scheme? = nil,
         tertiaryColor: Scheme? = nil,
-        textColor: Color = .primary
+        textColor: Scheme? = nil
     ) {
         self.primaryColor = primaryColor
         self.badgeColor = badgeColor
