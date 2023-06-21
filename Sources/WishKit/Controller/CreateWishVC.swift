@@ -251,6 +251,7 @@ extension CreateWishVC {
         )
 
         wishTitleTF.addTarget(viewModel, action: #selector(viewModel.titleHasChangedAction), for: .editingChanged)
+        wishTitleTF.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupWishDescriptionSectionLabel() {
@@ -294,6 +295,7 @@ extension CreateWishVC {
 
         wishDescriptionTV.delegate = viewModel
         wishDescriptionTV.font = .systemFont(ofSize: UIFont.labelFontSize)
+        wishDescriptionTV.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupSaveButton() {

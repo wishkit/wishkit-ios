@@ -151,8 +151,8 @@ extension WishCell {
     }
 
     private func setupTitleLabel() {
-        titleLabel.textColor = WishKit.theme.textColor
-        descriptionLabel.textColor = WishKit.theme.textColor
+        titleLabel.textColor = UIColor(WishKit.theme.textColor)
+        descriptionLabel.textColor = UIColor(WishKit.theme.textColor)
         titleBadgeStackView.addArrangedSubview(titleLabel)
     }
 

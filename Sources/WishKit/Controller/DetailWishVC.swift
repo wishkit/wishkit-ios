@@ -187,6 +187,7 @@ final class DetailWishVC: UIViewController {
 
         wishTitleLabel.numberOfLines = 0
         wishTitleLabel.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
+        wishTitleLabel.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupWishDescriptionLabel() {
@@ -202,6 +203,7 @@ final class DetailWishVC: UIViewController {
 
         wishDescriptionLabel.numberOfLines = 0
         wishDescriptionLabel.font = .systemFont(ofSize: 13)
+        wishDescriptionLabel.textColor = UIColor(WishKit.theme.textColor)
     }
 
     private func setupVoteButton() {
