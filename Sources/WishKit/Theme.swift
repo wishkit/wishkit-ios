@@ -14,10 +14,13 @@ import UIKit
 
 public struct Theme {
 
+    /// This is for the Add-Button, Segmented Control, and Vote-Button.
     public var primaryColor: Color
 
+    /// This is for the background color of cells and text fields.
     public var secondaryColor: Scheme?
 
+    /// This is for the background color of the view/ViewController.
     public var tertiaryColor: Scheme?
 
     /// The badge that shows the state of a wish.

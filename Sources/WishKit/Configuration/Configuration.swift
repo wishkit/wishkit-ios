@@ -17,14 +17,14 @@ public struct Configuration {
 
     public var tabBar = TabBar()
 
+    public var cell = Cell()
+
     init(
-        showStatusBadge: Display = .hide,
-        buttons: Configuration.Buttons = .init(),
+        statusBadgeDisplay: Display = .hide,
         localization: Localizaton = .default()
     ) {
-        self.statusBadge = showStatusBadge
+        self.statusBadge = statusBadgeDisplay
         self.localization = localization
-        self.buttons = buttons
     }
 }
 
