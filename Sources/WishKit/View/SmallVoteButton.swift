@@ -30,6 +30,8 @@ final class SmallVoteButton: UIButton {
         setupStackView()
         setupArrowIV()
         setupVoteCountLabel()
+
+        setupTheme()
     }
 
     // MARK: - Setup Small
@@ -73,6 +75,60 @@ final class SmallVoteButton: UIButton {
         )
 
         voteCountLabel.textAlignment = .center
+    }
+}
+
+// MARK: - Theme
+
+extension SmallVoteButton {
+
+    // MARK: - WishKit Color
+
+    private func setupTheme() {
+        // VoteCountLabel
+        if let color = WishKit.theme.textColor {
+            if traitCollection.userInterfaceStyle == .light {
+                voteCountLabel.textColor = UIColor(color.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                voteCountLabel.textColor = UIColor(color.dark)
+            }
+        }
+    }
+}
+
+// MARK: - Dark/Light mode
+
+extension SmallVoteButton {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        // Title & Description
+        if let color = WishKit.theme.textColor {
+            // Needed this case where it's the same, there's a weird behaviour otherwise.
+            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    voteCountLabel.textColor = UIColor(color.light)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    voteCountLabel.textColor = UIColor(color.dark)
+                }
+            } else {
+                if previousTraitCollection.userInterfaceStyle == .light {
+                    voteCountLabel.textColor = UIColor(color.dark)
+                }
+
+                if previousTraitCollection.userInterfaceStyle == .dark {
+                    voteCountLabel.textColor = UIColor(color.light)
+                }
+            }
+        }
     }
 }
 #endif
