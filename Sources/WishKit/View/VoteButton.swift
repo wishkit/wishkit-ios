@@ -62,9 +62,16 @@ final class VoteButton: UIButton {
         container.anchor(size: CGSize(width: 15, height: 0))
 
         let config = UIImage.SymbolConfiguration(font: .systemFont(ofSize: 14), scale: .medium)
-        let image = UIImage(systemName: "arrowtriangle.up.fill")?.withConfiguration(config).withRenderingMode(.alwaysTemplate)
+        let image = UIImage(systemName: "arrowtriangle.up.fill")?.withConfiguration(config)
         arrowIV.image = image
-        arrowIV.tintColor = WishKit.config.buttons.voteButton.tintColor
+
+        if traitCollection.userInterfaceStyle == .light {
+            arrowIV.tintColor = UIColor(WishKit.config.buttons.voteButton.textColor.light)
+        }
+
+        if traitCollection.userInterfaceStyle == .dark {
+            arrowIV.tintColor = UIColor(WishKit.config.buttons.voteButton.textColor.dark)
+        }
 
         arrowIV.anchor(
             leading: container.leadingAnchor,
@@ -75,13 +82,45 @@ final class VoteButton: UIButton {
 
     private func setupUpVoteLabel() {
         stackView.addArrangedSubview(upvoteLabel)
-        upvoteLabel.textColor = WishKit.config.buttons.voteButton.tintColor
     }
 
     private func setupVoteCountLabel() {
         stackView.addArrangedSubview(voteCountLabel)
-        voteCountLabel.textColor = WishKit.config.buttons.voteButton.tintColor
         voteCountLabel.adjustsFontSizeToFitWidth = true
+    }
+}
+
+// MARK: - Theme
+
+extension VoteButton {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        // ContainerView
+        let textColor = WishKit.config.buttons.voteButton.textColor
+        
+        // Needed this case where it's the same, there's a weird behaviour otherwise.
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                arrowIV.tintColor = UIColor(textColor.light)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                arrowIV.tintColor = UIColor(textColor.dark)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                arrowIV.tintColor = UIColor(textColor.dark)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                arrowIV.tintColor = UIColor(textColor.light)
+            }
+        }
     }
 }
 #endif

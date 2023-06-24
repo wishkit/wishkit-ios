@@ -97,6 +97,30 @@ final class WishCell: UITableViewCell {
                 }
             }
         }
+
+        // Arrow
+        // Needed this case where it's the same, there's a weird behaviour otherwise.
+        let arrowColor = WishKit.config.buttons.voteButton.arrowColor
+
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                voteButton.arrowIV.tintColor = UIColor(arrowColor.light)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                voteButton.arrowIV.tintColor = UIColor(arrowColor.dark)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                voteButton.arrowIV.tintColor = UIColor(arrowColor.dark)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                voteButton.arrowIV.tintColor = UIColor(arrowColor.light)
+            }
+        }
+
+        applyVotedColor()
     }
 }
 
@@ -110,12 +134,8 @@ extension WishCell {
         titleLabel.text = response.title
         descriptionLabel.text = response.description
 
-        let userUUID = UUIDManager.getUUID()
-        if response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID }) {
-            voteButton.arrowIV.tintColor = UIColor(WishKit.theme.primaryColor)
-        } else {
-            voteButton.arrowIV.tintColor = .tertiaryLabel
-        }
+        applyTheme()
+        applyVotedColor()
 
         badgeView.configure(with: response.state)
 
@@ -124,6 +144,26 @@ extension WishCell {
             badgeContainerView.isHidden = false
         case .hide:
             badgeContainerView.isHidden = true
+        }
+    }
+
+    func applyTheme() {
+        if traitCollection.userInterfaceStyle == .light {
+            voteButton.arrowIV.tintColor = UIColor(WishKit.config.buttons.voteButton.arrowColor.light)
+        }
+
+        if traitCollection.userInterfaceStyle == .dark {
+            voteButton.arrowIV.tintColor = UIColor(WishKit.config.buttons.voteButton.arrowColor.dark)
+        }
+    }
+
+    func applyVotedColor() {
+        let userUUID = UUIDManager.getUUID()
+        if
+            let response = singleWishResponse,
+            response.userUUID == userUUID || response.votingUsers.contains(where: { $0.uuid == userUUID })
+        {
+            voteButton.arrowIV.tintColor = UIColor(WishKit.theme.primaryColor)
         }
     }
 }

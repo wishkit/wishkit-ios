@@ -53,13 +53,13 @@ final class SmallVoteButton: UIButton {
     private func setupArrowIV() {
         let container = UIView()
         stackView.addArrangedSubview(container)
-
         container.addSubview(arrowIV)
-        arrowIV.anchor(centerX: centerXAnchor, size: CGSize(width: 20, height: 20))
-        arrowIV.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -12).isActive = true
+
         arrowIV.image = UIImage(systemName: "arrowtriangle.up.fill")
         arrowIV.contentMode = .scaleAspectFit
-        arrowIV.tintColor = .tertiaryLabel
+
+        arrowIV.anchor(centerX: centerXAnchor, size: CGSize(width: 20, height: 20))
+        arrowIV.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -12).isActive = true
     }
 
     private func setupVoteCountLabel() {

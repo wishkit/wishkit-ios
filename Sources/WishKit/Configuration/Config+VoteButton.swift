@@ -16,9 +16,15 @@ extension Configuration {
     public struct VoteButton {
 
         #if os(macOS)
-        public var tintColor: Color = Color.white
+        @available(*, deprecated, message: "Use `arrowColor` instead.")
+        public var tintColor: Color = .white
         #elseif canImport(UIKit)
+        @available(*, deprecated, message: "Use `arrowColor` instead.")
         public var tintColor: UIColor = .label
         #endif
+
+        public var arrowColor = Theme.Scheme(light: .gray, dark: .gray)
+
+        public var textColor = Theme.Scheme(light: .black, dark: .white)
     }
 }

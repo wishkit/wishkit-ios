@@ -9,20 +9,10 @@
 extension Configuration {
     public struct Buttons {
 
-        public var segmentedControl: SegmentedControl
+        public var segmentedControl = SegmentedControl()
 
-        public var addButton: AddButton
+        public var addButton = AddButton()
 
-        public var voteButton: VoteButton
-
-        init(
-            segmentedControl: SegmentedControl = SegmentedControl(),
-            addButton: AddButton = AddButton(),
-            voteButton: VoteButton = VoteButton()
-        ) {
-            self.segmentedControl = segmentedControl
-            self.addButton = addButton
-            self.voteButton = voteButton
-        }
+        public var voteButton = VoteButton()
     }
 }
