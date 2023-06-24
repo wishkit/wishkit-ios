@@ -95,6 +95,7 @@ struct WishView: View {
                                 .foregroundColor(WishKit.theme.primaryColor)
                         } else {
                             Image(systemName: "triangle.fill")
+                                .foregroundColor(arrowColor)
                         }
                         Text(wish.votingUsers.count.description)
                     }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
@@ -182,6 +183,15 @@ struct WishView: View {
             }
 
             return .primary
+        }
+    }
+
+    var arrowColor: Color {
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.voteButton.arrowColor.light
+        case .dark:
+            return WishKit.config.buttons.voteButton.arrowColor.dark
         }
     }
 }
