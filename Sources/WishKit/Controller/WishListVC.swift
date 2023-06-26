@@ -36,7 +36,6 @@ final class WishListVC: UIViewController {
         let control = UISegmentedControl(items: [Kind.requested.title, Kind.implemented.title])
         control.selectedSegmentIndex = 0
         control.selectedSegmentTintColor = UIColor(WishKit.theme.primaryColor)
-        control.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: WishKit.config.buttons.segmentedControl.tintColor], for: .selected)
         control.addTarget(self, action: #selector(switchListAction), for: .valueChanged)
         return control
     }()
@@ -107,18 +106,29 @@ final class WishListVC: UIViewController {
             return
         }
 
+        let segmentedControlActive = WishKit.config.buttons.segmentedControl.activeTextColor
+        let segmentedControlDefault = WishKit.config.buttons.segmentedControl.defaultTextColor
+
         // Needed this case where it's the same, there's a weird behaviour otherwise.
         if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
             if previousTraitCollection.userInterfaceStyle == .light {
                 view.backgroundColor = UIColor(color.light)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.light)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.light)], for: .selected)
             } else if previousTraitCollection.userInterfaceStyle == .dark {
                 view.backgroundColor = UIColor(color.dark)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.dark)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
             }
         } else {
             if previousTraitCollection.userInterfaceStyle == .dark {
                 view.backgroundColor = UIColor(color.light)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.light)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.light)], for: .selected)
             } else if previousTraitCollection.userInterfaceStyle == .light {
                 view.backgroundColor = UIColor(color.dark)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.dark)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
             }
         }
     }
@@ -177,13 +187,20 @@ extension WishListVC {
     private func setup() {
         navigationItem.title = WishKit.config.localization.featureWishlist
 
+        let segmentedControlActive = WishKit.config.buttons.segmentedControl.activeTextColor
+        let segmentedControlDefault = WishKit.config.buttons.segmentedControl.defaultTextColor
+
         if let color = WishKit.theme.tertiaryColor {
             if traitCollection.userInterfaceStyle == .light {
                 view.backgroundColor = UIColor(color.light)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.light)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.light)], for: .selected)
             }
 
             if traitCollection.userInterfaceStyle == .dark {
                 view.backgroundColor = UIColor(color.dark)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.dark)], for: .normal)
+                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
             }
         } else {
             view.backgroundColor = .secondarySystemBackground

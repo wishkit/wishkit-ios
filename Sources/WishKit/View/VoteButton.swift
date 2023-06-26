@@ -107,18 +107,26 @@ extension VoteButton {
         if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
             if previousTraitCollection.userInterfaceStyle == .light {
                 arrowIV.tintColor = UIColor(textColor.light)
+                upvoteLabel.textColor = UIColor(textColor.light)
+                voteCountLabel.textColor = UIColor(textColor.light)
             }
 
             if previousTraitCollection.userInterfaceStyle == .dark {
                 arrowIV.tintColor = UIColor(textColor.dark)
+                upvoteLabel.textColor = UIColor(textColor.dark)
+                voteCountLabel.textColor = UIColor(textColor.dark)
             }
         } else {
             if previousTraitCollection.userInterfaceStyle == .light {
                 arrowIV.tintColor = UIColor(textColor.dark)
+                upvoteLabel.textColor = UIColor(textColor.dark)
+                voteCountLabel.textColor = UIColor(textColor.dark)
             }
 
             if previousTraitCollection.userInterfaceStyle == .dark {
                 arrowIV.tintColor = UIColor(textColor.light)
+                upvoteLabel.textColor = UIColor(textColor.light)
+                voteCountLabel.textColor = UIColor(textColor.light)
             }
         }
     }

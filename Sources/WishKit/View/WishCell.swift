@@ -73,27 +73,27 @@ final class WishCell: UITableViewCell {
         }
 
         // Title & Description
-        if let color = WishKit.theme.textColor {
+        if let textColor = WishKit.theme.textColor {
             // Needed this case where it's the same, there's a weird behaviour otherwise.
             if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
                 if previousTraitCollection.userInterfaceStyle == .light {
-                    titleLabel.textColor = UIColor(color.light)
-                    descriptionLabel.textColor = UIColor(color.light)
+                    titleLabel.textColor = UIColor(textColor.light)
+                    descriptionLabel.textColor = UIColor(textColor.light)
                 }
 
                 if previousTraitCollection.userInterfaceStyle == .dark {
-                    titleLabel.textColor = UIColor(color.dark)
-                    descriptionLabel.textColor = UIColor(color.dark)
+                    titleLabel.textColor = UIColor(textColor.dark)
+                    descriptionLabel.textColor = UIColor(textColor.dark)
                 }
             } else {
                 if previousTraitCollection.userInterfaceStyle == .light {
-                    titleLabel.textColor = UIColor(color.dark)
-                    descriptionLabel.textColor = UIColor(color.dark)
+                    titleLabel.textColor = UIColor(textColor.dark)
+                    descriptionLabel.textColor = UIColor(textColor.dark)
                 }
 
                 if previousTraitCollection.userInterfaceStyle == .dark {
-                    titleLabel.textColor = UIColor(color.light)
-                    descriptionLabel.textColor = UIColor(color.light)
+                    titleLabel.textColor = UIColor(textColor.light)
+                    descriptionLabel.textColor = UIColor(textColor.light)
                 }
             }
         }

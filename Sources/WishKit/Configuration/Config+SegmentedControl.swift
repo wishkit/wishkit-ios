@@ -19,9 +19,15 @@ extension Configuration {
         public var display: Display = .show
 
         #if os(macOS)
+        @available(*, deprecated, message: "Use `activeTextColor` instead.")
         public var tintColor: Color = Color.white
         #elseif canImport(UIKit)
+        @available(*, deprecated, message: "Use `activeTextColor` instead.")
         public var tintColor: UIColor = .label
         #endif
+
+        public var defaultTextColor = Theme.Scheme(light: .black, dark: .white)
+
+        public var activeTextColor = Theme.Scheme(light: .white, dark: .white)
     }
 }
