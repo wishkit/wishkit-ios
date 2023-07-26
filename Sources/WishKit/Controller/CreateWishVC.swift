@@ -354,7 +354,11 @@ extension CreateWishVC {
 extension CreateWishVC {
 
     @objc private func dismissAction() {
-        dismiss(animated: true)
+        if viewModel.showDiscardWarning() {
+            AlertManager.confirmAction(on: self, message: "Discard changes?", action: { self.dismiss(animated: true) })
+        } else {
+            dismiss(animated: true)
+        }
     }
 
     @objc func adjustForKeyboard(notification: Notification) {

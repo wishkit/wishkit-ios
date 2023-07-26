@@ -36,6 +36,10 @@ final class CreateWishVM: NSObject {
         }
     }
 
+    func showDiscardWarning() -> Bool {
+        return !wishTitle.isEmpty || !wishDescription.isEmpty
+    }
+
     func characterCount(of property: Property) -> Int {
         switch property {
         case .title:
