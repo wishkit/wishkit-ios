@@ -32,7 +32,7 @@ final class CreateWishVC: UIViewController {
 
     private let wishDescriptionTV = TextView()
 
-    private let saveButton = UIButton(type: .system)
+    private let saveButton = SaveButton(title: WishKit.config.localization.save)
 
     private let toolbar = UIToolbar()
 
@@ -65,8 +65,7 @@ extension CreateWishVC {
 
     private func updateSaveButton() {
         saveButton.backgroundColor = UIColor(WishKit.theme.primaryColor)
-        saveButton.isEnabled = viewModel.canSave()
-        saveButton.layer.opacity = viewModel.canSave() ? 1 : 2/3
+        saveButton.configure(state: viewModel.canSave() ? .active : .disabled)
     }
 
     private func updateCharacterCountLabels() {
@@ -75,8 +74,12 @@ extension CreateWishVC {
     }
 
     private func sendCreateRequest(_ createRequest: CreateWishRequest) {
+        saveButton.configure(state: .loading)
+
         WishApi.createWish(createRequest: createRequest) { result in
             DispatchQueue.main.async {
+                self.saveButton.configure(state: .active)
+
                 switch result {
                 case .success(let response):
                     self.handleCreateSuccess(response: response)
@@ -320,7 +323,6 @@ extension CreateWishVC {
             size: CGSize(width: 200, height: 45)
         )
 
-        saveButton.setTitle(WishKit.config.localization.save, for: .normal)
         saveButton.setTitleColor(WishKit.config.buttons.voteButton.tintColor, for: .normal)
 
         saveButton.layer.cornerRadius = 12
