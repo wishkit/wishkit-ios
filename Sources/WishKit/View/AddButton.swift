@@ -31,13 +31,58 @@ final class AddButton: UIButton {
 
         let image = UIImage(systemName: "plus")
         setImage(image, for: .normal)
-        imageView?.tintColor = WishKit.config.buttons.addButton.tintColor
         backgroundColor = UIColor(WishKit.theme.primaryColor)
         layer.cornerRadius = length/2
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowColor = UIColor.black.withAlphaComponent(0.8).cgColor
         layer.shadowRadius = 1.5
         layer.shadowOpacity = 0.50
+
+        setupTheme()
+    }
+}
+
+// MARK: - Theme
+
+extension AddButton {
+    private func setupTheme() {
+        let textColor = WishKit.config.buttons.addButton.textColor
+        if traitCollection.userInterfaceStyle == .light {
+            imageView?.tintColor = UIColor(textColor.light)
+        }
+
+        if traitCollection.userInterfaceStyle == .dark {
+            imageView?.tintColor = UIColor(textColor.dark)
+        }
+    }
+}
+
+extension AddButton {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard
+            let previousTraitCollection = previousTraitCollection
+        else {
+            return
+        }
+
+        let textColor = WishKit.config.buttons.addButton.textColor
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                imageView?.tintColor = UIColor(textColor.light)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                imageView?.tintColor = UIColor(textColor.dark)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                imageView?.tintColor = UIColor(textColor.dark)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                imageView?.tintColor = UIColor(textColor.light)
+            }
+        }
     }
 }
 #endif

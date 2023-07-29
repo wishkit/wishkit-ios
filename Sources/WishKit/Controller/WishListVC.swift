@@ -187,23 +187,35 @@ extension WishListVC {
     private func setup() {
         navigationItem.title = WishKit.config.localization.featureWishlist
 
-        let segmentedControlActive = WishKit.config.buttons.segmentedControl.activeTextColor
-        let segmentedControlDefault = WishKit.config.buttons.segmentedControl.defaultTextColor
-
         if let color = WishKit.theme.tertiaryColor {
             if traitCollection.userInterfaceStyle == .light {
                 view.backgroundColor = UIColor(color.light)
-                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.light)], for: .normal)
-                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.light)], for: .selected)
             }
 
             if traitCollection.userInterfaceStyle == .dark {
                 view.backgroundColor = UIColor(color.dark)
-                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.dark)], for: .normal)
-                switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
             }
         } else {
             view.backgroundColor = .secondarySystemBackground
+        }
+
+        let segmentedControlActive = WishKit.config.buttons.segmentedControl.activeTextColor
+        let segmentedControlDefault = WishKit.config.buttons.segmentedControl.defaultTextColor
+        
+        if traitCollection.userInterfaceStyle == .light {
+            switchListControl.setTitleTextAttributes(
+                [NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.light)],
+                for: .normal
+            )
+            switchListControl.setTitleTextAttributes(
+                [NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.light)],
+                for: .selected
+            )
+        }
+
+        if traitCollection.userInterfaceStyle == .dark {
+            switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlDefault.dark)], for: .normal)
+            switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
         }
 
         setupTabBar()

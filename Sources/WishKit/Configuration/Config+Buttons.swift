@@ -14,5 +14,7 @@ extension Configuration {
         public var addButton = AddButton()
 
         public var voteButton = VoteButton()
+
+        public var saveButton = SaveButton()
     }
 }

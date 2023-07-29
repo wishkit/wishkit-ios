@@ -16,10 +16,14 @@ extension Configuration {
     public struct AddButton {
 
         #if os(macOS)
+        @available(*, deprecated, message: "Use `textColor` instead.")
         public var tintColor: Color = Color.white
         #elseif canImport(UIKit)
+        @available(*, deprecated, message: "Use `textColor` instead.")
         public var tintColor: UIColor = .label
         #endif
+
+        public var textColor = Theme.Scheme(light: .black, dark: .white)
 
         public var bottomPadding: Padding
 

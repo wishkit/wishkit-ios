@@ -518,6 +518,25 @@ extension CreateWishVC {
                 }
             }
         }
+
+        let textColor = WishKit.config.buttons.saveButton.textColor
+        if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                saveButton.setTitleColor(UIColor(textColor.light), for: .normal)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                saveButton.setTitleColor(UIColor(textColor.dark), for: .normal)
+            }
+        } else {
+            if previousTraitCollection.userInterfaceStyle == .light {
+                saveButton.setTitleColor(UIColor(textColor.dark), for: .normal)
+            }
+
+            if previousTraitCollection.userInterfaceStyle == .dark {
+                saveButton.setTitleColor(UIColor(textColor.light), for: .normal)
+            }
+        }
     }
 }
 #endif
