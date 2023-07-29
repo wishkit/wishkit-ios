@@ -218,10 +218,13 @@ extension WishListVC {
             switchListControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(segmentedControlActive.dark)], for: .selected)
         }
 
-        setupTabBar()
+
+
 
         setupView()
         setupConstraints()
+
+        setupTabBar()
     }
 
     private func setupTabBar() {
@@ -251,7 +254,7 @@ extension WishListVC {
         let topPadding: CGFloat = WishKit.config.buttons.segmentedControl.display == .hide ? 30 : 0
 
         stackView.anchor(
-            top: view.topAnchor,
+            top: view.layoutMarginsGuide.topAnchor,
             leading: view.leadingAnchor,
             bottom: view.bottomAnchor,
             trailing: view.trailingAnchor,
