@@ -116,18 +116,18 @@ struct ContentView: View {
 WishKit.theme.primaryColor = .yellow
 
 // Set the secondary color (this is for the cells and text fields).
-WishKit.theme.secondaryColor = Theme.Scheme(light: .orange, dark: .red)
+WishKit.theme.secondaryColor = .set(light: .orange, dark: .red)
 
 // Set the tertiary color (this is for the background).
-WishKit.theme.tertiaryColor = Theme.Scheme(light: .gray, dark: .black)
+WishKit.theme.tertiaryColor = .set(light: .gray, dark: .black)
 
 // Segmented Control (Text color)
-WishKit.config.buttons.segmentedControl.defaultTextColor = Theme.Scheme(light: .white, dark: .white)
+WishKit.config.buttons.segmentedControl.defaultTextColor = .setBoth(to: .white)
 
-WishKit.config.buttons.segmentedControl.activeTextColor = Theme.Scheme(light: .white, dark: .white)
+WishKit.config.buttons.segmentedControl.activeTextColor = .setBoth(to: .white)
 
 // Save Button (Text color)
-WishKit.config.buttons.saveButton.textColor = Theme.Scheme(light: .white, dark: .white)
+WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 
 ```
 
