@@ -121,6 +121,14 @@ WishKit.theme.secondaryColor = Theme.Scheme(light: .orange, dark: .red)
 // Set the tertiary color (this is for the background).
 WishKit.theme.tertiaryColor = Theme.Scheme(light: .gray, dark: .black)
 
+// Segmented Control (Text color)
+WishKit.config.buttons.segmentedControl.defaultTextColor = Theme.Scheme(light: .white, dark: .white)
+
+WishKit.config.buttons.segmentedControl.activeTextColor = Theme.Scheme(light: .white, dark: .white)
+
+// Save Button (Text color)
+WishKit.config.buttons.saveButton.textColor = Theme.Scheme(light: .white, dark: .white)
+
 ```
 
 ---
