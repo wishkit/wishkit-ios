@@ -1,4 +1,4 @@
-<h3 align="center">WishKit</h1>
+<h1 align="center"> <a href="https://www.wishkit.io">wishkit.io</a></h1>
 <h4 align="center"> In-App Feature Requests. Made Easy. </h2>
 <p align="center">
 	<a href="LICENSE">
