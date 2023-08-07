@@ -13,7 +13,7 @@ import WishKitShared
 struct WishlistContainer: View {
 
     @Environment(\.colorScheme)
-    var colorScheme
+    private var colorScheme
 
     @State
     private var listType: WishState = .approved
@@ -22,7 +22,12 @@ struct WishlistContainer: View {
     private var isRefreshing = false
 
     @ObservedObject
-    var wishModel: WishModel
+    private var wishModel: WishModel
+
+    init(wishModel: WishModel) {
+        self.wishModel = wishModel
+        self.wishModel.fetchList()
+    }
 
     func refreshList() {
         isRefreshing = true
