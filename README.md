@@ -21,6 +21,7 @@ WishKit allows your users to request and vote on features in your app that <b>ju
 - [Setup (UIKit)](#uikit)
 - [Setup (SwiftUI)](#swiftui)
 - [Theming](#theming)
+- [User Segmentation](#user-segmentation)
 - [Control UI Elements](#ui-elements)
 - [Localization](#localization)
 
@@ -129,6 +130,25 @@ WishKit.config.buttons.segmentedControl.activeTextColor = .setBoth(to: .white)
 // Save Button (Text color)
 WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 
+```
+
+
+---
+
+# User Segmentation
+#### Share user information so you can access it on the dashboard.
+```swift
+// How much he's paying per week or month or year.
+WishKit.updateUser(payment: .monthly(7.99))
+
+// What his email is.
+WishKit.updateUser(email: "stevejobs@apple.com")
+
+// What his name is.
+WishKit.updateUser(name: "Steve")
+
+// If you manage user IDs yourself you can let WishKit prioritize it.
+WishKit.updateUser(customID: "8AHD1IL03ACIP")
 ```
 
 ---
