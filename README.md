@@ -141,8 +141,7 @@ WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 // How much a user is paying per week or month or year.
 WishKit.updateUser(payment: .monthly(7.99))
 ```
-WishKit supports weekly, monthly and yearly payments. You only need to call one of the three functions. <br />
-Don't worry calling the same function numerous times e.g. on every app launch or similar - WishKit can handle it!
+WishKit supports weekly, monthly and yearly payments. You only need to call one of the three functions.
 
 #### 📧 Additional: Share optional user information with WishKit.
 ```swift
