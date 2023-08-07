@@ -138,18 +138,18 @@ WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 # User Segmentation
 #### 💰 Revenue Indication: Share how much a user is paying in your app.
 ```swift
-// How much he's paying per week or month or year.
+// How much a user is paying per week or month or year.
 WishKit.updateUser(payment: .monthly(7.99))
 ```
-WishKit supports weekly, monthly and yearly. You only need to call one of the three functions. <br />
-Don't worry calling the same function numerous times like on every app launch or similar - WishKit can handle it!
+WishKit supports weekly, monthly and yearly payments. You only need to call one of the three functions. <br />
+Don't worry calling the same function numerous times e.g. on every app launch or similar - WishKit can handle it!
 
 #### 📧 Additional: Share optional user information with WishKit.
 ```swift
-// What his email is.
+// Email
 WishKit.updateUser(email: "stevejobs@apple.com")
 
-// What his name is.
+// Name
 WishKit.updateUser(name: "Steve")
 
 // If you manage user IDs yourself you can let WishKit prioritize it.
