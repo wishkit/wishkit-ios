@@ -62,5 +62,34 @@ extension Api {
             completionHandler(.failure(ApiError(reason: .couldNotDecodeBackendResponse)))
         }.resume()
     }
+
+    /// Generic Send Function. You need to specify the Result<T, Error> type to help inferring it.
+    /// e.g: Api.send(request: resetRequest) { (result: Result<ResetPasswordResponse, ApiError.Kind>) in ... }
+    static func send<T: Decodable>(request: URLRequest) async -> ApiResult<T, ApiError> {
+        let method = request.httpMethod ?? ""
+
+        print("🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
+
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let decoder = JSONDecoder()
+            // Date Decoding Standard used across frontend and backend.
+            decoder.dateDecodingStrategy = .millisecondsSince1970
+            if let object = try? decoder.decode(T.self, from: data) {
+                return .success(object)
+            }
+
+            if let apiError = try? decoder.decode(ApiError.self, from: data) {
+                printError(self, "\(apiError.reason.description).")
+                return .failure(apiError)
+            }
+
+            printError(self, String(data: data, encoding: .utf8) ?? "")
+            return .failure(ApiError(reason: .couldNotDecodeBackendResponse))
+        } catch {
+            printError(self, error.localizedDescription)
+            return .failure(ApiError(reason: .requestResultedInError))
+        }
+    }
 }
 
