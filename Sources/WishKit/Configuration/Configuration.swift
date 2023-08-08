@@ -17,6 +17,8 @@ public struct Configuration {
 
     public var tabBar = TabBar()
 
+    public var expandDescriptionInList: Bool = false
+
     init(
         statusBadgeDisplay: Display = .hide,
         localization: Localizaton = .default()
