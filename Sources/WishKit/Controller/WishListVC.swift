@@ -62,11 +62,16 @@ final class WishListVC: UIViewController {
         return tableView
     }()
 
+    // Don't use refreshControl on macCatalyst
+    #if targetEnvironment(macCatalyst)
+    #else
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(fetchWishList), for: .valueChanged)
         return refreshControl
     }()
+    #endif
+
 
     private lazy var addWishButton: AddButton = {
         let buttons = AddButton()
@@ -275,7 +280,12 @@ extension WishListVC {
         stackView.setCustomSpacing(0, after: doneContainer)
         stackView.addArrangedSubview(switchContainer)
         stackView.addArrangedSubview(tableView)
+
+        // Don't use refreshControl on macCatalyst
+        #if targetEnvironment(macCatalyst)
+        #else
         tableView.addSubview(refreshControl)
+        #endif
     }
 
     private func setupConstraints() {
@@ -376,7 +386,13 @@ extension WishListVC: WishVMDelegate {
     func listWasUpdated() {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
+
+            // Don't use refreshControl on macCatalyst
+            #if targetEnvironment(macCatalyst)
+            #else
             self.refreshControl.endRefreshing()
+            #endif
+
             self.tableView.reloadData()
             self.watermarkLabel.isHidden = !self.wishVM.shouldShowWatermark
         }
