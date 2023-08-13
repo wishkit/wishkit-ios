@@ -13,7 +13,7 @@ struct SingleCommentView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    private let cornerRadius: CGFloat = 12
+    private let cornerRadius: CGFloat = 10
 
     private let comment: String
 

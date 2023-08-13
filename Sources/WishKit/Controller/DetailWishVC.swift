@@ -47,11 +47,11 @@ final class DetailWishVC: UIViewController {
             CommentResponse(userId: UUID(), description: "Oh wow..", createdAt: Date(), isAdmin: false),
             CommentResponse(userId: UUID(), description: "This is weird..", createdAt: Date(), isAdmin: true),
             CommentResponse(userId: UUID(), description: "Ah maybe the id?", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Well in that case", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Dangerous!", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: true),
-            CommentResponse(userId: UUID(), description: "To go alone..", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Take this!", createdAt: Date(), isAdmin: false),
+//            CommentResponse(userId: UUID(), description: "Well in that case", createdAt: Date(), isAdmin: false),
+//            CommentResponse(userId: UUID(), description: "Dangerous!", createdAt: Date(), isAdmin: false),
+//            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: true),
+//            CommentResponse(userId: UUID(), description: "To go alone..", createdAt: Date(), isAdmin: false),
+//            CommentResponse(userId: UUID(), description: "Take this!", createdAt: Date(), isAdmin: false),
         ])
 
         self.commentListView = UIHostingController(rootView: commentListView).view
@@ -161,11 +161,12 @@ final class DetailWishVC: UIViewController {
         commentListView.anchor(
             top: commentSeparator.bottomAnchor,
             leading: view.leadingAnchor,
+            bottom: view.bottomAnchor,
             trailing: view.trailingAnchor,
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
-        commentListView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor).isActive = true
+//        commentListView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     // MARK: - WishKit Color
