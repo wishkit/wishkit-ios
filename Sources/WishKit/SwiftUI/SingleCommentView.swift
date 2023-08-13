@@ -10,6 +10,9 @@ import SwiftUI
 
 struct SingleCommentView: View {
 
+    @Environment(\.colorScheme)
+    var colorScheme
+
     private let cornerRadius: CGFloat = 12
 
     private let comment: String
@@ -29,9 +32,11 @@ struct SingleCommentView: View {
             HStack {
                 Text(comment)
                     .padding(15)
+                    .foregroundColor(textColor)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
+            .background(backgroundColor)
             .cornerRadius(cornerRadius) // make the background rounded
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
@@ -42,14 +47,48 @@ struct SingleCommentView: View {
                 Spacer()
                 HStack(spacing: 0) {
                     Text(createdAt, style: .date)
-                        .font(.footnote)
-                        .foregroundColor(.black.opacity(2/3))
+                        .font(.caption2)
+                        .foregroundColor(textColor.opacity(2/3))
                     Text(" • \(isAdmin ? "Admin" : "User")")
-                        .font(.footnote)
-                        .foregroundColor(.black.opacity(2/3))
+                        .font(.caption2)
+                        .foregroundColor(textColor.opacity(2/3))
                 }.padding(.trailing, 10)
-
             }
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.secondaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.elementBackgroundColor.light
+        case .dark:
+            if let color = WishKit.theme.secondaryColor {
+                return color.dark
+            }
+
+            return PrivateTheme.elementBackgroundColor.dark
         }
     }
 }

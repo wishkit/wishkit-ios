@@ -11,6 +11,9 @@ import WishKitShared
 
 struct CommentListView: View {
 
+    @Environment(\.colorScheme)
+    var colorScheme
+
     private let commentList: [CommentResponse]
 
     init(commentList: [CommentResponse]) {
@@ -20,15 +23,35 @@ struct CommentListView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(self.commentList, id: \.createdAt) { comment in
+                ForEach(self.commentList, id: \.description) { comment in
                     SingleCommentView(
                         comment: comment.description,
-                        createdAt: Date(),
-                        isAdmin: Bool.random()
+                        createdAt: comment.createdAt,
+                        isAdmin: comment.isAdmin
                     )
                     .padding(.bottom, 15)
                 }
-            }.padding()
+            }
+            .padding()
+            .background(backgroundColor)
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
+        case .dark:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.dark
+            }
+
+            return PrivateTheme.systemBackgroundColor.dark
         }
     }
 }
