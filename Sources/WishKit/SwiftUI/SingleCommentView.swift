@@ -31,7 +31,8 @@ struct SingleCommentView: View {
         VStack {
             HStack {
                 Text(comment)
-                    .padding(15)
+                    .font(.footnote)
+                    .padding(10)
                     .foregroundColor(textColor)
                 Spacer()
             }

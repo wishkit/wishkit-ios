@@ -12,6 +12,12 @@ import WishKitShared
 
 final class WishListVC: UIViewController {
 
+    private lazy var wishVM: WishListVM = {
+        let wishVM = WishListVM()
+        wishVM.delegate = self
+        return wishVM
+    }()
+
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,12 +87,6 @@ final class WishListVC: UIViewController {
 
     private let spinner = UIActivityIndicatorView()
 
-    private lazy var wishVM: WishListVM = {
-        let wishVM = WishListVM()
-        wishVM.delegate = self
-        return wishVM
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
@@ -150,6 +150,12 @@ final class WishListVC: UIViewController {
                     view.backgroundColor = UIColor(bgColor.light)
                 } else if previousTraitCollection.userInterfaceStyle == .light {
                     view.backgroundColor = UIColor(bgColor.dark)
+                }
+            } else {
+                if traitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+                } else if traitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
                 }
             }
 
@@ -226,7 +232,13 @@ extension WishListVC {
                 view.backgroundColor = UIColor(color.dark)
             }
         } else {
-            view.backgroundColor = .secondarySystemBackground
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
+            }
         }
 
         let segmentedActive = WishKit.config.buttons.segmentedControl.activeTextColor

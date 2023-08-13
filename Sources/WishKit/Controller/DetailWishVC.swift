@@ -162,7 +162,7 @@ final class DetailWishVC: UIViewController {
             top: commentSeparator.bottomAnchor,
             leading: view.leadingAnchor,
             trailing: view.trailingAnchor,
-            padding: UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
+            padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
         commentListView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor).isActive = true
@@ -182,7 +182,13 @@ final class DetailWishVC: UIViewController {
                 view.backgroundColor = UIColor(color.dark)
             }
         } else {
-            view.backgroundColor = .secondarySystemBackground
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
+            }
         }
     }
 }
@@ -291,6 +297,14 @@ extension DetailWishVC {
                 if previousTraitCollection.userInterfaceStyle == .dark {
                     view.backgroundColor = UIColor(color.light)
                 }
+            }
+        } else {
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
             }
         }
     }

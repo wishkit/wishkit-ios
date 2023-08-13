@@ -11,9 +11,6 @@ import WishKitShared
 
 struct CommentListView: View {
 
-    @Environment(\.colorScheme)
-    var colorScheme
-
     private let commentList: [CommentResponse]
 
     init(commentList: [CommentResponse]) {
@@ -29,29 +26,10 @@ struct CommentListView: View {
                         createdAt: comment.createdAt,
                         isAdmin: comment.isAdmin
                     )
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 10)
                 }
             }
             .padding()
-            .background(backgroundColor)
-        }
-    }
-
-    var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
-        case .dark:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.systemBackgroundColor.dark
         }
     }
 }

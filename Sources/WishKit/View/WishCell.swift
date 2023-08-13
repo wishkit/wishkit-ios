@@ -70,6 +70,14 @@ final class WishCell: UITableViewCell {
                     containerView.backgroundColor = UIColor(color.light)
                 }
             }
+        } else {
+            if traitCollection.userInterfaceStyle == .light {
+                containerView.backgroundColor = UIColor(PrivateTheme.elementBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                containerView.backgroundColor = UIColor(PrivateTheme.elementBackgroundColor.dark)
+            }
         }
 
         // Title & Description
@@ -204,7 +212,13 @@ extension WishCell {
                 containerView.backgroundColor = UIColor(color.dark)
             }
         } else {
-            containerView.backgroundColor = .tertiarySystemBackground
+            if traitCollection.userInterfaceStyle == .light {
+                containerView.backgroundColor = UIColor(PrivateTheme.elementBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                containerView.backgroundColor = UIColor(PrivateTheme.elementBackgroundColor.dark)
+            }
         }
     }
 

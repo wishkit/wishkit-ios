@@ -55,13 +55,13 @@ struct WKWishView: View {
                 return color.light
             }
 
-            return PrivateTheme.systemBackgroundColor.light
+            return PrivateTheme.elementBackgroundColor.light
         case .dark:
             if let color = WishKit.theme.secondaryColor {
                 return color.dark
             }
 
-            return PrivateTheme.systemBackgroundColor.dark
+            return PrivateTheme.elementBackgroundColor.dark
         }
     }
 }
