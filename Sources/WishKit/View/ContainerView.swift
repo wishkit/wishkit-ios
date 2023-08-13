@@ -22,11 +22,15 @@ final class ContainerView: UIView {
 
     private func setupView() {
         backgroundColor = .white
-        layer.cornerRadius = 16
+        layer.cornerRadius = WishKit.config.cornerRadius
         layer.cornerCurve = .continuous
-        layer.shadowRadius = 4
-        layer.shadowOpacity = 0.2
-        layer.shadowOffset = CGSize(width: 0, height: 3)
+
+        if WishKit.config.dropShadow == .show {
+            layer.shadowRadius = 4
+            layer.shadowOpacity = 0.2
+            layer.shadowOffset = CGSize(width: 0, height: 3)
+        }
+
         layer.masksToBounds = false
     }
 }

@@ -21,7 +21,7 @@ final class TextView: UITextView {
     init(padding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)) {
         super.init(frame: .zero, textContainer: nil)
 
-        layer.cornerRadius = 12
+        layer.cornerRadius = WishKit.config.cornerRadius
         layer.cornerCurve = .continuous
         backgroundColor = .tertiarySystemBackground
         contentInset = padding

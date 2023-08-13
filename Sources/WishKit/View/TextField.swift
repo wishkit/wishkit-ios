@@ -17,7 +17,7 @@ final class TextField: UITextField {
         self.padding = padding
         super.init(frame: .zero)
         
-        layer.cornerRadius = 12
+        layer.cornerRadius = WishKit.config.cornerRadius
         layer.cornerCurve = .continuous
         textColor = .label
         backgroundColor = .tertiarySystemBackground
