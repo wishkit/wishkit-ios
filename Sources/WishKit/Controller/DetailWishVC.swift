@@ -25,15 +25,18 @@ final class DetailWishVC: UIViewController {
         return button
     }()
 
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        return stackView
-    }()
-
     private let wishView: UIView
 
     private let voteButton = VoteButton()
+
+    private let commentSeparator: UIView = {
+        guard let view = UIHostingController(rootView: SeparatorView()).view else {
+            return UIView()
+        }
+
+        view.backgroundColor = .clear
+        return view
+    }()
 
     init(wishResponse: WishResponse) {
         self.wishResponse = wishResponse
@@ -64,6 +67,7 @@ final class DetailWishVC: UIViewController {
         setupDoneButton()
         setupWishView()
         setupVoteButton()
+        setupCommentSeparatorView()
 
         setupTheme()
     }
@@ -120,6 +124,19 @@ final class DetailWishVC: UIViewController {
         voteButton.voteCountLabel.text = String(describing: wishResponse.votingUsers.count)
     }
 
+    private func setupCommentSeparatorView() {
+        view.addSubview(commentSeparator)
+
+        commentSeparator.translatesAutoresizingMaskIntoConstraints = false
+
+        commentSeparator.anchor(
+            top: voteButton.bottomAnchor,
+            leading: view.leadingAnchor,
+            trailing: view.trailingAnchor,
+            padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+        )
+    }
+
     // MARK: - WishKit Color
 
     private func setupTheme() {
@@ -135,33 +152,6 @@ final class DetailWishVC: UIViewController {
             }
         } else {
             view.backgroundColor = .secondarySystemBackground
-        }
-
-        // CardView
-        if let color = WishKit.theme.secondaryColor {
-            if traitCollection.userInterfaceStyle == .light {
-                
-//                cardView.backgroundColor = UIColor(color.light)
-            }
-
-            if traitCollection.userInterfaceStyle == .dark {
-//                cardView.backgroundColor = UIColor(color.dark)
-            }
-        } else {
-//            cardView.backgroundColor = .tertiarySystemBackground
-        }
-
-        // Title & Description
-        if let color = WishKit.theme.textColor {
-            if traitCollection.userInterfaceStyle == .light {
-//                wishTitleLabel.textColor = UIColor(color.light)
-//                wishDescriptionLabel.textColor = UIColor(color.light)
-            }
-
-            if traitCollection.userInterfaceStyle == .dark {
-//                wishTitleLabel.textColor = UIColor(color.dark)
-//                wishDescriptionLabel.textColor = UIColor(color.dark)
-            }
         }
     }
 }
@@ -251,28 +241,6 @@ extension DetailWishVC {
             return
         }
 
-        // CardView
-        if let color = WishKit.theme.secondaryColor {
-            // Needed this case where it's the same, there's a weird behaviour otherwise.
-            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
-                if previousTraitCollection.userInterfaceStyle == .light {
-//                    cardView.backgroundColor = UIColor(color.light)
-                }
-
-                if previousTraitCollection.userInterfaceStyle == .dark {
-//                    cardView.backgroundColor = UIColor(color.dark)
-                }
-            } else {
-                if previousTraitCollection.userInterfaceStyle == .light {
-//                    cardView.backgroundColor = UIColor(color.dark)
-                }
-
-                if previousTraitCollection.userInterfaceStyle == .dark {
-//                    cardView.backgroundColor = UIColor(color.light)
-                }
-            }
-        }
-
         // Background
         if let color = WishKit.theme.tertiaryColor {
             // Needed this case where it's the same, there's a weird behaviour otherwise.
@@ -291,32 +259,6 @@ extension DetailWishVC {
 
                 if previousTraitCollection.userInterfaceStyle == .dark {
                     view.backgroundColor = UIColor(color.light)
-                }
-            }
-        }
-
-        // Title & Description
-        if let color = WishKit.theme.textColor {
-            // Needed this case where it's the same, there's a weird behaviour otherwise.
-            if traitCollection.userInterfaceStyle == previousTraitCollection.userInterfaceStyle {
-                if previousTraitCollection.userInterfaceStyle == .light {
-//                    wishTitleLabel.textColor = UIColor(color.light)
-//                    wishDescriptionLabel.textColor = UIColor(color.light)
-                }
-
-                if previousTraitCollection.userInterfaceStyle == .dark {
-//                    wishTitleLabel.textColor = UIColor(color.dark)
-//                    wishDescriptionLabel.textColor = UIColor(color.dark)
-                }
-            } else {
-                if previousTraitCollection.userInterfaceStyle == .light {
-//                    wishTitleLabel.textColor = UIColor(color.dark)
-//                    wishDescriptionLabel.textColor = UIColor(color.dark)
-                }
-
-                if previousTraitCollection.userInterfaceStyle == .dark {
-//                    wishTitleLabel.textColor = UIColor(color.light)
-//                    wishDescriptionLabel.textColor = UIColor(color.light)
                 }
             }
         }

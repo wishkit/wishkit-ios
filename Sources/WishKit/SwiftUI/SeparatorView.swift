@@ -12,7 +12,7 @@ struct SeparatorView: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack { Divider() }
-            Text("COMMENTS").font(.footnote)
+            Text("COMMENTS").font(.caption2)
             VStack { Divider() }
         }
     }
