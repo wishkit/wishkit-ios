@@ -10,6 +10,16 @@ import SwiftUI
 import WishKitShared
 
 #if os(macOS)
+extension View {
+    func wkShadow() -> some View {
+        if WishKit.config.dropShadow == .show {
+            return AnyView(self.shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0))
+        } else {
+            return AnyView(self)
+        }
+    }
+}
+
 struct WishView: View {
 
     enum AlertReason {
@@ -83,9 +93,9 @@ struct WishView: View {
 
     var body: some View {
         return ZStack {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous)
                 .fill(backgroundColor)
-                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0)
+                .wkShadow()
 
             HStack {
                 Button(action: vote) {
