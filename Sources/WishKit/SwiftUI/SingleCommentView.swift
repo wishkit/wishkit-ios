@@ -44,7 +44,7 @@ struct SingleCommentView: View {
                     Text(createdAt, style: .date)
                         .font(.footnote)
                         .foregroundColor(.black.opacity(2/3))
-                    Text(" • Admin")
+                    Text(" • \(isAdmin ? "Admin" : "User")")
                         .font(.footnote)
                         .foregroundColor(.black.opacity(2/3))
                 }.padding(.trailing, 10)

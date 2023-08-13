@@ -19,7 +19,7 @@ struct CommentListView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack {
+            VStack {
                 ForEach(self.commentList, id: \.createdAt) { comment in
                     SingleCommentView(
                         comment: comment.description,
@@ -27,7 +27,6 @@ struct CommentListView: View {
                         isAdmin: Bool.random()
                     )
                     .padding(.bottom, 15)
-                    .redacted(reason: .placeholder)
                 }
             }.padding()
         }

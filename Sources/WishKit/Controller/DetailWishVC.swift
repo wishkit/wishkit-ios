@@ -30,18 +30,32 @@ final class DetailWishVC: UIViewController {
     private let voteButton = VoteButton()
 
     private let commentSeparator: UIView = {
-        guard let view = UIHostingController(rootView: SeparatorView()).view else {
-            return UIView()
-        }
-
+        let view = UIHostingController(rootView: SeparatorView()).view ?? UIView()
         view.backgroundColor = .clear
         return view
     }()
 
+    private let commentListView: UIView
+
     init(wishResponse: WishResponse) {
         self.wishResponse = wishResponse
+
         let wishView = WKWishView(title: wishResponse.title, description: wishResponse.description)
         self.wishView = UIHostingController(rootView: wishView).view
+
+        let commentListView = CommentListView(commentList: [
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: .random()),
+        ])
+
+        self.commentListView = UIHostingController(rootView: commentListView).view
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -68,6 +82,7 @@ final class DetailWishVC: UIViewController {
         setupWishView()
         setupVoteButton()
         setupCommentSeparatorView()
+        setupCommentListView()
 
         setupTheme()
     }
@@ -135,6 +150,22 @@ final class DetailWishVC: UIViewController {
             trailing: view.trailingAnchor,
             padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         )
+    }
+
+    private func setupCommentListView() {
+        view.addSubview(commentListView)
+
+        commentListView.translatesAutoresizingMaskIntoConstraints = false
+
+        commentListView.anchor(
+            top: commentSeparator.bottomAnchor,
+            leading: view.leadingAnchor,
+//            bottom: view.bottomAnchor,
+            trailing: view.trailingAnchor,
+            padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+        )
+
+        commentListView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor).isActive = true
     }
 
     // MARK: - WishKit Color
