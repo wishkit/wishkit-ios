@@ -33,10 +33,13 @@ final class AddButton: UIButton {
         setImage(image, for: .normal)
         backgroundColor = UIColor(WishKit.theme.primaryColor)
         layer.cornerRadius = length/2
-        layer.shadowOffset = CGSize(width: 0, height: 3)
-        layer.shadowColor = UIColor.black.withAlphaComponent(0.8).cgColor
-        layer.shadowRadius = 1.5
-        layer.shadowOpacity = 0.50
+
+        if WishKit.config.dropShadow == .show {
+            layer.shadowOffset = CGSize(width: 0, height: 3)
+            layer.shadowColor = UIColor.black.withAlphaComponent(0.8).cgColor
+            layer.shadowRadius = 1.5
+            layer.shadowOpacity = 0.50
+        }
 
         setupTheme()
     }
