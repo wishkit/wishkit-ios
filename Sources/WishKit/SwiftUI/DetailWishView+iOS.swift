@@ -20,6 +20,9 @@ struct DetailWishView: View {
 
     private let wishResponse: WishResponse
 
+    @State
+    private var newCommentValue = ""
+
     public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
 
     init(wishResponse: WishResponse) {
@@ -49,7 +52,18 @@ struct DetailWishView: View {
                     SeparatorView()
                         .padding([.top, .bottom], 15)
 
-                    CommentFieldView()
+                    CommentFieldView($newCommentValue) {
+                        let request = CreateCommentRequest(wishId: wishResponse.id, description: newCommentValue)
+
+                        let response = await CommentApi.createComment(request: request)
+
+                        switch response {
+                        case .success(let success):
+                            print("✅ \(success.description)")
+                        case .failure(let error):
+                            print("❌ \(error.localizedDescription)")
+                        }
+                    }
                         .frame(maxWidth: 700)
 
                     Spacer(minLength: 20)

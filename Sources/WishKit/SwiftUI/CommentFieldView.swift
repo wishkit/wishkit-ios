@@ -7,14 +7,22 @@
 //
 
 import SwiftUI
+import WishKitShared
 
 struct CommentFieldView: View {
 
     @Environment(\.colorScheme)
     var colorScheme
 
-    @State
-    private var textFieldValue = ""
+    @Binding
+    private var textFieldValue: String
+
+    private let submitAction: () async throws -> ()
+
+    init(_ textFieldValue: Binding<String>, submitAction: @escaping () async throws -> ()) {
+        self._textFieldValue = textFieldValue
+        self.submitAction = submitAction
+    }
 
     var body: some View {
         ZStack {
@@ -27,7 +35,7 @@ struct CommentFieldView: View {
 
             HStack {
                 Spacer()
-                Button(action: { print("commenting..") }) {
+                Button(action: { Task { try await submitAction() } }) {
                     Image(systemName: "paperplane.fill")
                         .padding(10)
                 }.foregroundColor(WishKit.theme.primaryColor)
@@ -57,7 +65,11 @@ extension CommentFieldView {
 }
 
 struct CommentFieldView_Previews: PreviewProvider {
+
+    @State
+    static var textValue = ""
+
     static var previews: some View {
-        CommentFieldView()
+        CommentFieldView($textValue, submitAction: { print("Sending API call..") })
     }
 }
