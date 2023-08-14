@@ -25,9 +25,20 @@ final class DetailWishVC: UIViewController {
         return button
     }()
 
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+
     private let wishView: UIView
 
-    private let voteButton = VoteButton()
+    private lazy var voteButton: VoteButton = {
+        let button = VoteButton()
+        button.addTarget(self, action: #selector(voteAction), for: .touchUpInside)
+        button.voteCountLabel.text = String(describing: wishResponse.votingUsers.count)
+        return button
+    }()
 
     private let commentSeparator: UIView = {
         let view = UIHostingController(rootView: SeparatorView()).view ?? UIView()
@@ -77,19 +88,14 @@ final class DetailWishVC: UIViewController {
     // MARK: - Setup View
 
     private func setupView() {
+        navigationItem.title = WishKit.config.localization.detail
 
-        setupNavigation()
         setupDoneButton()
-        setupWishView()
-        setupVoteButton()
-        setupCommentSeparatorView()
-        setupCommentListView()
+
+        setupViews()
+        setupConstraints()
 
         setupTheme()
-    }
-
-    private func setupNavigation() {
-        navigationItem.title = WishKit.config.localization.detail
     }
 
     private func setupDoneButton() {
@@ -111,10 +117,17 @@ final class DetailWishVC: UIViewController {
         )
     }
 
-    private func setupWishView() {
+    private func setupViews() {
         view.addSubview(wishView)
+        view.addSubview(voteButton)
+        view.addSubview(commentSeparator)
+        view.addSubview(commentListView)
+    }
 
+    private func setupConstraints() {
         wishView.translatesAutoresizingMaskIntoConstraints = false
+        commentSeparator.translatesAutoresizingMaskIntoConstraints = false
+        commentListView.translatesAutoresizingMaskIntoConstraints = false
 
         wishView.anchor(
             top: doneContainer.bottomAnchor,
@@ -123,12 +136,6 @@ final class DetailWishVC: UIViewController {
             padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         )
 
-        wishView.backgroundColor = .clear
-    }
-
-    private func setupVoteButton() {
-        view.addSubview(voteButton)
-
         voteButton.anchor(
             top: wishView.bottomAnchor,
             centerX: view.layoutMarginsGuide.centerXAnchor,
@@ -136,27 +143,12 @@ final class DetailWishVC: UIViewController {
             size: CGSize(width: 200, height: 0)
         )
 
-        voteButton.addTarget(self, action: #selector(voteAction), for: .touchUpInside)
-        voteButton.voteCountLabel.text = String(describing: wishResponse.votingUsers.count)
-    }
-
-    private func setupCommentSeparatorView() {
-        view.addSubview(commentSeparator)
-
-        commentSeparator.translatesAutoresizingMaskIntoConstraints = false
-
         commentSeparator.anchor(
             top: voteButton.bottomAnchor,
             leading: view.leadingAnchor,
             trailing: view.trailingAnchor,
             padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         )
-    }
-
-    private func setupCommentListView() {
-        view.addSubview(commentListView)
-
-        commentListView.translatesAutoresizingMaskIntoConstraints = false
 
         commentListView.anchor(
             top: commentSeparator.bottomAnchor,
@@ -166,7 +158,7 @@ final class DetailWishVC: UIViewController {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
-//        commentListView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        wishView.backgroundColor = .clear
     }
 
     // MARK: - WishKit Color
