@@ -86,7 +86,7 @@ struct CreateWishView: View {
                         .font(.system(size: 10))
                 }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
 
-                TextField(WishKit.config.localization.titleOfWish, text: $title)
+                WKTextField(WishKit.config.localization.titleOfWish, text: $title)
                     .foregroundColor(textColor)
                     .textFieldStyle(PlainTextFieldStyle())
                     .frame(height: 35)

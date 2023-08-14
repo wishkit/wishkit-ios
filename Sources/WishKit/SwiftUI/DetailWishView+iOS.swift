@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 8/13/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -48,6 +48,11 @@ struct DetailWishView: View {
 
                     SeparatorView()
                         .padding([.top, .bottom], 15)
+
+                    CommentFieldView()
+                        .frame(maxWidth: 700)
+
+                    Spacer(minLength: 20)
 
                     CommentListView(commentList: mockCommentList)
                         .frame(maxWidth: 700)

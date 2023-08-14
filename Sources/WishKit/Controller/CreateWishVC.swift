@@ -24,7 +24,7 @@ final class CreateWishVC: UIViewController {
 
     private let wishTitleCharacterCountLabel = UILabel()
 
-    private let wishTitleTF = TextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
+    private let wishTitleTF = WKTextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
 
     private let wishDescriptionSectionLabel = UILabel(WishKit.config.localization.description)
 
