@@ -38,11 +38,8 @@ struct SingleCommentView: View {
             }
             .frame(maxWidth: .infinity)
             .background(backgroundColor)
-            .cornerRadius(cornerRadius) // make the background rounded
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(.gray.opacity(2/3), lineWidth: 0.5)
-            )
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
 
             HStack {
                 Spacer()

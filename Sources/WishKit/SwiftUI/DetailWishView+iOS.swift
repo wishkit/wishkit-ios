@@ -47,7 +47,7 @@ struct DetailWishView: View {
                     Spacer(minLength: 15)
 
                     SeparatorView()
-                        .padding([.top], 15)
+                        .padding([.top, .bottom], 15)
 
                     CommentListView(commentList: mockCommentList)
                         .frame(maxWidth: 700)
