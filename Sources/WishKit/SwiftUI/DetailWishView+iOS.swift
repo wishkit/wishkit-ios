@@ -18,15 +18,19 @@ struct DetailWishView: View {
     @State
     private var isLandscape = false
 
-    private let wishResponse: WishResponse
-
     @State
     private var newCommentValue = ""
+
+    @State
+    private var commentList: [CommentResponse] = []
+
+    private let wishResponse: WishResponse
 
     public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
 
     init(wishResponse: WishResponse) {
         self.wishResponse = wishResponse
+        self._commentList = State(wrappedValue: wishResponse.commentList)
     }
 
     var body: some View {
@@ -58,17 +62,17 @@ struct DetailWishView: View {
                         let response = await CommentApi.createComment(request: request)
 
                         switch response {
-                        case .success(let success):
-                            print("✅ \(success.description)")
+                        case .success(let commentResponse):
+                            commentList.insert(commentResponse, at: 0)
+                            newCommentValue = ""
                         case .failure(let error):
                             print("❌ \(error.localizedDescription)")
                         }
-                    }
-                        .frame(maxWidth: 700)
+                    }.frame(maxWidth: 700)
 
                     Spacer(minLength: 20)
 
-                    CommentListView(commentList: wishResponse.commentList)
+                    CommentListView(commentList: $commentList)
                         .frame(maxWidth: 700)
                 }
                 .padding()

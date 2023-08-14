@@ -11,11 +11,8 @@ import WishKitShared
 
 struct CommentListView: View {
 
-    private let commentList: [CommentResponse]
-
-    init(commentList: [CommentResponse]) {
-        self.commentList = commentList
-    }
+    @Binding
+    var commentList: [CommentResponse]
 
     var body: some View {
         VStack {
@@ -33,10 +30,13 @@ struct CommentListView: View {
 }
 
 struct CommentListView_Previews: PreviewProvider {
+    @State
+    static var commentList = [
+        CommentResponse(userId: UUID(), description: "The Only Distance That Matters Is The Distance Between Our Hearts.", createdAt: Date(), isAdmin: true),
+        CommentResponse(userId: UUID(), description: "It's dangerous to go alone, take this! - Old Man", createdAt: Date(), isAdmin: true)
+    ]
+
     static var previews: some View {
-        CommentListView(commentList: [
-            CommentResponse(userId: UUID(), description: "The Only Distance That Matters Is The Distance Between Our Hearts.", createdAt: Date(), isAdmin: true),
-            CommentResponse(userId: UUID(), description: "It's dangerous to go alone, take this! - Old Man", createdAt: Date(), isAdmin: true)
-        ])
+        CommentListView(commentList: $commentList)
     }
 }
