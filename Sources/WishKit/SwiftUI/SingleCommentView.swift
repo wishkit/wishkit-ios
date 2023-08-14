@@ -28,7 +28,22 @@ struct SingleCommentView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
+            HStack(spacing: 0){
+
+                Text("\(isAdmin ? "Admin" : "User")")
+                    .font(.caption2)
+                    .foregroundColor(textColor.opacity(1/3))
+                Spacer()
+                Text(createdAt.wkFormatted())
+                    .font(.caption2)
+                    .foregroundColor(textColor.opacity(1/3))
+            }
+            .padding([.top, .bottom], 5)
+            .padding([.leading, .trailing], 10)
+
+            Divider()
+
             HStack {
                 Text(comment)
                     .font(.footnote)
@@ -36,22 +51,11 @@ struct SingleCommentView: View {
                     .foregroundColor(textColor)
                 Spacer()
             }
-            .frame(maxWidth: .infinity)
-            .background(backgroundColor)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
-
-            HStack(spacing: 0){
-                Spacer()
-                Text("\(isAdmin ? "Admin" : "User") - ")
-                    .font(.caption2)
-                    .foregroundColor(textColor.opacity(1/3))
-
-                Text(createdAt.wkFormatted())
-                    .font(.caption2)
-                    .foregroundColor(textColor.opacity(1/3))
-            }.padding([.leading, .trailing], 10)
         }
+        .frame(maxWidth: .infinity)
+        .background(backgroundColor)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
     }
 
     var textColor: Color {
