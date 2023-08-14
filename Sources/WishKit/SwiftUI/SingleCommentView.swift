@@ -41,17 +41,16 @@ struct SingleCommentView: View {
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
 
-            HStack {
+            HStack(spacing: 0){
                 Spacer()
-                HStack(spacing: 0) {
-                    Text(createdAt, style: .date)
-                        .font(.caption2)
-                        .foregroundColor(textColor.opacity(2/3))
-                    Text(" • \(isAdmin ? "Admin" : "User")")
-                        .font(.caption2)
-                        .foregroundColor(textColor.opacity(2/3))
-                }.padding(.trailing, 10)
-            }
+                Text("\(isAdmin ? "Admin" : "User") - ")
+                    .font(.caption2)
+                    .foregroundColor(textColor.opacity(1/3))
+
+                Text(createdAt.wkFormatted())
+                    .font(.caption2)
+                    .foregroundColor(textColor.opacity(1/3))
+            }.padding([.leading, .trailing], 10)
         }
     }
 
