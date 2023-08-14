@@ -27,28 +27,63 @@ struct DetailWishView: View {
     }
 
     var body: some View {
-        VStack {
+        ZStack {
+            ScrollView {
+                VStack {
 
-            if isLandscape {
-                HStack {
-                    Spacer()
-                    Button("Done", action: { doneButtonPublisher.send(true) })
+                    if isLandscape {
+                        HStack {
+                            Spacer()
+                            Button("Done", action: { doneButtonPublisher.send(true) })
+                        }
+                        .frame(maxWidth: 700)
+                    }
+
+                    Spacer(minLength: 15)
+
+                    WKWishView(title: wishResponse.title, description: wishResponse.description)
+                        .frame(maxWidth: 700)
+
+                    Spacer(minLength: 15)
+
+                    Button(action: { print("upvoted..") }) {
+                        HStack {
+                            Image(systemName: "arrowtriangle.up.fill")
+                            Text(WishKit.config.localization.upvote)
+                            Text(String(describing: wishResponse.votingUsers.count))
+                        }
+                        .padding([.top, .bottom], 15)
+                        .frame(width: 200)
+                        .background(WishKit.theme.primaryColor)
+                        .cornerRadius(12)
+                        .foregroundColor(.white)
+                    }
+
+                    SeparatorView()
+                        .padding([.top], 15)
+
+                    CommentListView(commentList: mockCommentList)
+                        .frame(maxWidth: 700)
+                }
+                .padding()
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    handleRotation(orientation: UIDevice.current.orientation)
                 }
             }
+            .background(backgroundColor)
+            .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
 
-            Spacer(minLength: 30)
-
-            WKWishView(title: wishResponse.title, description: wishResponse.description)
-            SeparatorView()
-                .padding([.top], 15)
-            CommentListView(commentList: mockCommentList)
+            GeometryReader { proxy in
+                VStack {}
+                    .onAppear {
+                        if proxy.size.width > proxy.size.height {
+                            self.isLandscape = true
+                        } else {
+                            self.isLandscape = false
+                        }
+                    }
+            }
         }
-        .padding()
-        .background(backgroundColor)
-        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-            handleRotation(orientation: UIDevice.current.orientation)
-        }
-//        .ignoresSafeArea(edges: [.leading, .trailing])
     }
 
     private func handleRotation(orientation: UIDeviceOrientation) {
@@ -67,11 +102,11 @@ struct DetailWishView: View {
             CommentResponse(userId: UUID(), description: "Oh wow..", createdAt: Date(), isAdmin: false),
             CommentResponse(userId: UUID(), description: "This is weird..", createdAt: Date(), isAdmin: true),
             CommentResponse(userId: UUID(), description: "Ah maybe the id?", createdAt: Date(), isAdmin: false),
-//            CommentResponse(userId: UUID(), description: "Well in that case", createdAt: Date(), isAdmin: false),
-//            CommentResponse(userId: UUID(), description: "Dangerous!", createdAt: Date(), isAdmin: false),
-//            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: true),
-//            CommentResponse(userId: UUID(), description: "To go alone..", createdAt: Date(), isAdmin: false),
-//            CommentResponse(userId: UUID(), description: "Take this!", createdAt: Date(), isAdmin: false),
+            CommentResponse(userId: UUID(), description: "Well in that case", createdAt: Date(), isAdmin: false),
+            CommentResponse(userId: UUID(), description: "Dangerous!", createdAt: Date(), isAdmin: false),
+            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: true),
+            CommentResponse(userId: UUID(), description: "To go alone..", createdAt: Date(), isAdmin: false),
+            CommentResponse(userId: UUID(), description: "Take this!", createdAt: Date(), isAdmin: false),
         ]
     }
 }
