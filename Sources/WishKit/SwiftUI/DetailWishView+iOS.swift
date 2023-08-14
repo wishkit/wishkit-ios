@@ -68,7 +68,7 @@ struct DetailWishView: View {
 
                     Spacer(minLength: 20)
 
-                    CommentListView(commentList: mockCommentList)
+                    CommentListView(commentList: wishResponse.commentList)
                         .frame(maxWidth: 700)
                 }
                 .padding()
@@ -102,19 +102,6 @@ struct DetailWishView: View {
             return
         }
     }
-
-    var mockCommentList: [CommentResponse] {
-        return [
-            CommentResponse(userId: UUID(), description: "Oh wow..", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "This is weird..", createdAt: Date(), isAdmin: true),
-            CommentResponse(userId: UUID(), description: "Ah maybe the id?", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Well in that case", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Dangerous!", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Hey! Listen!", createdAt: Date(), isAdmin: true),
-            CommentResponse(userId: UUID(), description: "To go alone..", createdAt: Date(), isAdmin: false),
-            CommentResponse(userId: UUID(), description: "Take this!", createdAt: Date(), isAdmin: false),
-        ]
-    }
 }
 
 // MARK: - Color Scheme
@@ -141,7 +128,7 @@ extension DetailWishView {
 
 struct DetailWishView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailWishView(wishResponse: WishResponse(id: UUID(), userUUID: UUID(), title: "📈 Statistis of my workouts", description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can lift would be really ncie", state: .approved, votingUsers: [UserResponse(uuid: UUID()), UserResponse(uuid: UUID()), UserResponse(uuid: UUID())]))
+        DetailWishView(wishResponse: WishResponse(id: UUID(), userUUID: UUID(), title: "📈 Statistis of my workouts", description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can lift would be really ncie", state: .approved, votingUsers: [UserResponse(uuid: UUID()), UserResponse(uuid: UUID()), UserResponse(uuid: UUID())], commentList: []))
     }
 }
 #endif

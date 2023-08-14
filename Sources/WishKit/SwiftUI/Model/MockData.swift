@@ -35,7 +35,7 @@ struct MockData {
                 title: shadowWish.title,
                 description: shadowWish.description,
                 state: .approved,
-                votingUsers: ul
+                votingUsers: ul, commentList: []
             )
         })
     }
@@ -47,7 +47,8 @@ struct MockData {
             title: title,
             description: description,
             state: .pending,
-            votingUsers: []
+            votingUsers: [],
+            commentList: []
         )
     }
 }
