@@ -9,8 +9,12 @@
 #if canImport(UIKit)
 import UIKit
 import WishKitShared
+import SwiftUI
+import Combine
 
 final class WishListVC: UIViewController {
+
+    private var subscribers: Set<AnyCancellable> = []
 
     private lazy var wishVM: WishListVM = {
         let wishVM = WishListVM()
@@ -411,7 +415,13 @@ extension WishListVC: WishVMDelegate {
     }
 
     func didSelect(wishResponse: WishResponse) {
-        let vc = DetailWishVC(wishResponse: wishResponse)
+        let detailWishView = DetailWishView(wishResponse: wishResponse)
+
+        detailWishView.doneButtonPublisher.sink { hasTappedButton in
+            self.dismissAction()
+        }.store(in: &subscribers)
+
+        let vc = UIHostingController(rootView: detailWishView)
 
         if let navigationController = navigationController {
             navigationController.pushViewController(vc, animated: true)

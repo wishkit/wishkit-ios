@@ -18,17 +18,19 @@ struct CommentListView: View {
     }
 
     var body: some View {
-        VStack {
-            ForEach(self.commentList, id: \.description) { comment in
-                SingleCommentView(
-                    comment: comment.description,
-                    createdAt: comment.createdAt,
-                    isAdmin: comment.isAdmin
-                )
-                .padding(.bottom, 10)
+        ScrollView {
+            VStack {
+                ForEach(self.commentList, id: \.description) { comment in
+                    SingleCommentView(
+                        comment: comment.description,
+                        createdAt: comment.createdAt,
+                        isAdmin: comment.isAdmin
+                    )
+                    .padding(.bottom, 10)
+                }
             }
+            .padding()
         }
-        .padding()
     }
 }
 
