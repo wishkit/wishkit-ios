@@ -46,19 +46,6 @@ struct DetailWishView: View {
 
                     Spacer(minLength: 15)
 
-                    Button(action: { print("upvoted..") }) {
-                        HStack {
-                            Image(systemName: "arrowtriangle.up.fill")
-                            Text(WishKit.config.localization.upvote)
-                            Text(String(describing: wishResponse.votingUsers.count))
-                        }
-                        .padding([.top, .bottom], 15)
-                        .frame(width: 200)
-                        .background(WishKit.theme.primaryColor)
-                        .cornerRadius(12)
-                        .foregroundColor(.white)
-                    }
-
                     SeparatorView()
                         .padding([.top], 15)
 
@@ -114,6 +101,7 @@ struct DetailWishView: View {
 // MARK: - Color Scheme
 
 extension DetailWishView {
+
     var backgroundColor: Color {
         switch colorScheme {
         case .light:

@@ -23,29 +23,60 @@ struct WKWishView: View {
     }
 
     var body: some View {
-        VStack(spacing: 5) {
-            HStack {
-                Text(title)
-                    .foregroundColor(textColor)
-                    .font(.system(size: 17))
-                    .fontWeight(.semibold)
-                Spacer()
+        HStack(spacing: 0) {
+            Button(action: { print("upvoted..") }) {
+                VStack(spacing: 5) {
+                    Image(systemName: "arrowtriangle.up.fill")
+                    Text(String(describing: 9))
+                }
+                .foregroundColor(textColor)
+                .padding([.leading, .trailing], 20)
+                .padding([.top, .bottom], 10)
+                .cornerRadius(12)
             }
 
-            HStack {
-                Text(description)
-                    .foregroundColor(textColor)
-                    .font(.system(size: 13))
-                Spacer()
-            }
+            VStack(spacing: 5) {
+                HStack {
+                    Text(title)
+                        .foregroundColor(textColor)
+                        .font(.system(size: 17))
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
 
+                HStack {
+                    Text(description)
+                        .foregroundColor(textColor)
+                        .font(.system(size: 13))
+                    Spacer()
+                }
+            }
         }
-        .padding()
+        .padding([.top, .bottom, .trailing], 15)
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
     }
+}
 
+extension WKWishView {
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        }
+    }
 
     var backgroundColor: Color {
         switch colorScheme {
@@ -62,27 +93,6 @@ struct WKWishView: View {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
-        }
-    }
-}
-
-extension WKWishView {
-    var textColor: Color {
-
-        switch colorScheme {
-        case .light:
-
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
-        case .dark:
-            if let color = WishKit.theme.textColor {
-                return color.dark
-            }
-
-            return .white
         }
     }
 }
