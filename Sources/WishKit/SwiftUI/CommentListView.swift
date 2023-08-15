@@ -26,6 +26,7 @@ struct CommentListView: View {
             }
         }
         .padding(1)
+        .padding(.bottom, 30)
     }
 }
 

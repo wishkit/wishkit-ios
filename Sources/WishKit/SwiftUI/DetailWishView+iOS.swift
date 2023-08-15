@@ -17,6 +17,7 @@ final class CommentModel: ObservableObject {
     @Published
     var isLoading = false
 }
+
 struct DetailWishView: View {
 
     // MARK: - Private

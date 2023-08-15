@@ -82,7 +82,6 @@ final class WishListVC: UIViewController {
     }()
     #endif
 
-
     private lazy var addWishButton: AddButton = {
         let buttons = AddButton()
         buttons.addTarget(self, action: #selector(createWishAction), for: .touchUpInside)
@@ -424,12 +423,12 @@ extension WishListVC: WishVMDelegate {
             self.dismissAction()
         }.store(in: &subscribers)
 
-        let vc = UIHostingController(rootView: detailWishView)
+        let detailWishVC = WKHostingController(rootView: detailWishView)
 
         if let navigationController = navigationController {
-            navigationController.pushViewController(vc, animated: true)
+            navigationController.pushViewController(detailWishVC, animated: true)
         } else {
-            present(vc, animated: true)
+            present(detailWishVC, animated: true)
         }
     }
 }
