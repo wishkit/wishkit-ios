@@ -7,37 +7,66 @@
 //
 
 import SwiftUI
+import WishKitShared
 
 struct WKWishView: View {
+
+    enum AlertReason {
+        case alreadyVoted
+        case alreadyImplemented
+        case voteReturnedError(String)
+        case none
+    }
 
     @Environment(\.colorScheme)
     var colorScheme
 
-    private let title: String
+    @State
+    var showAlert = false
 
-    private let description: String
+    @State
+    private var alertReason: AlertReason = .none
 
-    init(title: String, description: String) {
-        self.title = title
-        self.description = description
+    @State
+    var voteCount = 0
+
+    private let wishResponse: WishResponse
+
+    init(wishResponse: WishResponse) {
+        self.wishResponse = wishResponse
+        self._voteCount = State(wrappedValue: wishResponse.votingUsers.count)
     }
 
     var body: some View {
         HStack(spacing: 0) {
-            Button(action: { print("upvoted..") }) {
+            Button(action: voteAction) {
                 VStack(spacing: 5) {
                     Image(systemName: "arrowtriangle.up.fill")
-                    Text(String(describing: 9))
+                    Text(String(describing: voteCount))
                 }
                 .foregroundColor(textColor)
                 .padding([.leading, .trailing], 20)
                 .padding([.top, .bottom], 10)
                 .cornerRadius(12)
+            }.alert(isPresented: $showAlert) {
+                var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+                switch alertReason {
+                case .alreadyVoted:
+                    title = Text(WishKit.config.localization.youCanOnlyVoteOnce)
+                case .alreadyImplemented:
+                    title = Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
+                case .voteReturnedError(let error):
+                    title = Text("Something went wrong during your vote. Try again later.\n\n\(error)")
+                case .none:
+                    title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+                }
+
+                return Alert(title: title)
             }
 
             VStack(spacing: 5) {
                 HStack {
-                    Text(title)
+                    Text(wishResponse.title)
                         .foregroundColor(textColor)
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
@@ -45,7 +74,7 @@ struct WKWishView: View {
                 }
 
                 HStack {
-                    Text(description)
+                    Text(wishResponse.description)
                         .foregroundColor(textColor)
                         .font(.system(size: 13))
                     Spacer()
@@ -56,6 +85,33 @@ struct WKWishView: View {
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
+    }
+
+    private func voteAction() {
+        let userUUID = UUIDManager.getUUID()
+
+        if wishResponse.state == .implemented {
+            alertReason = .alreadyImplemented
+            showAlert = true
+            return
+        }
+
+        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
+            alertReason = .alreadyVoted
+            showAlert = true
+            return
+        }
+
+        let request = VoteWishRequest(wishId: wishResponse.id)
+        WishApi.voteWish(voteRequest: request) { result in
+            switch result {
+            case .success(let response):
+                voteCount = response.votingUsers.count
+            case .failure(let error):
+                alertReason = .voteReturnedError(error.localizedDescription)
+                showAlert = true
+            }
+        }
     }
 }
 
@@ -98,13 +154,21 @@ extension WKWishView {
 }
 
 struct WKWishView_Previews: PreviewProvider {
+    static let wishResponse = WishResponse(
+        id: UUID(),
+        userUUID: UUID(),
+        title: "📈 Statistics of my workouts!",
+        description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can list would be really ncie.",
+        state: .approved,
+        votingUsers: [],
+        commentList: []
+    )
+
     static var previews: some View {
         VStack {
             Spacer()
-            WKWishView(
-                title: "📈 Statistics of my workouts!",
-                description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can list would be really ncie."
-            ).padding()
+            WKWishView(wishResponse: wishResponse)
+                .padding()
             Spacer()
         }.background(Color.red)
     }

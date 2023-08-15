@@ -48,7 +48,7 @@ struct DetailWishView: View {
 
                     Spacer(minLength: 15)
 
-                    WKWishView(title: wishResponse.title, description: wishResponse.description)
+                    WKWishView(wishResponse: wishResponse)
                         .frame(maxWidth: 700)
 
                     Spacer(minLength: 15)
@@ -77,12 +77,14 @@ struct DetailWishView: View {
                 }
                 .padding()
                 .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    // Handle when phone is rotated to/from landscape.
                     handleRotation(orientation: UIDevice.current.orientation)
                 }
             }
             .background(backgroundColor)
             .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
 
+            // Handle when app is launched in landscape.
             GeometryReader { proxy in
                 VStack {}
                     .onAppear {
