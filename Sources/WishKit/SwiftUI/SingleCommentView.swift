@@ -13,7 +13,7 @@ struct SingleCommentView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    private let cornerRadius: CGFloat = 10
+    private let cornerRadius: CGFloat = 12
 
     private let comment: String
 
@@ -55,7 +55,7 @@ struct SingleCommentView: View {
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
+        .wkShadow()
     }
 
     var textColor: Color {

@@ -15,8 +15,8 @@ struct CommentListView: View {
     var commentList: [CommentResponse]
 
     var body: some View {
-        VStack {
-            ForEach(self.commentList, id: \.description) { comment in
+        LazyVStack {
+            ForEach(self.commentList, id: \.id) { comment in
                 SingleCommentView(
                     comment: comment.description,
                     createdAt: comment.createdAt,
@@ -32,8 +32,8 @@ struct CommentListView: View {
 struct CommentListView_Previews: PreviewProvider {
     @State
     static var commentList = [
-        CommentResponse(userId: UUID(), description: "The Only Distance That Matters Is The Distance Between Our Hearts.", createdAt: Date(), isAdmin: true),
-        CommentResponse(userId: UUID(), description: "It's dangerous to go alone, take this! - Old Man", createdAt: Date(), isAdmin: true)
+        CommentResponse(id: UUID(), userId: UUID(), description: "The Only Distance That Matters Is The Distance Between Our Hearts.", createdAt: Date(), isAdmin: true),
+        CommentResponse(id: UUID(), userId: UUID(), description: "It's dangerous to go alone, take this! - Old Man", createdAt: Date(), isAdmin: true)
     ]
 
     static var previews: some View {

@@ -93,7 +93,7 @@ struct WKWishView: View {
         .padding([.top, .bottom, .trailing], 15)
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .shadow(color: .black.opacity(1/5), radius: 4, y: 3)
+        .wkShadow()
     }
 
     private func voteAction() {
