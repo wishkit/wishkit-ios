@@ -12,15 +12,23 @@ import WishKitShared
 struct CommentFieldView: View {
 
     @Environment(\.colorScheme)
-    var colorScheme
+    private var colorScheme
 
     @Binding
     private var textFieldValue: String
 
+    @Binding
+    private var isLoading: Bool
+
     private let submitAction: () async throws -> ()
 
-    init(_ textFieldValue: Binding<String>, submitAction: @escaping () async throws -> ()) {
+    init(
+        _ textFieldValue: Binding<String>,
+        isLoading: Binding<Bool>,
+        submitAction: @escaping () async throws -> ()
+    ) {
         self._textFieldValue = textFieldValue
+        self._isLoading = isLoading
         self.submitAction = submitAction
     }
 
@@ -35,10 +43,17 @@ struct CommentFieldView: View {
 
             HStack {
                 Spacer()
-                Button(action: { Task { try await submitAction() } }) {
-                    Image(systemName: "paperplane.fill")
+                if isLoading {
+                    ProgressView()
                         .padding(10)
-                }.foregroundColor(WishKit.theme.primaryColor)
+                } else {
+                    Button(action: { Task { try await submitAction() } }) {
+                        Image(systemName: "paperplane.fill")
+                            .padding(10)
+                    }
+                    .foregroundColor(WishKit.theme.primaryColor)
+                    .disabled(textFieldValue.replacingOccurrences(of: " ", with: "").isEmpty)
+                }
             }
         }
     }
@@ -69,7 +84,14 @@ struct CommentFieldView_Previews: PreviewProvider {
     @State
     static var textValue = ""
 
+    @State
+    static var isLoading = false
+
     static var previews: some View {
-        CommentFieldView($textValue, submitAction: { print("Sending API call..") })
+        CommentFieldView(
+            $textValue,
+            isLoading: $isLoading,
+            submitAction: { print("Sending API call..") }
+        )
     }
 }

@@ -10,6 +10,13 @@ import SwiftUI
 import WishKitShared
 import Combine
 
+final class CommentModel: ObservableObject {
+    @Published
+    var newCommentValue = ""
+
+    @Published
+    var isLoading = false
+}
 struct DetailWishView: View {
 
     // MARK: - Private
@@ -20,8 +27,8 @@ struct DetailWishView: View {
     @State
     private var isLandscape = false
 
-    @State
-    private var newCommentValue = ""
+    @ObservedObject
+    private var commentModel = CommentModel()
 
     @State
     private var commentList: [CommentResponse] = []
@@ -63,18 +70,20 @@ struct DetailWishView: View {
                     SeparatorView()
                         .padding([.top, .bottom], 15)
 
-                    CommentFieldView($newCommentValue) {
-                        let request = CreateCommentRequest(wishId: wishResponse.id, description: newCommentValue)
+                    CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
+                        let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
 
+                        commentModel.isLoading = true
                         let response = await CommentApi.createComment(request: request)
-
+                        commentModel.isLoading = false
+                        
                         switch response {
                         case .success(let commentResponse):
                             withAnimation {
                                 commentList.insert(commentResponse, at: 0)
                             }
 
-                            newCommentValue = ""
+                            commentModel.newCommentValue = ""
                         case .failure(let error):
                             print("❌ \(error.localizedDescription)")
                         }
