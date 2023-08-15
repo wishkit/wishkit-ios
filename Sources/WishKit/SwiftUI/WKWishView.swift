@@ -27,21 +27,17 @@ final class AlertModel: ObservableObject {
 
 struct WKWishView: View {
 
-    enum AlertReason {
-        case alreadyVoted
-        case alreadyImplemented
-        case voteReturnedError(String)
-        case none
-    }
-
     @Environment(\.colorScheme)
-    var colorScheme
+    private var colorScheme
 
     @ObservedObject
     private var alertModel = AlertModel()
 
     @State
-    var voteCount = 0
+    private var voteCount = 0
+
+    @State
+    private var hasVoted = false
 
     private let wishResponse: WishResponse
 
@@ -109,7 +105,7 @@ struct WKWishView: View {
             return
         }
 
-        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
+        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) || hasVoted {
             alertModel.alertReason = .alreadyVoted
             alertModel.showAlert = true
             return
@@ -118,8 +114,9 @@ struct WKWishView: View {
         let request = VoteWishRequest(wishId: wishResponse.id)
         WishApi.voteWish(voteRequest: request) { result in
             switch result {
-            case .success(let response):
-                voteCount = response.votingUsers.count
+            case .success:
+                voteCount += 1
+                hasVoted = true
             case .failure(let error):
                 alertModel.alertReason = .voteReturnedError(error.localizedDescription)
                 alertModel.showAlert = true
