@@ -5,7 +5,7 @@
 //  Created by Martin Lasek on 8/15/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
-
+#if canImport(UIKit)
 import SwiftUI
 
 final class WKHostingController<Content>: UIHostingController<Content> where Content: View {
@@ -64,3 +64,4 @@ final class WKHostingController<Content>: UIHostingController<Content> where Con
         }
     }
 }
+#endif
