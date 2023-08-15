@@ -9,6 +9,22 @@
 import SwiftUI
 import WishKitShared
 
+final class AlertModel: ObservableObject {
+
+    enum AlertReason {
+        case alreadyVoted
+        case alreadyImplemented
+        case voteReturnedError(String)
+        case none
+    }
+
+    @Published
+    var showAlert = false
+
+    @Published
+    var alertReason: AlertReason = .none
+}
+
 struct WKWishView: View {
 
     enum AlertReason {
@@ -21,11 +37,8 @@ struct WKWishView: View {
     @Environment(\.colorScheme)
     var colorScheme
 
-    @State
-    var showAlert = false
-
-    @State
-    private var alertReason: AlertReason = .none
+    @ObservedObject
+    private var alertModel = AlertModel()
 
     @State
     var voteCount = 0
@@ -48,9 +61,9 @@ struct WKWishView: View {
                 .padding([.leading, .trailing], 20)
                 .padding([.top, .bottom], 10)
                 .cornerRadius(12)
-            }.alert(isPresented: $showAlert) {
+            }.alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
-                switch alertReason {
+                switch alertModel.alertReason {
                 case .alreadyVoted:
                     title = Text(WishKit.config.localization.youCanOnlyVoteOnce)
                 case .alreadyImplemented:
@@ -91,14 +104,14 @@ struct WKWishView: View {
         let userUUID = UUIDManager.getUUID()
 
         if wishResponse.state == .implemented {
-            alertReason = .alreadyImplemented
-            showAlert = true
+            alertModel.alertReason = .alreadyImplemented
+            alertModel.showAlert = true
             return
         }
 
         if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
-            alertReason = .alreadyVoted
-            showAlert = true
+            alertModel.alertReason = .alreadyVoted
+            alertModel.showAlert = true
             return
         }
 
@@ -108,8 +121,8 @@ struct WKWishView: View {
             case .success(let response):
                 voteCount = response.votingUsers.count
             case .failure(let error):
-                alertReason = .voteReturnedError(error.localizedDescription)
-                showAlert = true
+                alertModel.alertReason = .voteReturnedError(error.localizedDescription)
+                alertModel.showAlert = true
             }
         }
     }

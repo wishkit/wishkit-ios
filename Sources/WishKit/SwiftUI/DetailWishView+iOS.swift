@@ -63,7 +63,10 @@ struct DetailWishView: View {
 
                         switch response {
                         case .success(let commentResponse):
-                            commentList.insert(commentResponse, at: 0)
+                            withAnimation {
+                                commentList.insert(commentResponse, at: 0)
+                            }
+
                             newCommentValue = ""
                         case .failure(let error):
                             print("❌ \(error.localizedDescription)")
