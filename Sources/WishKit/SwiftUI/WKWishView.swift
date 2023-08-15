@@ -54,9 +54,10 @@ struct WKWishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     Image(systemName: "arrowtriangle.up.fill")
+                        .foregroundColor(arrowColor)
                     Text(String(describing: voteCount))
+                        .foregroundColor(textColor)
                 }
-                .foregroundColor(textColor)
                 .padding([.leading, .trailing], 20)
                 .padding([.top, .bottom], 10)
                 .cornerRadius(12)
@@ -130,6 +131,20 @@ struct WKWishView: View {
 }
 
 extension WKWishView {
+    var arrowColor: Color {
+        let userUUID = UUIDManager.getUUID()
+        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) || hasVoted {
+            return WishKit.theme.primaryColor
+        }
+
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.voteButton.arrowColor.light
+        case .dark:
+            return WishKit.config.buttons.voteButton.arrowColor.dark
+        }
+    }
+
     var textColor: Color {
         switch colorScheme {
         case .light:
