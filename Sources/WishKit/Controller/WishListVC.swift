@@ -415,7 +415,10 @@ extension WishListVC: WishVMDelegate {
     }
 
     func didSelect(wishResponse: WishResponse) {
-        let detailWishView = DetailWishView(wishResponse: wishResponse)
+        let detailWishView = DetailWishView(
+            wishResponse: wishResponse,
+            voteActionCompletion: fetchWishList
+        )
 
         detailWishView.doneButtonPublisher.sink { hasTappedButton in
             self.dismissAction()

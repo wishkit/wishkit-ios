@@ -41,8 +41,11 @@ struct WKWishView: View {
 
     private let wishResponse: WishResponse
 
-    init(wishResponse: WishResponse) {
+    private let voteActionCompletion: () -> Void
+
+    init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void)) {
         self.wishResponse = wishResponse
+        self.voteActionCompletion = voteActionCompletion
         self._voteCount = State(wrappedValue: wishResponse.votingUsers.count)
     }
 
@@ -117,6 +120,7 @@ struct WKWishView: View {
             case .success:
                 voteCount += 1
                 hasVoted = true
+                voteActionCompletion()
             case .failure(let error):
                 alertModel.alertReason = .voteReturnedError(error.localizedDescription)
                 alertModel.showAlert = true
@@ -177,7 +181,7 @@ struct WKWishView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            WKWishView(wishResponse: wishResponse)
+            WKWishView(wishResponse: wishResponse, voteActionCompletion: { })
                 .padding()
             Spacer()
         }.background(Color.red)

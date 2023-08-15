@@ -12,8 +12,10 @@ import Combine
 
 struct DetailWishView: View {
 
+    // MARK: - Private
+
     @Environment(\.colorScheme)
-    var colorScheme
+    private var colorScheme
 
     @State
     private var isLandscape = false
@@ -26,10 +28,15 @@ struct DetailWishView: View {
 
     private let wishResponse: WishResponse
 
+    private let voteActionCompletion: () -> Void
+
+    // MARK: - Public
+
     public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
 
-    init(wishResponse: WishResponse) {
+    init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void)) {
         self.wishResponse = wishResponse
+        self.voteActionCompletion = voteActionCompletion
         self._commentList = State(wrappedValue: wishResponse.commentList)
     }
 
@@ -48,7 +55,7 @@ struct DetailWishView: View {
 
                     Spacer(minLength: 15)
 
-                    WKWishView(wishResponse: wishResponse)
+                    WKWishView(wishResponse: wishResponse, voteActionCompletion: voteActionCompletion)
                         .frame(maxWidth: 700)
 
                     Spacer(minLength: 15)
@@ -137,7 +144,7 @@ extension DetailWishView {
 
 struct DetailWishView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailWishView(wishResponse: WishResponse(id: UUID(), userUUID: UUID(), title: "📈 Statistis of my workouts", description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can lift would be really ncie", state: .approved, votingUsers: [UserResponse(uuid: UUID()), UserResponse(uuid: UUID()), UserResponse(uuid: UUID())], commentList: []))
+        DetailWishView(wishResponse: WishResponse(id: UUID(), userUUID: UUID(), title: "📈 Statistis of my workouts", description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can lift would be really ncie", state: .approved, votingUsers: [UserResponse(uuid: UUID()), UserResponse(uuid: UUID()), UserResponse(uuid: UUID())], commentList: []), voteActionCompletion: { })
     }
 }
 #endif
