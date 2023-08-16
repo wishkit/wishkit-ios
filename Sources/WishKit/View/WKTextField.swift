@@ -1,5 +1,5 @@
 //
-//  TextField.swift
+//  WKTextField.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 2/9/23.
@@ -9,7 +9,7 @@
 #if canImport(UIKit)
 import UIKit
 
-final class TextField: UITextField {
+final class WKTextField: UITextField {
     
     private var padding: UIEdgeInsets
     
@@ -30,7 +30,7 @@ final class TextField: UITextField {
 
 // MARK: - Padding
 
-extension TextField {
+extension WKTextField {
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)
     }

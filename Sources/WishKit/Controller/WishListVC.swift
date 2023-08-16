@@ -9,8 +9,18 @@
 #if canImport(UIKit)
 import UIKit
 import WishKitShared
+import SwiftUI
+import Combine
 
 final class WishListVC: UIViewController {
+
+    private var subscribers: Set<AnyCancellable> = []
+
+    private lazy var wishVM: WishListVM = {
+        let wishVM = WishListVM()
+        wishVM.delegate = self
+        return wishVM
+    }()
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -72,7 +82,6 @@ final class WishListVC: UIViewController {
     }()
     #endif
 
-
     private lazy var addWishButton: AddButton = {
         let buttons = AddButton()
         buttons.addTarget(self, action: #selector(createWishAction), for: .touchUpInside)
@@ -80,12 +89,6 @@ final class WishListVC: UIViewController {
     }()
 
     private let spinner = UIActivityIndicatorView()
-
-    private lazy var wishVM: WishListVM = {
-        let wishVM = WishListVM()
-        wishVM.delegate = self
-        return wishVM
-    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,6 +153,12 @@ final class WishListVC: UIViewController {
                     view.backgroundColor = UIColor(bgColor.light)
                 } else if previousTraitCollection.userInterfaceStyle == .light {
                     view.backgroundColor = UIColor(bgColor.dark)
+                }
+            } else {
+                if traitCollection.userInterfaceStyle == .light {
+                    view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+                } else if traitCollection.userInterfaceStyle == .dark {
+                    view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
                 }
             }
 
@@ -226,7 +235,13 @@ extension WishListVC {
                 view.backgroundColor = UIColor(color.dark)
             }
         } else {
-            view.backgroundColor = .secondarySystemBackground
+            if traitCollection.userInterfaceStyle == .light {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.light)
+            }
+
+            if traitCollection.userInterfaceStyle == .dark {
+                view.backgroundColor = UIColor(PrivateTheme.systemBackgroundColor.dark)
+            }
         }
 
         let segmentedActive = WishKit.config.buttons.segmentedControl.activeTextColor
@@ -399,12 +414,21 @@ extension WishListVC: WishVMDelegate {
     }
 
     func didSelect(wishResponse: WishResponse) {
-        let vc = DetailWishVC(wishResponse: wishResponse)
+        let detailWishView = DetailWishView(
+            wishResponse: wishResponse,
+            voteActionCompletion: fetchWishList
+        )
+
+        detailWishView.doneButtonPublisher.sink { hasTappedButton in
+            self.dismissAction()
+        }.store(in: &subscribers)
+
+        let detailWishVC = WKHostingController(rootView: detailWishView)
 
         if let navigationController = navigationController {
-            navigationController.pushViewController(vc, animated: true)
+            navigationController.pushViewController(detailWishVC, animated: true)
         } else {
-            present(vc, animated: true)
+            present(detailWishVC, animated: true)
         }
     }
 }

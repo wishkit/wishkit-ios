@@ -46,10 +46,14 @@ extension Api {
 
             let decoder = JSONDecoder()
             // Date Decoding Standard used across frontend and backend.
-            decoder.dateDecodingStrategy = .millisecondsSince1970
-            if let restaurant = try? decoder.decode(T.self, from: data) {
+            decoder.dateDecodingStrategy = .iso8601
+
+            do {
+                let restaurant = try decoder.decode(T.self, from: data)
                 completionHandler(.success(restaurant))
                 return
+            } catch {
+                printError(self, String(describing: error))
             }
 
             if let apiError = try? decoder.decode(ApiError.self, from: data) {
@@ -74,9 +78,13 @@ extension Api {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             // Date Decoding Standard used across frontend and backend.
-            decoder.dateDecodingStrategy = .millisecondsSince1970
-            if let object = try? decoder.decode(T.self, from: data) {
+            decoder.dateDecodingStrategy = .iso8601
+
+            do {
+                let object = try decoder.decode(T.self, from: data)
                 return .success(object)
+            } catch {
+                printError(self, String(describing: error))
             }
 
             if let apiError = try? decoder.decode(ApiError.self, from: data) {
@@ -84,10 +92,10 @@ extension Api {
                 return .failure(apiError)
             }
 
-            printError(self, String(data: data, encoding: .utf8) ?? "")
+            printError(self, "Could not decode: \n\n \(String(data: data, encoding: .utf8) ?? "") \n")
             return .failure(ApiError(reason: .couldNotDecodeBackendResponse))
         } catch {
-            printError(self, error.localizedDescription)
+            printError(self, String(describing: error))
             return .failure(ApiError(reason: .requestResultedInError))
         }
     }
