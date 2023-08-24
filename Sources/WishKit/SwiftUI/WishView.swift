@@ -10,16 +10,6 @@ import SwiftUI
 import WishKitShared
 
 #if os(macOS)
-extension View {
-    func wkShadow() -> some View {
-        if WishKit.config.dropShadow == .show {
-            return AnyView(self.shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0))
-        } else {
-            return AnyView(self)
-        }
-    }
-}
-
 struct WishView: View {
 
     enum AlertReason {

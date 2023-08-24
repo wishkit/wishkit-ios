@@ -10,6 +10,10 @@ import SwiftUI
 
 extension View {
     func wkShadow() -> some View {
-        return self.shadow(color: .black.opacity(1/5), radius: 4, y: 3)
+        if WishKit.config.dropShadow == .show {
+            return AnyView(self.shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 0))
+        } else {
+            return AnyView(self)
+        }
     }
 }
