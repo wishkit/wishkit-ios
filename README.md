@@ -146,7 +146,7 @@ WishKit supports weekly, monthly and yearly payments. You only need to call one 
 #### 📧 Additional: Share optional user information with WishKit.
 ```swift
 // Email
-WishKit.updateUser(email: "stevejobs@apple.com")
+WishKit.updateUser(email: "jobs@apple.com")
 
 // Name
 WishKit.updateUser(name: "Steve")
