@@ -191,8 +191,17 @@ extension WishListVC {
     }
 
     @objc private func createWishAction() {
-        let vc = CreateWishVC()
-        vc.delegate = self
+
+        let createView = CreateWishView()
+        
+        createView.doneButtonPublisher.sink { shouldDismiss in
+            if shouldDismiss {
+                self.fetchWishList()
+                self.dismissAction()
+            }
+        }.store(in: &subscribers)
+
+        let vc = WKHostingController(rootView: createView)
 
         if let navigationController = navigationController {
             navigationController.pushViewController(vc, animated: true)
@@ -202,7 +211,11 @@ extension WishListVC {
     }
 
     @objc private func dismissAction() {
-        dismiss(animated: true)
+        if let navigationController = navigationController {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
     }
 }
 

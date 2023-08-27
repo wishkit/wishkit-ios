@@ -26,6 +26,10 @@ final class CreateWishVC: UIViewController {
 
     private let wishTitleTF = WKTextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
 
+    private let emailLabel = UILabel("Email")
+
+    private let emailTF = WKTextField(padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
+
     private let wishDescriptionSectionLabel = UILabel(WishKit.config.localization.description)
 
     private let wishDescriptionCharacterCountLabel = UILabel()
@@ -138,6 +142,9 @@ extension CreateWishVC {
         setupWishTitleSectionLabel()
         setupWishTitleCharacterCountLabel()
         setupWishTitleTV()
+
+        setupEmailSectionLabel()
+        setupEmailTF()
 
         setupWishDescriptionSectionLabel()
         setupWishDescriptionCharacterCountLabel()
@@ -270,11 +277,42 @@ extension CreateWishVC {
         wishTitleTF.addTarget(viewModel, action: #selector(viewModel.titleHasChangedAction), for: .editingChanged)
     }
 
+    private func setupEmailSectionLabel() {
+        scrollView.addSubview(emailLabel)
+
+        emailLabel.anchor(
+            top: wishTitleTF.bottomAnchor,
+            leading: safeArea.leadingAnchor,
+            trailing: safeArea.trailingAnchor,
+            padding: UIEdgeInsets(top: 15, left: 7, bottom: 0, right: 0)
+        )
+
+        emailLabel.font = .boldSystemFont(ofSize: 10)
+
+        if WishKit.config.emailField == .optional {
+            let labelText = emailLabel.text ?? ""
+            emailLabel.text = "\(labelText) (optional)"
+        }
+    }
+
+    private func setupEmailTF() {
+        scrollView.addSubview(emailTF)
+
+        emailTF.anchor(
+            top: emailLabel.bottomAnchor,
+            leading: safeArea.leadingAnchor,
+            trailing: safeArea.trailingAnchor,
+            padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
+        )
+
+        emailTF.addTarget(viewModel, action: #selector(viewModel.emailHasChangedAction), for: .editingChanged)
+    }
+
     private func setupWishDescriptionSectionLabel() {
         scrollView.addSubview(wishDescriptionSectionLabel)
 
         wishDescriptionSectionLabel.anchor(
-            top: wishTitleTF.bottomAnchor,
+            top: emailTF.bottomAnchor,
             leading: safeArea.leadingAnchor,
             padding: UIEdgeInsets(top: 15, left: 7, bottom: 0, right: 0)
         )
@@ -385,10 +423,6 @@ extension CreateWishVC {
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
-
-    @objc private func backAction() {
-        navigationController?.popViewController(animated: true)
     }
 
     @objc private func saveWishAction() {

@@ -25,6 +25,8 @@ public struct Configuration {
 
     public var cornerRadius: CGFloat = 16
 
+    public var emailField: EmailField = .optional
+
     init(
         statusBadgeDisplay: Display = .hide,
         localization: Localizaton = .default()
@@ -40,5 +42,15 @@ extension Configuration {
     public enum Display {
         case show
         case hide
+    }
+}
+
+// MARK: - Email Field
+
+extension Configuration {
+    public enum EmailField {
+        case none
+        case optional
+        case required
     }
 }

@@ -24,6 +24,8 @@ struct WKButton: View {
 
     private let style: ButtonStyle
 
+    private let size: CGSize
+
     @Binding
     var isLoading: Bool?
 
@@ -31,12 +33,14 @@ struct WKButton: View {
         text: String,
         action: @escaping () -> (),
         style: ButtonStyle = .primary,
-        isLoading: Binding<Bool?> = Binding.constant(nil)
+        isLoading: Binding<Bool?> = Binding.constant(nil),
+        size: CGSize = CGSize(width: 100, height: 30)
     ) {
         self.text = text
         self.action = action
         self.style = style
-        _isLoading = isLoading
+        self._isLoading = isLoading
+        self.size = size
     }
 
     func getColor(for style: ButtonStyle) -> Color {
@@ -55,16 +59,16 @@ struct WKButton: View {
                     .scaleEffect(0.5)
             } else {
                 Text(text)
-                    .frame(width: 100, height: 30)
+                    .frame(width: size.width, height: size.height)
                     .background(getColor(for: style))
                     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
             }
         }
-            .buttonStyle(PlainButtonStyle())
-            .frame(width: 100, height: 30)
-            .background(getColor(for: style))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .disabled(isLoading ?? false)
+        .buttonStyle(PlainButtonStyle())
+        .frame(width: size.width, height: size.height)
+        .background(getColor(for: style))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .disabled(isLoading ?? false)
     }
 
     var backgroundColor: Color {

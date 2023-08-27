@@ -18,6 +18,8 @@ final class CreateWishVM: NSObject {
 
     private var wishTitle = ""
 
+    private var email: String? = nil
+
     private var wishDescription = ""
 
     private let titleCharLimit = 50
@@ -82,7 +84,11 @@ final class CreateWishVM: NSObject {
     }
 
     private func makeCreateRequest() -> CreateWishRequest {
-        return CreateWishRequest(title: wishTitle, description: wishDescription)
+        return CreateWishRequest(
+            title: wishTitle,
+            description: wishDescription,
+            email: email
+        )
     }
 
     func descriptionHasChangedAction(_ textView: UITextView) {
@@ -102,6 +108,15 @@ final class CreateWishVM: NSObject {
         }
 
         wishTitle = textField.text ?? ""
+        updateState()
+    }
+
+    @objc func emailHasChangedAction(_ textField: UITextField) {
+        if let text = textField.text, text.count > titleCharLimit {
+            let _ = textField.text?.popLast()
+        }
+
+        email = textField.text ?? ""
         updateState()
     }
 }
