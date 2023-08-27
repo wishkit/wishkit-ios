@@ -62,6 +62,10 @@ extension Configuration {
 
         public var createWish: String
 
+        public var optional: String
+
+        public var required: String
+
         public init(
             requested: String = Localizaton.default().requested,
             pending: String = Localizaton.default().pending,
@@ -88,7 +92,9 @@ extension Configuration {
             titleDescriptionCannotBeEmpty: String = Localizaton.default().titleDescriptionCannotBeEmpty,
             votes: String = Localizaton.default().votes,
             close: String = Localizaton.default().close,
-            createWish: String = Localizaton.default().createWish
+            createWish: String = Localizaton.default().createWish,
+            optional: String = Localizaton.default().optional,
+            required: String = Localizaton.default().required
         ) {
             self.requested = requested
             self.pending = pending
@@ -116,6 +122,8 @@ extension Configuration {
             self.votes = votes
             self.close = close
             self.createWish = createWish
+            self.optional = optional
+            self.required = required
         }
 
         public static func `default`() -> Localizaton {
@@ -145,7 +153,9 @@ extension Configuration {
                 titleDescriptionCannotBeEmpty: "Title/Description cannot be empty.",
                 votes: "Votes",
                 close: "Close",
-                createWish: "Create Feature"
+                createWish: "Create Feature",
+                optional: "optional",
+                required: "required"
             )
         }
     }

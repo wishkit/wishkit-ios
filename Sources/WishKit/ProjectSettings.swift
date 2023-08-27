@@ -9,5 +9,5 @@
 import Foundation
 
 struct ProjectSettings {
-    static let apiUrl = "https://www.wishkit.io/api"
+    static let apiUrl = "http://127.0.0.1:8080/api"//"https://www.wishkit.io/api"
 }

@@ -105,18 +105,29 @@ struct CreateWishView: View {
                         .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
                 }
 
-                VStack(spacing: 0) {
-                    HStack {
-                        Text("Email (optional)")
-                            .font(.caption2)
-                            .padding([.leading, .trailing, .bottom], 5)
-                        Spacer()
-                    }
+                if WishKit.config.emailField != .none {
+                    VStack(spacing: 0) {
+                        HStack {
+                            if WishKit.config.emailField == .optional {
+                                Text("Email (optional)")
+                                    .font(.caption2)
+                                    .padding([.leading, .trailing, .bottom], 5)
+                            }
 
-                    TextField("", text: $emailText)
-                        .padding(10)
-                        .background(fieldBackgroundColor)
-                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                            if WishKit.config.emailField == .required {
+                                Text("Email (required)")
+                                    .font(.caption2)
+                                    .padding([.leading, .trailing, .bottom], 5)
+                            }
+
+                            Spacer()
+                        }
+                        
+                        TextField("", text: $emailText)
+                            .padding(10)
+                            .background(fieldBackgroundColor)
+                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                    }
                 }
 
                 WKButton(
