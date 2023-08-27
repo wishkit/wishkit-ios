@@ -10,11 +10,6 @@ import SwiftUI
 
 struct WKButton: View {
 
-    enum ButtonStyle {
-        case primary
-        case secondary
-    }
-
     @Environment(\.colorScheme)
     var colorScheme
 
@@ -78,5 +73,14 @@ struct WKButton: View {
         case .dark:
             return PrivateTheme.elementBackgroundColor.dark
         }
+    }
+}
+
+// MARK: - ButtonStyle
+
+extension WKButton {
+    enum ButtonStyle {
+        case primary
+        case secondary
     }
 }

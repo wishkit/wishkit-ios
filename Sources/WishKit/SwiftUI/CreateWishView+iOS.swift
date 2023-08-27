@@ -21,10 +21,28 @@ extension UITextView {
     }
 }
 
+final class CreateWishAlertModel: ObservableObject {
+
+    enum AlertReason {
+        case successfullyCreated
+        case createReturnedError(String)
+        case none
+    }
+
+    @Published
+    var showAlert = false
+
+    @Published
+    var alertReason: AlertReason = .none
+}
+
 struct CreateWishView: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
+
+    @ObservedObject
+    private var alertModel = CreateWishAlertModel()
 
     @State
     private var titleCharCount = 0
@@ -43,9 +61,6 @@ struct CreateWishView: View {
 
     @State
     private var isButtonLoading: Bool? = false
-
-    @State
-    private var showAlert = false
 
     // MARK: - Public
 
@@ -112,14 +127,30 @@ struct CreateWishView: View {
                     size: CGSize(width: 200, height: 45)
                 )
                 .disabled(isButtonDisabled)
-                .alert(isPresented: $showAlert) {
-                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: dismissAction)
-                    
-                    return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text("Successfully submitted."),
-                        dismissButton: button
-                    )
+                .alert(isPresented: $alertModel.showAlert) {
+
+                    switch alertModel.alertReason {
+                    case .successfullyCreated:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: dismissAction)
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text("Successfully created."),
+                            dismissButton: button
+                        )
+                    case .createReturnedError(let errorText):
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text(errorText),
+                            dismissButton: button
+                        )
+                    case .none:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                        return Alert(title: Text(""), dismissButton: button)
+                    }
+
                 }
 
             }.padding([.leading, .trailing], 15)
@@ -156,9 +187,11 @@ struct CreateWishView: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    doneButtonPublisher.send(true)
-                case .failure:
-                    showAlert = true
+                    alertModel.alertReason = .successfullyCreated
+                    alertModel.showAlert = true
+                case .failure(let error):
+                    alertModel.alertReason = .createReturnedError(error.reason.description)
+                    alertModel.showAlert = true
                 }
             }
         }
