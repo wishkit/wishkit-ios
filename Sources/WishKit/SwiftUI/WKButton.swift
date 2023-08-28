@@ -38,15 +38,6 @@ struct WKButton: View {
         self.size = size
     }
 
-    func getColor(for style: ButtonStyle) -> Color {
-        switch style {
-        case .primary:
-            return WishKit.theme.primaryColor
-        case .secondary:
-            return backgroundColor
-        }
-    }
-
     var body: some View {
         Button(action: action) {
             if isLoading ?? false {
@@ -54,6 +45,7 @@ struct WKButton: View {
                     .scaleEffect(0.5)
             } else {
                 Text(text)
+                    .foregroundColor(textColor)
                     .frame(width: size.width, height: size.height)
                     .background(getColor(for: style))
                     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
@@ -64,6 +56,24 @@ struct WKButton: View {
         .background(getColor(for: style))
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .disabled(isLoading ?? false)
+    }
+
+    func getColor(for style: ButtonStyle) -> Color {
+        switch style {
+        case .primary:
+            return WishKit.theme.primaryColor
+        case .secondary:
+            return backgroundColor
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.saveButton.textColor.light
+        case .dark:
+            return WishKit.config.buttons.saveButton.textColor.dark
+        }
     }
 
     var backgroundColor: Color {
