@@ -68,6 +68,8 @@ extension Configuration {
 
         public var emailRequiredText: String
 
+        public var emailFormatWrongText: String
+
         public init(
             requested: String = Localizaton.default().requested,
             pending: String = Localizaton.default().pending,
@@ -97,7 +99,8 @@ extension Configuration {
             createWish: String = Localizaton.default().createWish,
             optional: String = Localizaton.default().optional,
             required: String = Localizaton.default().required,
-            emailRequiredText: String = Localizaton.default().emailRequiredText
+            emailRequiredText: String = Localizaton.default().emailRequiredText,
+            emailFormatWrongText: String = Localizaton.default().emailFormatWrongText
         ) {
             self.requested = requested
             self.pending = pending
@@ -128,6 +131,7 @@ extension Configuration {
             self.optional = optional
             self.required = required
             self.emailRequiredText = emailRequiredText
+            self.emailFormatWrongText = emailFormatWrongText
         }
 
         public static func `default`() -> Localizaton {
@@ -160,7 +164,8 @@ extension Configuration {
                 createWish: "Create Feature",
                 optional: "optional",
                 required: "required",
-                emailRequiredText: "Please enter your email address."
+                emailRequiredText: "Please enter your email address.",
+                emailFormatWrongText: "Wrong email format."
             )
         }
     }

@@ -27,6 +27,7 @@ final class CreateWishAlertModel: ObservableObject {
         case successfullyCreated
         case createReturnedError(String)
         case emailRequired
+        case emailFormatWrong
         case none
     }
 
@@ -183,6 +184,14 @@ struct CreateWishView: View {
                                 message: Text(WishKit.config.localization.emailRequiredText),
                                 dismissButton: button
                             )
+                        case .emailFormatWrong:
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(WishKit.config.localization.emailFormatWrongText),
+                                dismissButton: button
+                            )
                         case .none:
                             let button = Alert.Button.default(Text(WishKit.config.localization.ok))
                             return Alert(title: Text(""), dismissButton: button)
@@ -239,6 +248,13 @@ struct CreateWishView: View {
 
         if WishKit.config.emailField == .required && emailText.isEmpty {
             alertModel.alertReason = .emailRequired
+            alertModel.showAlert = true
+            return
+        }
+
+        let isInvalidEmailFormat = (emailText.count < 6 || !emailText.contains("@") || !emailText.contains("."))
+        if WishKit.config.emailField == .required && isInvalidEmailFormat {
+            alertModel.alertReason = .emailFormatWrong
             alertModel.showAlert = true
             return
         }
