@@ -66,6 +66,8 @@ extension Configuration {
 
         public var required: String
 
+        public var emailRequiredText: String
+
         public init(
             requested: String = Localizaton.default().requested,
             pending: String = Localizaton.default().pending,
@@ -94,7 +96,8 @@ extension Configuration {
             close: String = Localizaton.default().close,
             createWish: String = Localizaton.default().createWish,
             optional: String = Localizaton.default().optional,
-            required: String = Localizaton.default().required
+            required: String = Localizaton.default().required,
+            emailRequiredText: String = Localizaton.default().emailRequiredText
         ) {
             self.requested = requested
             self.pending = pending
@@ -124,6 +127,7 @@ extension Configuration {
             self.createWish = createWish
             self.optional = optional
             self.required = required
+            self.emailRequiredText = emailRequiredText
         }
 
         public static func `default`() -> Localizaton {
@@ -155,7 +159,8 @@ extension Configuration {
                 close: "Close",
                 createWish: "Create Feature",
                 optional: "optional",
-                required: "required"
+                required: "required",
+                emailRequiredText: "Please enter your email address."
             )
         }
     }
