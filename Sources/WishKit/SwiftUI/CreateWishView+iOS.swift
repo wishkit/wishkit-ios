@@ -253,7 +253,7 @@ struct CreateWishView: View {
         }
 
         let isInvalidEmailFormat = (emailText.count < 6 || !emailText.contains("@") || !emailText.contains("."))
-        if WishKit.config.emailField == .required && isInvalidEmailFormat {
+        if !emailText.isEmpty && isInvalidEmailFormat {
             alertModel.alertReason = .emailFormatWrong
             alertModel.showAlert = true
             return
