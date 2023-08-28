@@ -62,6 +62,14 @@ extension Configuration {
 
         public var createWish: String
 
+        public var optional: String
+
+        public var required: String
+
+        public var emailRequiredText: String
+
+        public var emailFormatWrongText: String
+
         public init(
             requested: String = Localizaton.default().requested,
             pending: String = Localizaton.default().pending,
@@ -88,7 +96,11 @@ extension Configuration {
             titleDescriptionCannotBeEmpty: String = Localizaton.default().titleDescriptionCannotBeEmpty,
             votes: String = Localizaton.default().votes,
             close: String = Localizaton.default().close,
-            createWish: String = Localizaton.default().createWish
+            createWish: String = Localizaton.default().createWish,
+            optional: String = Localizaton.default().optional,
+            required: String = Localizaton.default().required,
+            emailRequiredText: String = Localizaton.default().emailRequiredText,
+            emailFormatWrongText: String = Localizaton.default().emailFormatWrongText
         ) {
             self.requested = requested
             self.pending = pending
@@ -116,6 +128,10 @@ extension Configuration {
             self.votes = votes
             self.close = close
             self.createWish = createWish
+            self.optional = optional
+            self.required = required
+            self.emailRequiredText = emailRequiredText
+            self.emailFormatWrongText = emailFormatWrongText
         }
 
         public static func `default`() -> Localizaton {
@@ -145,7 +161,11 @@ extension Configuration {
                 titleDescriptionCannotBeEmpty: "Title/Description cannot be empty.",
                 votes: "Votes",
                 close: "Close",
-                createWish: "Create Feature"
+                createWish: "Create Feature",
+                optional: "optional",
+                required: "required",
+                emailRequiredText: "Please enter your email address.",
+                emailFormatWrongText: "Wrong email format."
             )
         }
     }

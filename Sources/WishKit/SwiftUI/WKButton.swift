@@ -10,11 +10,6 @@ import SwiftUI
 
 struct WKButton: View {
 
-    enum ButtonStyle {
-        case primary
-        case secondary
-    }
-
     @Environment(\.colorScheme)
     var colorScheme
 
@@ -24,6 +19,8 @@ struct WKButton: View {
 
     private let style: ButtonStyle
 
+    private let size: CGSize
+
     @Binding
     var isLoading: Bool?
 
@@ -31,12 +28,34 @@ struct WKButton: View {
         text: String,
         action: @escaping () -> (),
         style: ButtonStyle = .primary,
-        isLoading: Binding<Bool?> = Binding.constant(nil)
+        isLoading: Binding<Bool?> = Binding.constant(nil),
+        size: CGSize = CGSize(width: 100, height: 30)
     ) {
         self.text = text
         self.action = action
         self.style = style
-        _isLoading = isLoading
+        self._isLoading = isLoading
+        self.size = size
+    }
+
+    var body: some View {
+        Button(action: action) {
+            if isLoading ?? false {
+                ProgressView()
+                    .scaleEffect(0.5)
+            } else {
+                Text(text)
+                    .foregroundColor(textColor)
+                    .frame(width: size.width, height: size.height)
+                    .background(getColor(for: style))
+                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .frame(width: size.width, height: size.height)
+        .background(getColor(for: style))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .disabled(isLoading ?? false)
     }
 
     func getColor(for style: ButtonStyle) -> Color {
@@ -48,23 +67,13 @@ struct WKButton: View {
         }
     }
 
-    var body: some View {
-        Button(action: action) {
-            if isLoading ?? false {
-                ProgressView()
-                    .scaleEffect(0.5)
-            } else {
-                Text(text)
-                    .frame(width: 100, height: 30)
-                    .background(getColor(for: style))
-                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
-            }
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.saveButton.textColor.light
+        case .dark:
+            return WishKit.config.buttons.saveButton.textColor.dark
         }
-            .buttonStyle(PlainButtonStyle())
-            .frame(width: 100, height: 30)
-            .background(getColor(for: style))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .disabled(isLoading ?? false)
     }
 
     var backgroundColor: Color {
@@ -74,5 +83,14 @@ struct WKButton: View {
         case .dark:
             return PrivateTheme.elementBackgroundColor.dark
         }
+    }
+}
+
+// MARK: - ButtonStyle
+
+extension WKButton {
+    enum ButtonStyle {
+        case primary
+        case secondary
     }
 }
