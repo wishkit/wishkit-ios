@@ -13,7 +13,7 @@ protocol RequestCreatable {}
 extension RequestCreatable {
 
     /// Create a POST request with JSON body
-    static func createPOSTRequest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
+    private static func createPOSTRequest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.jsonEncode(body)
@@ -21,14 +21,14 @@ extension RequestCreatable {
     }
 
     /// Create a GET request
-    static func createGETRequest(to url: URL) -> URLRequest {
+    private static func createGETRequest(to url: URL) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         return request
     }
 
     /// Create a PATCH request with JSON body
-    static func createPATCHRequest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
+    private static func createPATCHRequest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.jsonEncode(body)
@@ -36,7 +36,7 @@ extension RequestCreatable {
     }
 
     /// Create a DELETE request
-    static func createDELETERequest(to url: URL) -> URLRequest {
+    private static func createDELETERequest(to url: URL) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         return request
@@ -47,24 +47,28 @@ extension RequestCreatable {
     static func createAuthedPOSTReuqest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = createPOSTRequest(to: url, with: body)
         request.addAuth()
+        request.addSdkInfo()
         return request
     }
 
     static func createAuthedGETReuqest(to url: URL) -> URLRequest {
         var request = createGETRequest(to: url)
         request.addAuth()
+        request.addSdkInfo()
         return request
     }
 
     static func createAuthedPATCHReuqest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = createPATCHRequest(to: url, with: body)
         request.addAuth()
+        request.addSdkInfo()
         return request
     }
 
     static func createAuthedDELETERequest(to url: URL) -> URLRequest {
         var request = createDELETERequest(to: url)
         request.addAuth()
+        request.addSdkInfo()
         return request
     }
 }
@@ -77,6 +81,14 @@ extension URLRequest {
         let token = WishKit.apiKey
         self.setValue(token, forHTTPHeaderField: "x-wishkit-api-key")
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
+    }
+
+    /// Adds User UUID and Bearer token to URLRequest if given.
+    mutating func addSdkInfo() {
+        let displayName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "none"
+        self.setValue(displayName, forHTTPHeaderField: "x-wishkit-sdk-app-name")
+        self.setValue("ios", forHTTPHeaderField: "x-wishkit-sdk-kind")
+        self.setValue(ProjectSettings.sdkVersion, forHTTPHeaderField: "x-wishkit-sdk-version")
     }
 
     /// Encodes instance into JSON and stets json headers.
