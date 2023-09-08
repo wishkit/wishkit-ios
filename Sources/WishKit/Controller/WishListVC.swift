@@ -52,14 +52,24 @@ final class WishListVC: UIViewController {
         return control
     }()
 
-    private let watermarkLabel: UILabel = {
-        let label = UILabel()
-        label.text = "\(WishKit.config.localization.poweredBy) Wishkit.io"
-        label.font = .boldSystemFont(ofSize: 13)
-        label.textColor = .systemGray2
-        label.textAlignment = .center
-        label.isHidden = true
-        return label
+    private lazy var watermarkButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("\(WishKit.config.localization.poweredBy) wishkit.io", for: .normal)
+        button.setTitleColor(.systemGray, for: .normal)
+        button.layer.opacity = 2/3
+
+        var attributedString = NSMutableAttributedString()
+        var attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold)]
+        attributedString.append(NSAttributedString(string: WishKit.config.localization.poweredBy, attributes: attributes))
+
+        attributedString.append(NSAttributedString(string: " wishkit.io", attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold),
+            NSAttributedString.Key.foregroundColor: UIColor(WishKit.theme.primaryColor)
+        ]))
+
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.isHidden = true
+        return button
     }()
 
     private lazy var tableView: TableView = {
@@ -298,7 +308,7 @@ extension WishListVC {
 
     private func setupView() {
         view.addSubview(noWishesLabel)
-        view.addSubview(watermarkLabel)
+        view.addSubview(watermarkButton)
         view.addSubview(spinner)
         view.addSubview(stackView)
         view.addSubview(addWishButton)
@@ -356,7 +366,7 @@ extension WishListVC {
             padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         )
 
-        watermarkLabel.anchor(
+        watermarkButton.anchor(
             centerY: addWishButton.centerYAnchor,
             centerX: view.centerXAnchor
         )
@@ -430,7 +440,7 @@ extension WishListVC: WishVMDelegate {
             #endif
 
             self.tableView.reloadData()
-            self.watermarkLabel.isHidden = !self.wishVM.shouldShowWatermark
+            self.watermarkButton.isHidden = !self.wishVM.shouldShowWatermark
             self.noWishesLabel.isHidden = self.wishVM.wishCount > 0
         }
     }
