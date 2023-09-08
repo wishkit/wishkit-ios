@@ -22,6 +22,10 @@ final class WishListVM: NSObject {
 
     weak var delegate: WishVMDelegate?
 
+    var wishCount: Int {
+        return approvedWishList.count
+    }
+
     private func setApprovedWishlist(using response: ListWishResponse) {
         let userUUID = UUIDManager.getUUID()
 

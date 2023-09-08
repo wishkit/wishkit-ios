@@ -30,6 +30,8 @@ final class WishListVC: UIViewController {
         return stackView
     }()
 
+    private let noWishesLabel = UILabel("Be the first to create a feature request!", alignment: .center, lineCount: 0)
+
     private let doneContainer = UIView()
 
     private lazy var doneButton: UIButton = {
@@ -295,6 +297,7 @@ extension WishListVC {
     }
 
     private func setupView() {
+        view.addSubview(noWishesLabel)
         view.addSubview(watermarkLabel)
         view.addSubview(spinner)
         view.addSubview(stackView)
@@ -355,6 +358,11 @@ extension WishListVC {
 
         watermarkLabel.anchor(
             centerY: addWishButton.centerYAnchor,
+            centerX: view.centerXAnchor
+        )
+
+        noWishesLabel.anchor(
+            centerY: view.centerYAnchor,
             centerX: view.centerXAnchor
         )
 
@@ -423,6 +431,7 @@ extension WishListVC: WishVMDelegate {
 
             self.tableView.reloadData()
             self.watermarkLabel.isHidden = !self.wishVM.shouldShowWatermark
+            self.noWishesLabel.isHidden = self.wishVM.wishCount > 0
         }
     }
 
