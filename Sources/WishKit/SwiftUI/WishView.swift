@@ -110,7 +110,7 @@ struct WishView: View {
                                 .foregroundColor(textColor)
                                 .bold()
                                 .truncationMode(.tail)
-                                .lineLimit(1)
+                                .lineLimit(WishKit.config.expandDescriptionInList ? nil : 1)
                             Spacer()
                             Text(wish.state.rawValue.uppercased())
                                 .opacity(0.8)
@@ -124,13 +124,13 @@ struct WishView: View {
                             .foregroundColor(textColor)
                             .bold()
                             .truncationMode(.tail)
-                            .lineLimit(1)
+                            .lineLimit(WishKit.config.expandDescriptionInList ? nil : 1)
                     }
                     
                     Text(wish.description)
                         .foregroundColor(textColor)
                         .truncationMode(.tail)
-                        .lineLimit(1)
+                        .lineLimit(WishKit.config.expandDescriptionInList ? nil : 1)
                 }.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
                 Spacer()
             }
