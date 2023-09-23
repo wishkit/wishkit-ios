@@ -9,28 +9,11 @@
 import SwiftUI
 import WishKitShared
 
-// MARK: - iOS
-
-#if os(iOS)
-import SwiftUI
-
-public struct WishListView: UIViewControllerRepresentable {
-    public typealias UIViewControllerType = UIViewController
-
-    public func makeUIViewController(context: Context) -> UIViewControllerType {
-        let vc = WishKit.viewController
-        vc.viewDidLoad()
-        return vc
-    }
-
-    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
-}
-#endif
-
 // MARK: - macOS
 
-#if os(macOS)
 extension WishResponse: Identifiable { }
+
+#if os(macOS)
 
 extension View {
     @ViewBuilder
