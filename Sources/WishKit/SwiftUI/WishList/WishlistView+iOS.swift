@@ -36,14 +36,29 @@ struct WishlistViewIOS: View {
             VStack(spacing: 0) {
                 SegmentedView(selectedWishState: $selectedWishState)
                     .frame(maxWidth: 200)
+                    .padding([.top, .bottom], 15)
 
-                List(getList(), id: \.id) { wish in
+                ForEach(getList()) { wish in
                     NavigationLink(destination: {
                         DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
                     }, label: {
-                        Text(wish.title)
+                        HStack {
+                            VStack {
+                                Image(systemName: "arrow.up")
+                                Text(wish.votingUsers.count.description)
+                            }
+
+                            Text(wish.title)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray)
+                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                        .padding([.leading, .bottom, .trailing], 10)
                     })
                 }
+
+                Spacer()
             }
 
         }.onAppear(perform: wishModel.fetchList)
