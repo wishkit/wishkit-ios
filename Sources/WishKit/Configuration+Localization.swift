@@ -8,7 +8,7 @@
 
 extension Configuration {
 
-    public struct Localizaton {
+    public struct Localization {
 
         public var requested: String
 
@@ -70,37 +70,49 @@ extension Configuration {
 
         public var emailFormatWrongText: String
 
+        public var comments: String
+
+        public var writeAComment: String
+
+        public var admin: String
+
+        public var user: String
+
         public init(
-            requested: String = Localizaton.default().requested,
-            pending: String = Localizaton.default().pending,
-            approved: String = Localizaton.default().approved,
-            implemented: String = Localizaton.default().implemented,
-            wishlist: String = Localizaton.default().wishlist,
-            save: String = Localizaton.default().save,
-            title: String = Localizaton.default().title,
-            description: String = Localizaton.default().description,
-            upvote: String = Localizaton.default().upvote,
-            info: String = Localizaton.default().info,
-            youCanOnlyVoteOnce: String = Localizaton.default().youCanOnlyVoteOnce,
-            youCanNotVoteForAnImplementedWish: String = Localizaton.default().youCanNotVoteForAnImplementedWish,
-            youCanNotVoteForYourOwnWish: String = Localizaton.default().youCanNotVoteForYourOwnWish,
-            poweredBy: String = Localizaton.default().poweredBy,
-            successfullyCreated: String = Localizaton.default().successfullyCreated,
-            done: String = Localizaton.default().done,
-            detail: String = Localizaton.default().detail,
-            featureWishlist: String = Localizaton.default().featureWishlist,
-            confirm: String = Localizaton.default().confirm,
-            cancel: String = Localizaton.default().cancel,
-            ok: String = Localizaton.default().ok,
-            titleOfWish: String = Localizaton.default().titleOfWish,
-            titleDescriptionCannotBeEmpty: String = Localizaton.default().titleDescriptionCannotBeEmpty,
-            votes: String = Localizaton.default().votes,
-            close: String = Localizaton.default().close,
-            createWish: String = Localizaton.default().createWish,
-            optional: String = Localizaton.default().optional,
-            required: String = Localizaton.default().required,
-            emailRequiredText: String = Localizaton.default().emailRequiredText,
-            emailFormatWrongText: String = Localizaton.default().emailFormatWrongText
+            requested: String = Localization.default().requested,
+            pending: String = Localization.default().pending,
+            approved: String = Localization.default().approved,
+            implemented: String = Localization.default().implemented,
+            wishlist: String = Localization.default().wishlist,
+            save: String = Localization.default().save,
+            title: String = Localization.default().title,
+            description: String = Localization.default().description,
+            upvote: String = Localization.default().upvote,
+            info: String = Localization.default().info,
+            youCanOnlyVoteOnce: String = Localization.default().youCanOnlyVoteOnce,
+            youCanNotVoteForAnImplementedWish: String = Localization.default().youCanNotVoteForAnImplementedWish,
+            youCanNotVoteForYourOwnWish: String = Localization.default().youCanNotVoteForYourOwnWish,
+            poweredBy: String = Localization.default().poweredBy,
+            successfullyCreated: String = Localization.default().successfullyCreated,
+            done: String = Localization.default().done,
+            detail: String = Localization.default().detail,
+            featureWishlist: String = Localization.default().featureWishlist,
+            confirm: String = Localization.default().confirm,
+            cancel: String = Localization.default().cancel,
+            ok: String = Localization.default().ok,
+            titleOfWish: String = Localization.default().titleOfWish,
+            titleDescriptionCannotBeEmpty: String = Localization.default().titleDescriptionCannotBeEmpty,
+            votes: String = Localization.default().votes,
+            close: String = Localization.default().close,
+            createWish: String = Localization.default().createWish,
+            optional: String = Localization.default().optional,
+            required: String = Localization.default().required,
+            emailRequiredText: String = Localization.default().emailRequiredText,
+            emailFormatWrongText: String = Localization.default().emailFormatWrongText,
+            comments: String = Localization.default().comments,
+            writeAComment: String = Localization.default().writeAComment,
+            admin: String = Localization.default().admin,
+            user: String = Localization.default().user
         ) {
             self.requested = requested
             self.pending = pending
@@ -132,10 +144,14 @@ extension Configuration {
             self.required = required
             self.emailRequiredText = emailRequiredText
             self.emailFormatWrongText = emailFormatWrongText
+            self.comments = comments
+            self.writeAComment = writeAComment
+            self.admin = admin
+            self.user = user
         }
 
-        public static func `default`() -> Localizaton {
-            Localizaton(
+        public static func `default`() -> Localization {
+            Localization(
                 requested: "Requested",
                 pending: "Pending",
                 approved: "Approved",
@@ -165,7 +181,11 @@ extension Configuration {
                 optional: "optional",
                 required: "required",
                 emailRequiredText: "Please enter your email address.",
-                emailFormatWrongText: "Wrong email format."
+                emailFormatWrongText: "Wrong email format.",
+                comments: "Comments",
+                writeAComment: "Write a comment..",
+                admin: "Admin",
+                user: "User"
             )
         }
     }

@@ -34,7 +34,7 @@ struct CommentFieldView: View {
 
     var body: some View {
         ZStack {
-            TextField("Write a comment..", text: $textFieldValue)
+            TextField(WishKit.config.localization.writeAComment, text: $textFieldValue)
                 .font(.footnote)
                 .padding([.top, .leading, .bottom], 15)
                 .padding([.trailing], 40)
@@ -76,22 +76,5 @@ extension CommentFieldView {
 
             return PrivateTheme.elementBackgroundColor.dark
         }
-    }
-}
-
-struct CommentFieldView_Previews: PreviewProvider {
-
-    @State
-    static var textValue = ""
-
-    @State
-    static var isLoading = false
-
-    static var previews: some View {
-        CommentFieldView(
-            $textValue,
-            isLoading: $isLoading,
-            submitAction: { print("Sending API call..") }
-        )
     }
 }

@@ -56,7 +56,7 @@ struct DetailWishView: View {
                     if isLandscape {
                         HStack {
                             Spacer()
-                            Button("Done", action: { doneButtonPublisher.send(true) })
+                            Button(WishKit.config.localization.done, action: { doneButtonPublisher.send(true) })
                         }
                         .frame(maxWidth: 700)
                     }
@@ -149,12 +149,6 @@ extension DetailWishView {
 
             return PrivateTheme.systemBackgroundColor.dark
         }
-    }
-}
-
-struct DetailWishView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailWishView(wishResponse: WishResponse(id: UUID(), userUUID: UUID(), title: "📈 Statistis of my workouts", description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can lift would be really ncie", state: .approved, votingUsers: [UserResponse(uuid: UUID()), UserResponse(uuid: UUID()), UserResponse(uuid: UUID())], commentList: []), voteActionCompletion: { })
     }
 }
 #endif

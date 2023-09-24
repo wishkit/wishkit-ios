@@ -12,14 +12,8 @@ struct SeparatorView: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack { Divider() }
-            Text("COMMENTS").font(.caption2)
+            Text(WishKit.config.localization.comments.uppercased()).font(.caption2)
             VStack { Divider() }
         }
-    }
-}
-
-struct SeparatorView_Previews: PreviewProvider {
-    static var previews: some View {
-        SeparatorView()
     }
 }

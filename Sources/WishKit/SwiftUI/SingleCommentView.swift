@@ -31,7 +31,7 @@ struct SingleCommentView: View {
         VStack(spacing: 0) {
             HStack(spacing: 0){
 
-                Text("\(isAdmin ? "Admin" : "User")")
+                Text("\(isAdmin ? WishKit.config.localization.admin : WishKit.config.localization.user)")
                     .font(.caption2)
                     .foregroundColor(textColor.opacity(1/3))
                 Spacer()
@@ -91,15 +91,5 @@ struct SingleCommentView: View {
 
             return PrivateTheme.elementBackgroundColor.dark
         }
-    }
-}
-
-struct SingleCommentView_Previews: PreviewProvider {
-    static var previews: some View {
-        SingleCommentView(
-            comment: "Hey! Listen! It's dangerous to go alone. Take this!",
-            createdAt: Date(),
-            isAdmin: Bool.random()
-        )
     }
 }

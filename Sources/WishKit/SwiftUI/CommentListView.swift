@@ -29,15 +29,3 @@ struct CommentListView: View {
         .padding(.bottom, 30)
     }
 }
-
-struct CommentListView_Previews: PreviewProvider {
-    @State
-    static var commentList = [
-        CommentResponse(id: UUID(), userId: UUID(), description: "The Only Distance That Matters Is The Distance Between Our Hearts.", createdAt: Date(), isAdmin: true),
-        CommentResponse(id: UUID(), userId: UUID(), description: "It's dangerous to go alone, take this! - Old Man", createdAt: Date(), isAdmin: true)
-    ]
-
-    static var previews: some View {
-        CommentListView(commentList: $commentList)
-    }
-}
