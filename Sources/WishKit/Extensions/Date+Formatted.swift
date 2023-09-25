@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 8/14/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
