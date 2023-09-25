@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 9/15/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -56,28 +56,26 @@ struct WishlistViewIOS: View {
     var body: some View {
         NavigationView {
             ZStack {
-                VStack(spacing: 0) {
-                    ScrollView {
-                        VStack {
+                ScrollView {
+                    VStack {
 
-                            if WishKit.config.buttons.segmentedControl.display == .show {
-                                Spacer(minLength: 15)
-
-                                SegmentedView(selectedWishState: $selectedWishState)
-                                    .frame(maxWidth: 200)
-                            }
-
+                        if WishKit.config.buttons.segmentedControl.display == .show {
                             Spacer(minLength: 15)
 
-                            ForEach(getList()) { wish in
-                                NavigationLink(destination: {
-                                    DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
-                                }, label: {
-                                    WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
-                                        .padding(.all, 5)
-                                        .frame(maxWidth: 700)
-                                })
-                            }
+                            SegmentedView(selectedWishState: $selectedWishState)
+                                .frame(maxWidth: 200)
+                        }
+
+                        Spacer(minLength: 15)
+
+                        ForEach(getList()) { wish in
+                            NavigationLink(destination: {
+                                DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                            }, label: {
+                                WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
+                                    .padding(.all, 5)
+                                    .frame(maxWidth: 700)
+                            })
                         }
                     }
                 }
@@ -170,5 +168,4 @@ extension WishlistViewIOS {
         }
     }
 }
-
 #endif
