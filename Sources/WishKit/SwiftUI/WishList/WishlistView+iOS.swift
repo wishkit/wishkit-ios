@@ -68,24 +68,26 @@ struct WishlistViewIOS: View {
                                         Text(wish.state.description)
                                     }
 
-                                    Spacer(minLength: 3)
+                                    Spacer(minLength: 5)
 
                                     Text(wish.description)
-                                        .lineLimit(WishKit.config.expandDescriptionInList ? 0 : 1)
+                                        .lineLimit(WishKit.config.expandDescriptionInList ? nil : 1)
                                         .foregroundColor(textColor)
+                                        .multilineTextAlignment(.leading)
                                 }
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(backgroundColor)
+                            .background(cellBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                             .padding([.leading, .bottom, .trailing], 10)
+                            .wkShadow()
                         })
                     }
                 }
 
                 Spacer()
-            }
+            }.background(backgroundColor)
 
         }.onAppear(perform: wishModel.fetchList)
     }
@@ -127,7 +129,7 @@ extension WishlistViewIOS {
         }
     }
 
-    var backgroundColor: Color {
+    var cellBackgroundColor: Color {
         switch colorScheme {
         case .light:
 
@@ -142,6 +144,23 @@ extension WishlistViewIOS {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
+        case .dark:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.dark
+            }
+
+            return PrivateTheme.systemBackgroundColor.dark
         }
     }
 }

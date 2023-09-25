@@ -54,8 +54,10 @@ struct WKWishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     Image(systemName: "arrowtriangle.up.fill")
+                        .imageScale(.large)
                         .foregroundColor(arrowColor)
                     Text(String(describing: voteCount))
+                        .font(.system(size: 17))
                         .foregroundColor(textColor)
                 }
                 .padding([.leading, .trailing], 20)
@@ -96,7 +98,7 @@ struct WKWishView: View {
         }
         .padding([.top, .bottom, .trailing], 15)
         .background(backgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
         .wkShadow()
     }
 
