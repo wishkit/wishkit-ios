@@ -52,6 +52,18 @@ struct WishlistViewIOS: View {
         return rootViewController is UITabBarController
     }
 
+    private var addButtonBottomPadding: CGFloat {
+        let basePadding: CGFloat = isInTabBar ? 80 : 30
+        switch WishKit.config.buttons.addButton.bottomPadding {
+        case .small:
+            return basePadding + 15
+        case .medium:
+            return basePadding + 30
+        case .large:
+            return basePadding + 60
+        }
+    }
+
     private func getList() -> [WishResponse] {
         switch selectedWishState {
         case .approved:
@@ -88,6 +100,8 @@ struct WishlistViewIOS: View {
                             })
                         }
                     }
+
+                    Spacer(minLength: isInTabBar ? 50 : 25)
                 }.refreshableCompat(action: wishModel.fetchList)
                     .padding([.leading, .bottom, .trailing])
                     .frame(maxWidth: .infinity)
@@ -101,13 +115,13 @@ struct WishlistViewIOS: View {
                         Button(action: { print("add wish") }) {
                             Image(systemName: "plus")
                         }
-                        .frame(width: 50, height: 50)
+                        .frame(width: 60, height: 60)
                         .foregroundColor(addButtonTextColor)
                         .background(WishKit.theme.primaryColor)
                         .clipShape(Circle())
                         .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
-                        .padding(.bottom, isInTabBar ? 100 : 50)
-                    }.padding(.trailing, 20)
+                        .padding(.bottom, addButtonBottomPadding)
+                    }.padding(.trailing, 15)
                 }.frame(maxWidth: 700)
             }
             .background(backgroundColor)
@@ -132,7 +146,7 @@ struct WishlistViewIOS: View {
     }
 
     // MARK: - View
-    
+
     func getRefreshButton() -> some View {
         if #unavailable(iOS 15) {
             return Button(action: wishModel.fetchList) {
