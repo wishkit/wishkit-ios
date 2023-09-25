@@ -38,6 +38,7 @@ final class WishModel: ObservableObject {
         }
     }
 
+    @Sendable
     func fetchList() {
         fetchList(completion: nil)
     }

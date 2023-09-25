@@ -10,6 +10,16 @@ import SwiftUI
 import WishKitShared
 import Combine
 
+extension ScrollView {
+    func refreshableCompat(action: @escaping @Sendable () async -> Void) -> some View {
+        if #available(iOS 15, *) {
+            return self.refreshable(action: action)
+        }
+
+        return self
+    }
+}
+
 struct WishlistViewIOS: View {
 
     @Environment(\.colorScheme)
@@ -72,13 +82,13 @@ struct WishlistViewIOS: View {
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
                             }, label: {
-                                WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
+                                WKWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })
                         }
                     }
-                }
+                }.refreshableCompat(action: wishModel.fetchList)
                 .padding([.leading, .bottom, .trailing])
                 .frame(maxWidth: .infinity)
             }
@@ -87,13 +97,30 @@ struct WishlistViewIOS: View {
             .navigationTitle(WishKit.config.localization.featureWishlist)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if !isInTabBar {
-                    Button(WishKit.config.localization.done) {
-                        presentationMode.wrappedValue.dismiss()
+
+                ToolbarItem(placement: .topBarLeading) {
+                    getRefreshButton()
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    if !isInTabBar {
+                        Button(WishKit.config.localization.done) {
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     }
                 }
             }
         }.onAppear(perform: wishModel.fetchList)
+    }
+
+    func getRefreshButton() -> some View {
+        if #unavailable(iOS 15) {
+            return Button(action: wishModel.fetchList) {
+                Image(systemName: "arrow.clockwise")
+            }
+        } else {
+            return EmptyView()
+        }
     }
 }
 

@@ -38,7 +38,7 @@ public struct WishKit {
         #if os(macOS)
             return WishlistContainer(wishModel: WishModel())
         #else
-            return WishlistViewIOS(wishModel: WishModel()) // return WishListView()
+            return WishlistViewIOS(wishModel: WishModel())
         #endif
     }
 
