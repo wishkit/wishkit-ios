@@ -89,8 +89,26 @@ struct WishlistViewIOS: View {
                         }
                     }
                 }.refreshableCompat(action: wishModel.fetchList)
-                .padding([.leading, .bottom, .trailing])
-                .frame(maxWidth: .infinity)
+                    .padding([.leading, .bottom, .trailing])
+                    .frame(maxWidth: .infinity)
+
+                HStack {
+                    Spacer()
+
+                    VStack(alignment: .trailing) {
+                        Spacer()
+
+                        Button(action: { print("add wish") }) {
+                            Image(systemName: "plus")
+                        }
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(addButtonTextColor)
+                        .background(WishKit.theme.primaryColor)
+                        .clipShape(Circle())
+                        .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
+                        .padding(.bottom, isInTabBar ? 100 : 50)
+                    }.padding(.trailing, 20)
+                }.frame(maxWidth: 700)
             }
             .background(backgroundColor)
             .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
@@ -113,6 +131,8 @@ struct WishlistViewIOS: View {
         }.onAppear(perform: wishModel.fetchList)
     }
 
+    // MARK: - View
+    
     func getRefreshButton() -> some View {
         if #unavailable(iOS 15) {
             return Button(action: wishModel.fetchList) {
@@ -157,6 +177,15 @@ extension WishlistViewIOS {
             }
 
             return .white
+        }
+    }
+
+    var addButtonTextColor: Color {
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.addButton.textColor.light
+        case .dark:
+            return WishKit.config.buttons.addButton.textColor.dark
         }
     }
 
