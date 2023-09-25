@@ -8,6 +8,7 @@
 #if os(iOS)
 import SwiftUI
 import WishKitShared
+import Combine
 
 struct WishlistViewIOS: View {
 
@@ -23,6 +24,13 @@ struct WishlistViewIOS: View {
     @State
     var selectedWish: WishResponse? = nil
 
+    @State
+    private var isLandscape = false
+
+    // MARK: - Public
+
+    public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
+
     private func getList() -> [WishResponse] {
         switch selectedWishState {
         case .approved:
@@ -34,61 +42,66 @@ struct WishlistViewIOS: View {
         }
     }
 
+    private func handleRotation(orientation: UIDeviceOrientation) {
+        switch orientation {
+        case .portrait, .portraitUpsideDown:
+            self.isLandscape = false
+        case .landscapeLeft, .landscapeRight:
+            self.isLandscape = true
+        default:
+            return
+        }
+    }
+
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                SegmentedView(selectedWishState: $selectedWishState)
-                    .frame(maxWidth: 200)
-                    .padding([.top, .bottom], 15)
+            ZStack {
+                VStack(spacing: 0) {
+                    SegmentedView(selectedWishState: $selectedWishState)
+                        .frame(maxWidth: 200)
 
-                ScrollView {
-                    ForEach(getList()) { wish in
-                        NavigationLink(destination: {
-                            DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
-                        }, label: {
-                            HStack(spacing: 0) {
-                                VStack(spacing: 5) {
-                                    Image(systemName: "arrowtriangle.up.fill")
-                                        .imageScale(.large)
-                                        .foregroundColor(arrowColor)
-                                    Text(wish.votingUsers.count.description)
-                                        .font(.system(size: 17))
-                                        .foregroundColor(textColor)
-                                }
-
-                                Spacer(minLength: 14)
-
-                                VStack {
-                                    HStack {
-                                        Text(wish.title).lineLimit(1)
-                                            .font(.system(size: 17, weight: .semibold))
-                                            .foregroundColor(textColor)
-
-                                        Spacer()
-                                        Text(wish.state.description)
-                                    }
-
-                                    Spacer(minLength: 5)
-
-                                    Text(wish.description)
-                                        .lineLimit(WishKit.config.expandDescriptionInList ? nil : 1)
-                                        .foregroundColor(textColor)
-                                        .multilineTextAlignment(.leading)
-                                }
-                            }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(cellBackgroundColor)
-                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                            .padding([.leading, .bottom, .trailing], 10)
-                            .wkShadow()
-                        })
+                    if isLandscape {
+                        HStack {
+                            Spacer()
+                            Button(WishKit.config.localization.done, action: { doneButtonPublisher.send(true) })
+                        }
+                        .frame(maxWidth: 700)
                     }
+
+                    Spacer(minLength: 15)
+
+                    ScrollView {
+                        ForEach(getList()) { wish in
+                            NavigationLink(destination: {
+                                DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                            }, label: {
+                                WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
+                                    .padding(.all, 5)
+                                    .frame(maxWidth: 700)
+                            })
+                        }
+                    }
+                }.onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    // Handle when phone is rotated to/from landscape.
+                    handleRotation(orientation: UIDevice.current.orientation)
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
 
-                Spacer()
-            }.background(backgroundColor)
-
+                // Handle when app is launched in landscape.
+                GeometryReader { proxy in
+                    VStack {}
+                        .onAppear {
+                            if proxy.size.width > proxy.size.height {
+                                self.isLandscape = true
+                            } else {
+                                self.isLandscape = false
+                            }
+                        }
+                }
+            }
+            .background(backgroundColor)
+            .ignoresSafeArea(.all)
         }.onAppear(perform: wishModel.fetchList)
     }
 }

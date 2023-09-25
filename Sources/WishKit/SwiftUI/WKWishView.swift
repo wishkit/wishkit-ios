@@ -88,12 +88,10 @@ struct WKWishView: View {
                     Spacer()
                 }
 
-                HStack {
-                    Text(wishResponse.description)
-                        .foregroundColor(textColor)
-                        .font(.system(size: 13))
-                    Spacer()
-                }
+                Text(wishResponse.description)
+                    .foregroundColor(textColor)
+                    .font(.system(size: 13))
+                    .multilineTextAlignment(.leading)
             }
         }
         .padding([.top, .bottom, .trailing], 15)

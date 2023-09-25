@@ -12,8 +12,11 @@ import UIKit
 
 import SwiftUI
 import WishKitShared
+import Combine
 
 public struct WishKit {
+    
+    private static var subscribers: Set<AnyCancellable> = []
 
     static var apiKey = "my-fancy-api-key"
 
@@ -26,7 +29,26 @@ public struct WishKit {
     #if canImport(UIKit)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
-        return UIHostingController(rootView: WishlistViewIOS(wishModel: WishModel()))
+        let view = WishlistViewIOS(wishModel: WishModel())
+
+        view.doneButtonPublisher.sink { shouldDismiss in
+            if shouldDismiss {
+                let rootViewController = if #available(iOS 15, *) {
+                    UIApplication
+                        .shared
+                        .connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                        .first?
+                        .rootViewController
+                } else {
+                    UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
+                }
+
+                rootViewController?.dismiss(animated: true)
+            }
+        }.store(in: &subscribers)
+
+        return UIHostingController(rootView: view)
     }
     #endif
     
