@@ -15,6 +15,9 @@ struct WishlistViewIOS: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
+    @Environment (\.presentationMode)
+    var presentationMode
+
     @State
     private var selectedWishState: WishState = .approved
 
@@ -24,12 +27,20 @@ struct WishlistViewIOS: View {
     @State
     var selectedWish: WishResponse? = nil
 
-    @State
-    private var isLandscape = false
+    private var isInTabBar: Bool {
+        let rootViewController = if #available(iOS 15, *) {
+            UIApplication
+                .shared
+                .connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first?
+                .rootViewController
+        } else {
+            UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
+        }
 
-    // MARK: - Public
-
-    public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
+        return rootViewController is UITabBarController
+    }
 
     private func getList() -> [WishResponse] {
         switch selectedWishState {
@@ -42,66 +53,48 @@ struct WishlistViewIOS: View {
         }
     }
 
-    private func handleRotation(orientation: UIDeviceOrientation) {
-        switch orientation {
-        case .portrait, .portraitUpsideDown:
-            self.isLandscape = false
-        case .landscapeLeft, .landscapeRight:
-            self.isLandscape = true
-        default:
-            return
-        }
-    }
-
     var body: some View {
         NavigationView {
             ZStack {
                 VStack(spacing: 0) {
-                    SegmentedView(selectedWishState: $selectedWishState)
-                        .frame(maxWidth: 200)
-
-                    if isLandscape {
-                        HStack {
-                            Spacer()
-                            Button(WishKit.config.localization.done, action: { doneButtonPublisher.send(true) })
-                        }
-                        .frame(maxWidth: 700)
-                    }
-
-                    Spacer(minLength: 15)
-
                     ScrollView {
-                        ForEach(getList()) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
-                            }, label: {
-                                WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }
-                    }
-                }.onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                    // Handle when phone is rotated to/from landscape.
-                    handleRotation(orientation: UIDevice.current.orientation)
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
+                        VStack {
 
-                // Handle when app is launched in landscape.
-                GeometryReader { proxy in
-                    VStack {}
-                        .onAppear {
-                            if proxy.size.width > proxy.size.height {
-                                self.isLandscape = true
-                            } else {
-                                self.isLandscape = false
+                            if WishKit.config.buttons.segmentedControl.display == .show {
+                                Spacer(minLength: 15)
+
+                                SegmentedView(selectedWishState: $selectedWishState)
+                                    .frame(maxWidth: 200)
+                            }
+
+                            Spacer(minLength: 15)
+
+                            ForEach(getList()) { wish in
+                                NavigationLink(destination: {
+                                    DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                                }, label: {
+                                    WKWishView(wishResponse: wish, voteActionCompletion: { print("voted") })
+                                        .padding(.all, 5)
+                                        .frame(maxWidth: 700)
+                                })
                             }
                         }
+                    }
                 }
+                .padding([.leading, .bottom, .trailing])
+                .frame(maxWidth: .infinity)
             }
             .background(backgroundColor)
-            .ignoresSafeArea(.all)
+            .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+            .navigationTitle(WishKit.config.localization.featureWishlist)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if !isInTabBar {
+                    Button(WishKit.config.localization.done) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
         }.onAppear(perform: wishModel.fetchList)
     }
 }

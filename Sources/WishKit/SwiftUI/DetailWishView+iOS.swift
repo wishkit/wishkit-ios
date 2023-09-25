@@ -25,9 +25,6 @@ struct DetailWishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @State
-    private var isLandscape = false
-
     @ObservedObject
     private var commentModel = CommentModel()
 
@@ -38,10 +35,6 @@ struct DetailWishView: View {
 
     private let voteActionCompletion: () -> Void
 
-    // MARK: - Public
-
-    public let doneButtonPublisher = PassthroughSubject<Bool, Never>()
-
     init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void)) {
         self.wishResponse = wishResponse
         self.voteActionCompletion = voteActionCompletion
@@ -49,84 +42,47 @@ struct DetailWishView: View {
     }
 
     var body: some View {
-        ZStack {
-            ScrollView {
-                VStack {
+        ScrollView {
+            VStack {
 
-                    if isLandscape {
-                        HStack {
-                            Spacer()
-                            Button(WishKit.config.localization.done, action: { doneButtonPublisher.send(true) })
+                Spacer(minLength: 15)
+
+                WKWishView(wishResponse: wishResponse, voteActionCompletion: voteActionCompletion)
+                    .frame(maxWidth: 700)
+
+                Spacer(minLength: 15)
+
+                SeparatorView()
+                    .padding([.top, .bottom], 15)
+
+                CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
+                    let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
+
+                    commentModel.isLoading = true
+                    let response = await CommentApi.createComment(request: request)
+                    commentModel.isLoading = false
+
+                    switch response {
+                    case .success(let commentResponse):
+                        withAnimation {
+                            commentList.insert(commentResponse, at: 0)
                         }
-                        .frame(maxWidth: 700)
+
+                        commentModel.newCommentValue = ""
+                    case .failure(let error):
+                        print("❌ \(error.localizedDescription)")
                     }
+                }.frame(maxWidth: 700)
 
-                    Spacer(minLength: 15)
+                Spacer(minLength: 20)
 
-                    WKWishView(wishResponse: wishResponse, voteActionCompletion: voteActionCompletion)
-                        .frame(maxWidth: 700)
-
-                    Spacer(minLength: 15)
-
-                    SeparatorView()
-                        .padding([.top, .bottom], 15)
-
-                    CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
-                        let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
-
-                        commentModel.isLoading = true
-                        let response = await CommentApi.createComment(request: request)
-                        commentModel.isLoading = false
-                        
-                        switch response {
-                        case .success(let commentResponse):
-                            withAnimation {
-                                commentList.insert(commentResponse, at: 0)
-                            }
-
-                            commentModel.newCommentValue = ""
-                        case .failure(let error):
-                            print("❌ \(error.localizedDescription)")
-                        }
-                    }.frame(maxWidth: 700)
-
-                    Spacer(minLength: 20)
-
-                    CommentListView(commentList: $commentList)
-                        .frame(maxWidth: 700)
-                }
-                .padding()
-                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                    // Handle when phone is rotated to/from landscape.
-                    handleRotation(orientation: UIDevice.current.orientation)
-                }
+                CommentListView(commentList: $commentList)
+                    .frame(maxWidth: 700)
             }
-            .background(backgroundColor)
-            .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
-
-            // Handle when app is launched in landscape.
-            GeometryReader { proxy in
-                VStack {}
-                    .onAppear {
-                        if proxy.size.width > proxy.size.height {
-                            self.isLandscape = true
-                        } else {
-                            self.isLandscape = false
-                        }
-                    }
-            }
+            .padding()
         }
-    }
-
-    private func handleRotation(orientation: UIDeviceOrientation) {
-        switch orientation {
-        case .portrait, .portraitUpsideDown:
-            self.isLandscape = false
-        case .landscapeLeft, .landscapeRight:
-            self.isLandscape = true
-        default:
-            return
-        }
+        .background(backgroundColor)
+        .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
     }
 }
 
