@@ -11,6 +11,9 @@ import WishKitShared
 
 struct WishlistViewIOS: View {
 
+    @Environment(\.colorScheme)
+    private var colorScheme
+
     @State
     private var selectedWishState: WishState = .approved
 
@@ -38,24 +41,47 @@ struct WishlistViewIOS: View {
                     .frame(maxWidth: 200)
                     .padding([.top, .bottom], 15)
 
-                ForEach(getList()) { wish in
-                    NavigationLink(destination: {
-                        DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
-                    }, label: {
-                        HStack {
-                            VStack {
-                                Image(systemName: "arrow.up")
-                                Text(wish.votingUsers.count.description)
-                            }
+                ScrollView {
+                    ForEach(getList()) { wish in
+                        NavigationLink(destination: {
+                            DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                        }, label: {
+                            HStack(spacing: 0) {
+                                VStack(spacing: 5) {
+                                    Image(systemName: "arrowtriangle.up.fill")
+                                        .imageScale(.large)
+                                        .foregroundColor(arrowColor)
+                                    Text(wish.votingUsers.count.description)
+                                        .font(.system(size: 17))
+                                        .foregroundColor(textColor)
+                                }
 
-                            Text(wish.title)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray)
-                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                        .padding([.leading, .bottom, .trailing], 10)
-                    })
+                                Spacer(minLength: 14)
+
+                                VStack {
+                                    HStack {
+                                        Text(wish.title).lineLimit(1)
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundColor(textColor)
+
+                                        Spacer()
+                                        Text(wish.state.description)
+                                    }
+
+                                    Spacer(minLength: 3)
+
+                                    Text(wish.description)
+                                        .lineLimit(WishKit.config.expandDescriptionInList ? 0 : 1)
+                                        .foregroundColor(textColor)
+                                }
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(backgroundColor)
+                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                            .padding([.leading, .bottom, .trailing], 10)
+                        })
+                    }
                 }
 
                 Spacer()
@@ -64,4 +90,60 @@ struct WishlistViewIOS: View {
         }.onAppear(perform: wishModel.fetchList)
     }
 }
+
+extension WishlistViewIOS {
+    var arrowColor: Color {
+        let userUUID = UUIDManager.getUUID()
+        if
+            let selectedWish = selectedWish,
+            selectedWish.votingUsers.contains(where: { user in user.uuid == userUUID })
+        {
+            return WishKit.theme.primaryColor
+        }
+
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.voteButton.arrowColor.light
+        case .dark:
+            return WishKit.config.buttons.voteButton.arrowColor.dark
+        }
+    }
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        }
+    }
+
+    var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.secondaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.elementBackgroundColor.light
+        case .dark:
+            if let color = WishKit.theme.secondaryColor {
+                return color.dark
+            }
+
+            return PrivateTheme.elementBackgroundColor.dark
+        }
+    }
+}
+
 #endif

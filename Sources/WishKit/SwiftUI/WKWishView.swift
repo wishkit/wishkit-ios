@@ -181,24 +181,3 @@ extension WKWishView {
         }
     }
 }
-
-struct WKWishView_Previews: PreviewProvider {
-    static let wishResponse = WishResponse(
-        id: UUID(),
-        userUUID: UUID(),
-        title: "📈 Statistics of my workouts!",
-        description: "Seeing a chart showing when and how much I worked out to see my progress in how much more volume I can list would be really ncie.",
-        state: .approved,
-        votingUsers: [],
-        commentList: []
-    )
-
-    static var previews: some View {
-        VStack {
-            Spacer()
-            WKWishView(wishResponse: wishResponse, voteActionCompletion: { })
-                .padding()
-            Spacer()
-        }.background(Color.red)
-    }
-}
