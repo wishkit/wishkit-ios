@@ -76,8 +76,9 @@ struct WKWishView: View {
                     Text(String(describing: voteCount))
                         .font(.system(size: 17))
                         .foregroundColor(textColor)
+                        .frame(width: 35)
                 }
-                .padding([.leading, .trailing], 20)
+                .padding([.leading, .trailing], 12)
                 .cornerRadius(12)
             }.alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
@@ -101,7 +102,20 @@ struct WKWishView: View {
                         .foregroundColor(textColor)
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(viewKind == .list ? 1 : nil)
+
                     Spacer()
+
+                    if viewKind == .list && WishKit.config.statusBadge == .show {
+                        Text(wishResponse.state.description.uppercased())
+                            .opacity(0.8)
+                            .font(.system(size: 10, weight: .medium))
+                            .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
+                            .foregroundColor(badgeColor(for: wishResponse.state))
+                            .background(badgeColor(for: wishResponse.state).opacity(1/3))
+                            .cornerRadius(6)
+                    }
                 }
 
                 HStack {
@@ -118,6 +132,19 @@ struct WKWishView: View {
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
         .wkShadow()
+    }
+
+    func badgeColor(for wishState: WishState) -> Color {
+        switch wishState {
+        case .pending:
+            return WishKit.theme.badgeColor.pending
+        case .approved:
+            return WishKit.theme.badgeColor.approved
+        case .implemented:
+            return WishKit.theme.badgeColor.implemented
+        case .rejected:
+            return WishKit.theme.badgeColor.rejected
+        }
     }
 
     private func voteAction() {

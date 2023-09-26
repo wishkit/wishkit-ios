@@ -68,36 +68,6 @@ struct PrivateTheme {
 }
 
 // MARK: - StatusBadge
-#if canImport(UIKit)
-extension Theme {
-    public struct BadgeTheme {
-
-        public var pending: UIColor
-
-        public var approved: UIColor
-
-        public var implemented: UIColor
-
-        public var rejected: UIColor
-
-        init(pending: UIColor, approved: UIColor, implemented: UIColor, rejected: UIColor) {
-            self.pending = pending
-            self.approved = approved
-            self.implemented = implemented
-            self.rejected = rejected
-        }
-
-        static func `default`() -> BadgeTheme {
-            return BadgeTheme(
-                pending: .systemYellow.withAlphaComponent(0.3),
-                approved: .systemBlue.withAlphaComponent(0.3),
-                implemented: .systemGreen.withAlphaComponent(0.3),
-                rejected: .systemRed.withAlphaComponent(0.3)
-            )
-        }
-    }
-}
-#else
 
 extension Theme {
     public struct BadgeTheme {
@@ -119,15 +89,14 @@ extension Theme {
 
         static func `default`() -> BadgeTheme {
             return BadgeTheme(
-                pending: .yellow.opacity(0.3),
-                approved: .blue.opacity(0.3),
-                implemented: .green.opacity(0.3),
-                rejected: .red.opacity(0.3)
+                pending: .yellow,
+                approved: .blue,
+                implemented: .green,
+                rejected: .red
             )
         }
     }
 }
-#endif
 
 extension Theme {
     public struct Scheme {

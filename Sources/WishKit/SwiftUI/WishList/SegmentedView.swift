@@ -34,6 +34,8 @@ extension WishState: Identifiable {
             return WishKit.config.localization.approved
         case .implemented:
             return WishKit.config.localization.implemented
+        case .pending:
+            return WishKit.config.localization.pending
         default:
             return ""
         }
