@@ -47,7 +47,7 @@ struct DetailWishView: View {
 
                 Spacer(minLength: 15)
 
-                WKWishView(wishResponse: wishResponse, voteActionCompletion: voteActionCompletion)
+                WKWishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
                     .frame(maxWidth: 700)
 
                 Spacer(minLength: 15)

@@ -27,6 +27,12 @@ final class AlertModel: ObservableObject {
 
 struct WKWishView: View {
 
+    // Helps differentiate where this view is used (in the list or in detail view).
+    enum ViewKind {
+        case list
+        case detail
+    }
+
     @Environment(\.colorScheme)
     private var colorScheme
 
@@ -43,8 +49,19 @@ struct WKWishView: View {
 
     private let voteActionCompletion: () -> Void
 
-    init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void)) {
+    private let viewKind: ViewKind
+
+    private var descriptionLineLimit: Int? {
+        if viewKind == .detail {
+            return nil
+        }
+        
+        return WishKit.config.expandDescriptionInList ? nil : 1
+    }
+
+    init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
         self.wishResponse = wishResponse
+        self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
         self._voteCount = State(wrappedValue: wishResponse.votingUsers.count)
     }
@@ -92,6 +109,7 @@ struct WKWishView: View {
                         .foregroundColor(textColor)
                         .font(.system(size: 13))
                         .multilineTextAlignment(.leading)
+                        .lineLimit(descriptionLineLimit)
                     Spacer()
                 }
             }
@@ -131,6 +149,8 @@ struct WKWishView: View {
         }
     }
 }
+
+// MARK: - Darkmode
 
 extension WKWishView {
     var arrowColor: Color {
