@@ -37,6 +37,12 @@ struct WishlistViewIOS: View {
     @State
     var selectedWish: WishResponse? = nil
 
+    @State
+    private var isShowingCreateView = false
+
+    @State
+    private var currentWishList: [WishResponse] = []
+
     private var isInTabBar: Bool {
         let rootViewController = if #available(iOS 15, *) {
             UIApplication
@@ -78,6 +84,16 @@ struct WishlistViewIOS: View {
     var body: some View {
         NavigationView {
             ZStack {
+
+                if wishModel.isLoading && !wishModel.hasFetched {
+                    ProgressView()
+                        .imageScale(.large)
+                }
+
+                if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
+                    Text(WishKit.config.localization.noFeatureRequests)
+                }
+
                 ScrollView {
                     VStack {
 
@@ -101,7 +117,7 @@ struct WishlistViewIOS: View {
                         }
                     }
 
-                    Spacer(minLength: isInTabBar ? 50 : 25)
+                    Spacer(minLength: isInTabBar ? 100 : 25)
                 }.refreshableCompat(action: wishModel.fetchList)
                     .padding([.leading, .bottom, .trailing])
                     .frame(maxWidth: .infinity)
@@ -112,15 +128,19 @@ struct WishlistViewIOS: View {
                     VStack(alignment: .trailing) {
                         Spacer()
 
-                        Button(action: { print("add wish") }) {
-                            Image(systemName: "plus")
-                        }
-                        .frame(width: 60, height: 60)
-                        .foregroundColor(addButtonTextColor)
-                        .background(WishKit.theme.primaryColor)
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
-                        .padding(.bottom, addButtonBottomPadding)
+                        NavigationLink(isActive: $isShowingCreateView, destination: {
+                            CreateWishView(isShowing: $isShowingCreateView)
+                        }, label: {
+                            VStack {
+                                Image(systemName: "plus")
+                                    .foregroundColor(addButtonTextColor)
+                            }
+                            .frame(width: 60, height: 60)
+                            .background(WishKit.theme.primaryColor)
+                            .clipShape(Circle())
+                            .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
+                            .padding(.bottom, addButtonBottomPadding)
+                        })
                     }.padding(.trailing, 15)
                 }.frame(maxWidth: 700)
             }

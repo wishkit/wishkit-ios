@@ -21,7 +21,16 @@ final class WishModel: ObservableObject {
     @Published
     var shouldShowWatermark: Bool = false
 
+    @Published
+    var isLoading: Bool = false
+
+    // Used to differentiate empty list from fetch vs. from initial instance creation.
+    @Published
+    var hasFetched: Bool = false
+
     func fetchList(completion: (() -> ())? = nil) {
+        isLoading = true
+        
         WishApi.fetchWishList { result in
             switch result {
             case .success(let response):
@@ -34,11 +43,16 @@ final class WishModel: ObservableObject {
                 printError(self, error.reason.description)
             }
 
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.hasFetched = true
+            }
+            
             completion?()
         }
     }
 
-    @Sendable
+    @MainActor
     func fetchList() {
         fetchList(completion: nil)
     }

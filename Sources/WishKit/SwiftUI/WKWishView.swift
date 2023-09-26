@@ -61,7 +61,6 @@ struct WKWishView: View {
                         .foregroundColor(textColor)
                 }
                 .padding([.leading, .trailing], 20)
-                .padding([.top, .bottom], 10)
                 .cornerRadius(12)
             }.alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
@@ -88,13 +87,16 @@ struct WKWishView: View {
                     Spacer()
                 }
 
-                Text(wishResponse.description)
-                    .foregroundColor(textColor)
-                    .font(.system(size: 13))
-                    .multilineTextAlignment(.leading)
+                HStack {
+                    Text(wishResponse.description)
+                        .foregroundColor(textColor)
+                        .font(.system(size: 13))
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
             }
         }
-        .padding([.top, .bottom, .trailing], 15)
+        .padding([.top, .bottom, .trailing], 10)
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
         .wkShadow()
