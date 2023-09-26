@@ -67,6 +67,8 @@ struct CreateWishView: View {
     @Binding
     var isShowing: Bool
 
+    let createActionCompletion: () -> Void
+
     var body: some View {
         ScrollView {
             Spacer(minLength: 15)
@@ -143,7 +145,13 @@ struct CreateWishView: View {
 
                     switch alertModel.alertReason {
                     case .successfullyCreated:
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: dismissAction)
+                        let button = Alert.Button.default(
+                            Text(WishKit.config.localization.ok),
+                            action: {
+                                createActionCompletion()
+                                dismissAction()
+                            }
+                        )
 
                         return Alert(
                             title: Text(WishKit.config.localization.info),

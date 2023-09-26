@@ -54,7 +54,7 @@ struct WKWishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     Image(systemName: "arrowtriangle.up.fill")
-                        .imageScale(.large)
+                        .imageScale(.medium)
                         .foregroundColor(arrowColor)
                     Text(String(describing: voteCount))
                         .font(.system(size: 17))

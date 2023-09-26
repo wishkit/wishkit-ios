@@ -108,9 +108,9 @@ struct WishlistViewIOS: View {
 
                         ForEach(getList()) { wish in
                             NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                             }, label: {
-                                WKWishView(wishResponse: wish, voteActionCompletion: wishModel.fetchList)
+                                WKWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })
@@ -118,7 +118,7 @@ struct WishlistViewIOS: View {
                     }
 
                     Spacer(minLength: isInTabBar ? 100 : 25)
-                }.refreshableCompat(action: wishModel.fetchList)
+                }.refreshableCompat(action: { await wishModel.fetchList() })
                     .padding([.leading, .bottom, .trailing])
                     .frame(maxWidth: .infinity)
 
@@ -129,7 +129,7 @@ struct WishlistViewIOS: View {
                         Spacer()
 
                         NavigationLink(isActive: $isShowingCreateView, destination: {
-                            CreateWishView(isShowing: $isShowingCreateView)
+                            CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
                         }, label: {
                             VStack {
                                 Image(systemName: "plus")
@@ -141,7 +141,7 @@ struct WishlistViewIOS: View {
                             .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
                             .padding(.bottom, addButtonBottomPadding)
                         })
-                    }.padding(.trailing, 15)
+                    }.padding(.trailing, 20)
                 }.frame(maxWidth: 700)
             }
             .background(backgroundColor)
@@ -181,6 +181,7 @@ struct WishlistViewIOS: View {
 extension WishlistViewIOS {
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
+        
         if
             let selectedWish = selectedWish,
             selectedWish.votingUsers.contains(where: { user in user.uuid == userUUID })
