@@ -8,23 +8,9 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-#endif
-
 extension Configuration {
     public struct VoteButton {
-
-        #if os(macOS)
-        @available(*, deprecated, message: "Use `arrowColor` instead.")
-        public var tintColor: Color = .white
-        #elseif canImport(UIKit)
-        @available(*, deprecated, message: "Use `arrowColor` instead.")
-        public var tintColor: UIColor = .label
-        #endif
-
-        public var arrowColor = Theme.Scheme(light: .gray, dark: .gray)
-
-        public var textColor = Theme.Scheme(light: .black, dark: .white)
+        public var arrowColor: Theme.Scheme = .setBoth(to: .gray)
+        public var textColor: Theme.Scheme = .set(light: .black, dark: .white)
     }
 }

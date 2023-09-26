@@ -8,10 +8,6 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-#endif
-
 public struct Theme {
 
     /// This is for the Add-Button, Segmented Control, and Vote-Button.

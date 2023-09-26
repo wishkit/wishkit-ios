@@ -8,21 +8,9 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-#endif
-
 extension Configuration {
     public struct TabBar {
-        #if os(macOS)
         public var image = Image(systemName: "lightbulb")
-
         public var selectedImage = Image(systemName: "lightbulb.fill")
-
-        #elseif canImport(UIKit)
-        public var image = UIImage(systemName: "lightbulb")
-
-        public var selectedImage = UIImage(systemName: "lightbulb.fill")
-        #endif
     }
 }
