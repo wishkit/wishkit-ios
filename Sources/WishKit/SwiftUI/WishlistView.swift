@@ -14,7 +14,6 @@ import WishKitShared
 extension WishResponse: Identifiable { }
 
 #if os(macOS)
-
 extension View {
     @ViewBuilder
     func scrollContentBackgroundCompat(_ visibility: Visibility) -> some View {
@@ -91,7 +90,7 @@ struct WishlistView: View {
 
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish, voteCompletion: wishModel.fetchList)
+                    WishView(wish: wish, voteCompletion: { wishModel.fetchList() })
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -100,11 +99,11 @@ struct WishlistView: View {
             .scrollIndicatorsCompat(.hidden)
             .scrollContentBackgroundCompat(.hidden)
             .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
-                DetailWishView(wish: wish, voteCompletion: wishModel.fetchList)
+                DetailWishView(wish: wish, voteCompletion: { wishModel.fetchList() })
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
                     .background(backgroundColor)
             }
-            .onAppear(perform: wishModel.fetchList)
+            .onAppear(perform: { wishModel.fetchList() })
 
             if wishModel.shouldShowWatermark {
                 VStack {
