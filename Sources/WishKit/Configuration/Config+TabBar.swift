@@ -10,7 +10,9 @@ import SwiftUI
 
 extension Configuration {
     public struct TabBar {
+
         public var image = Image(systemName: "lightbulb")
+        
         public var selectedImage = Image(systemName: "lightbulb.fill")
     }
 }

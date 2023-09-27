@@ -10,6 +10,7 @@ import SwiftUI
 
 extension Configuration {
     public struct SaveButton {
+        
         public var textColor = Theme.Scheme(light: .black, dark: .white)
     }
 }

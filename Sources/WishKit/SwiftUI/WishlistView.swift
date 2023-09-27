@@ -38,6 +38,13 @@ extension View {
             }
         }
     }
+
+    @ViewBuilder
+    func listRowSeparatorCompat(_ visibility: Visibility) -> some View {
+        if #available(macOS 13.0, *) {
+            self.listRowSeparator(visibility)
+        }
+    }
 }
 
 enum ScrollIndicatorVisibilityCompat {
@@ -88,15 +95,15 @@ struct WishlistView: View {
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
+                .listRowSeparatorCompat(.hidden)
             }
+            .scrollIndicatorsCompat(.hidden)
             .scrollContentBackgroundCompat(.hidden)
             .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                 DetailWishView(wish: wish, voteCompletion: wishModel.fetchList)
                     .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
                     .background(backgroundColor)
             }
-            .scrollContentBackgroundCompat(.hidden)
-            .scrollIndicatorsCompat(.hidden)
             .onAppear(perform: wishModel.fetchList)
 
             if wishModel.shouldShowWatermark {

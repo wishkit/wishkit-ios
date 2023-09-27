@@ -10,7 +10,9 @@ import SwiftUI
 
 extension Configuration {
     public struct VoteButton {
+
         public var arrowColor: Theme.Scheme = .setBoth(to: .gray)
+        
         public var textColor: Theme.Scheme = .set(light: .black, dark: .white)
     }
 }
