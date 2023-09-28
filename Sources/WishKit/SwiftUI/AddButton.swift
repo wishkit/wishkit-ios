@@ -9,33 +9,48 @@
 import SwiftUI
 
 struct AddButton: View {
+    
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     @State
-    var showingSheet = false
+    private var showingSheet = false
 
-    var buttonAction: () -> ()
+    private let size: CGSize
+
+    private let buttonAction: () -> ()
+
+    init(size: CGSize = CGSize(width: 45, height: 45), buttonAction: (() -> ())? = nil) {
+        self.size = size
+        self.buttonAction = buttonAction ?? { }
+    }
 
     var body: some View {
         Button(action: buttonAction) {
             Image(systemName: "plus")
                 .frame(width: 45, height: 45)
-                .foregroundColor(.white)
+                .foregroundColor(addButtonTextColor)
                 .background(WishKit.theme.primaryColor)
-                .clipShape(Circle())
+                .clipShape(.circle)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
         .buttonStyle(RoundButtonStyle())
-        .frame(width: 45, height: 45)
+        .frame(width: size.width, height: size.height)
         .background(WishKit.theme.primaryColor)
-        .clipShape(Circle())
+        .clipShape(.circle)
         .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
         .sheet(isPresented: $showingSheet) {
             Text(WishKit.config.localization.createWish)
         }
     }
 
-    init(buttonAction: @escaping () -> ()) {
-        self.buttonAction = buttonAction
+    var addButtonTextColor: Color {
+        switch colorScheme {
+        case .light:
+            return WishKit.config.buttons.addButton.textColor.light
+        case .dark:
+            return WishKit.config.buttons.addButton.textColor.dark
+        }
     }
 }
 

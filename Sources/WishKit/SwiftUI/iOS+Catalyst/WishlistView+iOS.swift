@@ -140,20 +140,16 @@ struct WishlistViewIOS: View {
 
                     VStack(alignment: .trailing) {
                         Spacer()
+                        VStack {
+                            NavigationLink(
+                                destination: CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() }),
+                                isActive: $isShowingCreateView
+                            ) { EmptyView() }
 
-                        NavigationLink(isActive: $isShowingCreateView, destination: {
-                            CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
-                        }, label: {
-                            VStack {
-                                Image(systemName: "plus")
-                                    .foregroundColor(addButtonTextColor)
+                            AddButton(size: CGSize(width: 60, height: 60)) {
+                                isShowingCreateView = true
                             }
-                            .frame(width: 60, height: 60)
-                            .background(WishKit.theme.primaryColor)
-                            .clipShape(Circle())
-                            .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
-                            .padding(.bottom, addButtonBottomPadding)
-                        })
+                        }.padding(.bottom, addButtonBottomPadding)
                     }.padding(.trailing, 20)
                 }.frame(maxWidth: 700)
             }
@@ -225,15 +221,6 @@ extension WishlistViewIOS {
             }
 
             return .white
-        }
-    }
-
-    var addButtonTextColor: Color {
-        switch colorScheme {
-        case .light:
-            return WishKit.config.buttons.addButton.textColor.light
-        case .dark:
-            return WishKit.config.buttons.addButton.textColor.dark
         }
     }
 
