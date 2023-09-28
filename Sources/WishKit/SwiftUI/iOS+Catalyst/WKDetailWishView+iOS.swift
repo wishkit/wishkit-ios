@@ -1,22 +1,15 @@
 //
-//  SwiftUIView.swift
+//  DetailWishView+iOS.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 8/13/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
+
 #if os(iOS)
 import SwiftUI
 import WishKitShared
 import Combine
-
-final class CommentModel: ObservableObject {
-    @Published
-    var newCommentValue = ""
-
-    @Published
-    var isLoading = false
-}
 
 struct DetailWishView: View {
 
@@ -47,7 +40,7 @@ struct DetailWishView: View {
 
                 Spacer(minLength: 15)
 
-                WKWishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                WishViewiOS(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
                     .frame(maxWidth: 700)
 
                 Spacer(minLength: 15)

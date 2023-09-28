@@ -11,8 +11,6 @@ import WishKitShared
 
 // MARK: - macOS
 
-extension WishResponse: Identifiable { }
-
 #if os(macOS)
 extension View {
     @ViewBuilder
@@ -90,7 +88,7 @@ struct WishlistView: View {
 
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishView(wish: wish, voteCompletion: { wishModel.fetchList() })
+                    WishViewiOS(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -118,10 +116,10 @@ struct WishlistView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    WKAddButton(buttonAction: createWishAction)
+                    AddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
                         .sheet(isPresented: $showingSheet) {
-                            CreateWishView(completion: {
+                            CreateWishViewMacOS(completion: {
                                 wishModel.fetchList()
                                 showingSheet = false
                             })

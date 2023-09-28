@@ -1,5 +1,5 @@
 //
-//  DetailWishView.swift
+//  DetailWishView+macOS.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 3/10/23.

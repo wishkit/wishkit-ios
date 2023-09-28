@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  WishViewiOS.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 8/12/23.
@@ -9,23 +9,8 @@
 import SwiftUI
 import WishKitShared
 
-final class AlertModel: ObservableObject {
-
-    enum AlertReason {
-        case alreadyVoted
-        case alreadyImplemented
-        case voteReturnedError(String)
-        case none
-    }
-
-    @Published
-    var showAlert = false
-
-    @Published
-    var alertReason: AlertReason = .none
-}
-
-struct WKWishView: View {
+//#if os(iOS)
+struct WishViewiOS: View {
 
     // Helps differentiate where this view is used (in the list or in detail view).
     enum ViewKind {
@@ -80,7 +65,9 @@ struct WKWishView: View {
                 }
                 .padding([.leading, .trailing], 12)
                 .cornerRadius(12)
-            }.alert(isPresented: $alertModel.showAlert) {
+            }
+            .buttonStyle(.plain) // makes sure it looks good on macOS.
+            .alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
                 switch alertModel.alertReason {
                 case .alreadyVoted:
@@ -179,7 +166,7 @@ struct WKWishView: View {
 
 // MARK: - Darkmode
 
-extension WKWishView {
+extension WishViewiOS {
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
         if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) || hasVoted {
@@ -230,3 +217,4 @@ extension WKWishView {
         }
     }
 }
+//#endif

@@ -1,5 +1,5 @@
 //
-//  WKAddButton.swift
+//  AddButton.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 3/8/23.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct WKAddButton: View {
+struct AddButton: View {
 
     @State
     var showingSheet = false

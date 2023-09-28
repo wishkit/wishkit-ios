@@ -10,19 +10,9 @@ import SwiftUI
 import Combine
 import WishKitShared
 
-// Removes default background color and allows custom color for TextEditor
 
 #if os(macOS)
-extension NSTextView {
-    open override var frame: CGRect {
-        didSet {
-            backgroundColor = .clear
-            drawsBackground = true
-        }
-    }
-}
-
-struct CreateWishView: View {
+struct CreateWishViewMacOS: View {
 
     @Environment (\.presentationMode)
     var presentationMode

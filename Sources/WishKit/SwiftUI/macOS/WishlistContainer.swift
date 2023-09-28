@@ -55,15 +55,9 @@ struct WishlistContainer: View {
 
     var segmentedControlView: some View {
         ZStack {
-            Picker(selection: $listType, content: {
-                Text(WishKit.config.localization.requested).tag(WishState.approved)
-                Text(WishKit.config.localization.implemented).tag(WishState.implemented)
-            }, label: {
-                EmptyView()
-            })
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            .frame(maxWidth: 300)
+            SegmentedView(selectedWishState: $listType)
+                .padding()
+                .frame(maxWidth: 300)
 
             HStack {
                 Button(action: refreshList) {

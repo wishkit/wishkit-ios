@@ -10,13 +10,26 @@ import SwiftUI
 import WishKitShared
 import Combine
 
-extension ScrollView {
-    func refreshableCompat(action: @escaping @Sendable () async -> Void) -> some View {
-        if #available(iOS 15, *) {
-            return self.refreshable(action: action)
-        }
+/// Wraps the content in a NavigationView for iOS but not for Catalyst.
+struct WishListContainer<Content: View>: View {
+    let content: Content
 
-        return self
+    init(@ViewBuilder _ content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        #if targetEnvironment(macCatalyst)
+            content
+        #else
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                content
+            } else {
+                NavigationView {
+                    content
+                }
+            }
+        #endif
     }
 }
 
@@ -82,7 +95,7 @@ struct WishlistViewIOS: View {
     }
 
     var body: some View {
-        NavigationView {
+        WishListContainer {
             ZStack {
 
                 if wishModel.isLoading && !wishModel.hasFetched {
@@ -110,7 +123,7 @@ struct WishlistViewIOS: View {
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                             }, label: {
-                                WKWishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                WishViewiOS(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })
@@ -129,7 +142,7 @@ struct WishlistViewIOS: View {
                         Spacer()
 
                         NavigationLink(isActive: $isShowingCreateView, destination: {
-                            CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
+                            WKCreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
                         }, label: {
                             VStack {
                                 Image(systemName: "plus")

@@ -38,7 +38,7 @@ final class CreateWishAlertModel: ObservableObject {
     var alertReason: AlertReason = .none
 }
 
-struct CreateWishView: View {
+struct WKCreateWishView: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
@@ -257,7 +257,7 @@ struct CreateWishView: View {
 
 // MARK: - Color Scheme
 
-extension CreateWishView {
+extension WKCreateWishView {
 
     var backgroundColor: Color {
         switch colorScheme {

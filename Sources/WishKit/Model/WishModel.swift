@@ -28,6 +28,7 @@ final class WishModel: ObservableObject {
     @Published
     var hasFetched: Bool = false
 
+    @MainActor
     func fetchList(completion: (() -> ())? = nil) {
         isLoading = true
         
