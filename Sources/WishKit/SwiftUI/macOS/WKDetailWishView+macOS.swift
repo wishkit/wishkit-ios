@@ -40,12 +40,11 @@ struct DetailWishView: View {
 
             Spacer()
 
-            HStack {
-                WKButton(text: WishKit.config.localization.close, action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
-                .interactiveDismissDisabled()
-                WKButton(text: WishKit.config.localization.upvote, action: vote)
-            }
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+            WKButton(
+                text: WishKit.config.localization.close,
+                action: { self.presentationMode.wrappedValue.dismiss() },
+                style: .secondary
+            ).padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
             Button(WishKit.config.localization.ok, role: .cancel) { }
         } message: {
@@ -58,6 +57,8 @@ struct DetailWishView: View {
                 Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             case .none:
                 Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+            default:
+                Text("Something went wrong during your vote. Try again later.")
             }
 
         }

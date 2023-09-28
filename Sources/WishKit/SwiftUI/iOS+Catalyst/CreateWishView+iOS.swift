@@ -6,11 +6,11 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS)
 import SwiftUI
 import Combine
 import WishKitShared
 
+#if os(iOS)
 extension UITextView {
     open override var backgroundColor: UIColor? {
         didSet {
@@ -20,31 +20,15 @@ extension UITextView {
         }
     }
 }
+#endif
 
-final class CreateWishAlertModel: ObservableObject {
-
-    enum AlertReason {
-        case successfullyCreated
-        case createReturnedError(String)
-        case emailRequired
-        case emailFormatWrong
-        case none
-    }
-
-    @Published
-    var showAlert = false
-
-    @Published
-    var alertReason: AlertReason = .none
-}
-
-struct WKCreateWishView: View {
+struct CreateWishView: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
     @ObservedObject
-    private var alertModel = CreateWishAlertModel()
+    private var alertModel = AlertModel()
 
     @State
     private var titleCharCount = 0
@@ -69,6 +53,14 @@ struct WKCreateWishView: View {
 
     let createActionCompletion: () -> Void
 
+    var saveButtonSize: CGSize {
+        #if os(macOS)
+            return CGSize(width: 100, height: 30)
+        #else
+            return CGSize(width: 200, height: 45)
+        #endif
+    }
+
     var body: some View {
         ScrollView {
             Spacer(minLength: 15)
@@ -85,6 +77,7 @@ struct WKCreateWishView: View {
 
                     TextField("", text: $titleText)
                         .padding(10)
+                        .textFieldStyle(.plain)
                         .background(fieldBackgroundColor)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                         .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
@@ -128,17 +121,22 @@ struct WKCreateWishView: View {
 
                         TextField("", text: $emailText)
                             .padding(10)
+                            .textFieldStyle(.plain)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
                 }
+
+                #if os(macOS)
+                    Spacer()
+                #endif
 
                 WKButton(
                     text: WishKit.config.localization.save,
                     action: submitAction,
                     style: .primary,
                     isLoading: $isButtonLoading,
-                    size: CGSize(width: 200, height: 45)
+                    size: saveButtonSize
                 )
                 .disabled(isButtonDisabled)
                 .alert(isPresented: $alertModel.showAlert) {
@@ -185,15 +183,19 @@ struct WKCreateWishView: View {
                     case .none:
                         let button = Alert.Button.default(Text(WishKit.config.localization.ok))
                         return Alert(title: Text(""), dismissButton: button)
+                    default:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                        return Alert(title: Text(""), dismissButton: button)
                     }
 
                 }
-
             }
             .frame(maxWidth: 700)
             .padding()
 
-            Spacer()
+            #if os(iOS)
+                Spacer()
+            #endif
         }
         .background(backgroundColor)
         .ignoresSafeArea(edges: [.leading, .trailing])
@@ -257,7 +259,7 @@ struct WKCreateWishView: View {
 
 // MARK: - Color Scheme
 
-extension WKCreateWishView {
+extension CreateWishView {
 
     var backgroundColor: Color {
         switch colorScheme {
@@ -293,4 +295,3 @@ extension WKCreateWishView {
         }
     }
 }
-#endif

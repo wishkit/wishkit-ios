@@ -119,11 +119,8 @@ struct WishlistView: View {
                     AddButton(buttonAction: createWishAction)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
                         .sheet(isPresented: $showingSheet) {
-                            CreateWishViewMacOS(completion: {
-                                wishModel.fetchList()
-                                showingSheet = false
-                            })
-                            .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                            CreateWishView(isShowing: $showingSheet, createActionCompletion: { wishModel.fetchList() })
+                                .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
                             .background(backgroundColor)
                         }
                 }

@@ -78,6 +78,8 @@ struct WishViewiOS: View {
                     title = Text("Something went wrong during your vote. Try again later.\n\n\(error)")
                 case .none:
                     title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+                default:
+                    title = Text("Something went wrong during your vote. Try again later.")
                 }
 
                 return Alert(title: title)

@@ -142,7 +142,7 @@ struct WishlistViewIOS: View {
                         Spacer()
 
                         NavigationLink(isActive: $isShowingCreateView, destination: {
-                            WKCreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
+                            CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
                         }, label: {
                             VStack {
                                 Image(systemName: "plus")
