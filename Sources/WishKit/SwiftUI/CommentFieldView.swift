@@ -35,6 +35,7 @@ struct CommentFieldView: View {
     var body: some View {
         ZStack {
             TextField(WishKit.config.localization.writeAComment, text: $textFieldValue)
+                .textFieldStyle(.plain)
                 .font(.footnote)
                 .padding([.top, .leading, .bottom], 15)
                 .padding([.trailing], 40)
@@ -45,12 +46,14 @@ struct CommentFieldView: View {
                 Spacer()
                 if isLoading {
                     ProgressView()
+                        .controlSizeCompat(.small)
                         .padding(10)
                 } else {
                     Button(action: { Task { try await submitAction() } }) {
                         Image(systemName: "paperplane.fill")
                             .padding(10)
                     }
+                    .buttonStyle(.plain)
                     .foregroundColor(WishKit.theme.primaryColor)
                     .disabled(textFieldValue.replacingOccurrences(of: " ", with: "").isEmpty)
                 }

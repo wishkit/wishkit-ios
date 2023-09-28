@@ -1,5 +1,5 @@
 //
-//  WishViewiOS.swift
+//  WishView.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 8/12/23.
@@ -9,8 +9,7 @@
 import SwiftUI
 import WishKitShared
 
-//#if os(iOS)
-struct WishViewiOS: View {
+struct WishView: View {
 
     // Helps differentiate where this view is used (in the list or in detail view).
     enum ViewKind {
@@ -168,7 +167,7 @@ struct WishViewiOS: View {
 
 // MARK: - Darkmode
 
-extension WishViewiOS {
+extension WishView {
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
         if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) || hasVoted {
@@ -219,4 +218,3 @@ extension WishViewiOS {
         }
     }
 }
-//#endif

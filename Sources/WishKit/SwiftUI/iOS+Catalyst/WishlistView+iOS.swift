@@ -123,7 +123,7 @@ struct WishlistViewIOS: View {
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                             }, label: {
-                                WishViewiOS(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })

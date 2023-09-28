@@ -88,7 +88,7 @@ struct WishlistView: View {
 
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
-                    WishViewiOS(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                    WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -97,8 +97,8 @@ struct WishlistView: View {
             .scrollIndicatorsCompat(.hidden)
             .scrollContentBackgroundCompat(.hidden)
             .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
-                DetailWishView(wish: wish, voteCompletion: { wishModel.fetchList() })
-                    .frame(minWidth: 400, idealWidth: 400, maxWidth: 400, minHeight: 300, maxHeight: 400)
+                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                    .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
                     .background(backgroundColor)
             }
             .onAppear(perform: { wishModel.fetchList() })

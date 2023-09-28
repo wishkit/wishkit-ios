@@ -6,7 +6,6 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS)
 import SwiftUI
 import WishKitShared
 import Combine
@@ -40,7 +39,7 @@ struct DetailWishView: View {
 
                 Spacer(minLength: 15)
 
-                WishViewiOS(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
                     .frame(maxWidth: 700)
 
                 Spacer(minLength: 15)
@@ -100,4 +99,3 @@ extension DetailWishView {
         }
     }
 }
-#endif
