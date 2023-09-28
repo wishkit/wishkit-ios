@@ -1,6 +1,6 @@
 //
 //  ProgressView+Compat.swift
-//
+//  wishkit-ios
 //
 //  Created by Martin Lasek on 9/28/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
@@ -11,7 +11,7 @@ import SwiftUI
 extension ProgressView {
 
     @ViewBuilder
-    func controlSizeCompat(_ controlSize: ControlSizeCompat) -> some View {
+    func controlSizeCompat(_ controlSize: Compatability.ControlSize) -> some View {
         if #available(iOS 15, *) {
             switch controlSize {
             case .mini:
@@ -26,12 +26,5 @@ extension ProgressView {
         } else {
             self
         }
-    }
-
-    enum ControlSizeCompat {
-        case mini
-        case small
-        case regular
-        case large
     }
 }

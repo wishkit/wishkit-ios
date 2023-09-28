@@ -275,6 +275,12 @@ extension CreateWishView {
             }
 
             return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 
@@ -292,6 +298,12 @@ extension CreateWishView {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }

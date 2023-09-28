@@ -9,48 +9,7 @@
 import SwiftUI
 import WishKitShared
 
-// MARK: - macOS
-
 #if os(macOS)
-extension View {
-    @ViewBuilder
-    func scrollContentBackgroundCompat(_ visibility: Visibility) -> some View {
-        if #available(macOS 13.0, *) {
-            self.scrollContentBackground(visibility)
-        }
-    }
-
-    @ViewBuilder
-    func scrollIndicatorsCompat(_ visibility: ScrollIndicatorVisibilityCompat) -> some View {
-        if #available(macOS 13.0, *) {
-            switch visibility {
-            case .automatic:
-                self.scrollIndicators(.automatic)
-            case .visible:
-                self.scrollIndicators(.visible)
-            case .hidden:
-                self.scrollIndicators(.hidden)
-            case .never:
-                self.scrollIndicators(.never)
-            }
-        }
-    }
-
-    @ViewBuilder
-    func listRowSeparatorCompat(_ visibility: Visibility) -> some View {
-        if #available(macOS 13.0, *) {
-            self.listRowSeparator(visibility)
-        }
-    }
-}
-
-enum ScrollIndicatorVisibilityCompat {
-    case automatic
-    case visible
-    case hidden
-    case never
-}
-
 struct WishlistView: View {
 
     @Environment(\.colorScheme)
@@ -91,8 +50,8 @@ struct WishlistView: View {
                     WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                 }
-                .buttonStyle(PlainButtonStyle())
                 .listRowSeparatorCompat(.hidden)
+                .buttonStyle(PlainButtonStyle())
             }
             .scrollIndicatorsCompat(.hidden)
             .scrollContentBackgroundCompat(.hidden)
