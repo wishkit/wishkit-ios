@@ -197,6 +197,7 @@ struct CreateWishView: View {
                 Spacer()
             #endif
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
         .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
     }
