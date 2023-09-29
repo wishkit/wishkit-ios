@@ -59,8 +59,7 @@ struct WishlistView: View {
                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                     .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
                     .background(backgroundColor)
-            }
-            .onAppear(perform: { wishModel.fetchList() })
+            }.onAppear(perform: { wishModel.fetchList() })
 
             if wishModel.shouldShowWatermark {
                 VStack {
@@ -79,7 +78,7 @@ struct WishlistView: View {
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
                         .sheet(isPresented: $showingSheet) {
                             CreateWishView(isShowing: $showingSheet, createActionCompletion: { wishModel.fetchList() })
-                                .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
+                                .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
                             .background(backgroundColor)
                         }
                 }
@@ -101,6 +100,12 @@ struct WishlistView: View {
             }
 
             return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }

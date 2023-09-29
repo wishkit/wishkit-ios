@@ -26,22 +26,30 @@ struct AddButton: View {
     }
 
     var body: some View {
-        Button(action: buttonAction) {
-            Image(systemName: "plus")
-                .frame(width: 45, height: 45)
-                .foregroundColor(addButtonTextColor)
-                .background(WishKit.theme.primaryColor)
-                .clipShape(.circle)
-        }
-        .buttonStyle(.plain)
-        .buttonStyle(RoundButtonStyle())
-        .frame(width: size.width, height: size.height)
-        .background(WishKit.theme.primaryColor)
-        .clipShape(.circle)
-        .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
-        .sheet(isPresented: $showingSheet) {
-            Text(WishKit.config.localization.createWish)
-        }
+        #if os(macOS)
+            Button(action: buttonAction) {
+                Image(systemName: "plus")
+                    .frame(width: size.width, height: size.height)
+                    .foregroundColor(addButtonTextColor)
+                    .background(WishKit.theme.primaryColor)
+                    .clipShape(.circle)
+            }
+            .buttonStyle(.plain)
+            .buttonStyle(.roundButtonStyle)
+            .frame(width: size.width, height: size.height)
+            .background(WishKit.theme.primaryColor)
+            .clipShape(.circle)
+            .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
+        #else
+            VStack {
+                Image(systemName: "plus")
+                    .foregroundColor(addButtonTextColor)
+            }
+            .frame(width: size.width, height: size.height)
+            .background(WishKit.theme.primaryColor)
+            .clipShape(.circle)
+            .shadow(color: .black.opacity(1/4), radius: 3, x: 0, y: 3)
+        #endif
     }
 
     var addButtonTextColor: Color {
@@ -50,6 +58,8 @@ struct AddButton: View {
             return WishKit.config.buttons.addButton.textColor.light
         case .dark:
             return WishKit.config.buttons.addButton.textColor.dark
+        @unknown default:
+            return WishKit.config.buttons.addButton.textColor.light
         }
     }
 }
@@ -61,5 +71,11 @@ struct RoundButtonStyle: ButtonStyle {
             .label
             .foregroundColor(configuration.isPressed ? .white.opacity(0.66) : .white)
             .background(WishKit.theme.primaryColor)
+    }
+}
+
+extension ButtonStyle where Self == RoundButtonStyle {
+    static var roundButtonStyle: RoundButtonStyle {
+        RoundButtonStyle()
     }
 }

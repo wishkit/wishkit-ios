@@ -6,10 +6,10 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+#if os(macOS)
 import SwiftUI
 import WishKitShared
 
-#if os(macOS)
 struct WishlistContainer: View {
 
     @Environment(\.colorScheme)

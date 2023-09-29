@@ -5,31 +5,20 @@
 //  Created by Martin Lasek on 9/15/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
+
 #if os(iOS)
 import SwiftUI
 import WishKitShared
 import Combine
 
-/// Wraps the content in a NavigationView for iOS but not for Catalyst.
-struct WishListContainer<Content: View>: View {
-    let content: Content
+extension View {
+    // MARK: Public - Wrap in Navigation
 
-    init(@ViewBuilder _ content: () -> Content) {
-        self.content = content()
-    }
-
-    var body: some View {
-        #if targetEnvironment(macCatalyst)
-            content
-        #else
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                content
-            } else {
-                NavigationView {
-                    content
-                }
-            }
-        #endif
+    @ViewBuilder
+    public func withNavigation() -> some View {
+        NavigationView {
+            self
+        }.navigationViewStyle(.stack)
     }
 }
 
@@ -95,83 +84,80 @@ struct WishlistViewIOS: View {
     }
 
     var body: some View {
-        WishListContainer {
-            ZStack {
+        ZStack {
 
-                if wishModel.isLoading && !wishModel.hasFetched {
-                    ProgressView()
-                        .imageScale(.large)
-                }
+            if wishModel.isLoading && !wishModel.hasFetched {
+                ProgressView()
+                    .imageScale(.large)
+            }
 
-                if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                    Text(WishKit.config.localization.noFeatureRequests)
-                }
+            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
+                Text(WishKit.config.localization.noFeatureRequests)
+            }
 
-                ScrollView {
-                    VStack {
+            ScrollView {
+                VStack {
 
-                        if WishKit.config.buttons.segmentedControl.display == .show {
-                            Spacer(minLength: 15)
-
-                            SegmentedView(selectedWishState: $selectedWishState)
-                                .frame(maxWidth: 200)
-                        }
-
+                    if WishKit.config.buttons.segmentedControl.display == .show {
                         Spacer(minLength: 15)
 
-                        ForEach(getList()) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                            }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }
+                        SegmentedView(selectedWishState: $selectedWishState)
+                            .frame(maxWidth: 200)
                     }
 
-                    Spacer(minLength: isInTabBar ? 100 : 25)
-                }.refreshableCompat(action: { await wishModel.fetchList() })
-                    .padding([.leading, .bottom, .trailing])
-                    .frame(maxWidth: .infinity)
+                    Spacer(minLength: 15)
 
-                HStack {
+                    ForEach(getList()) { wish in
+                        NavigationLink(destination: {
+                            DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                .padding(.all, 5)
+                                .frame(maxWidth: 700)
+                        })
+                    }
+                }
+
+                Spacer(minLength: isInTabBar ? 100 : 25)
+            }.refreshableCompat(action: { await wishModel.fetchList() })
+                .padding([.leading, .bottom, .trailing])
+                .frame(maxWidth: .infinity)
+
+            HStack {
+                Spacer()
+
+                VStack(alignment: .trailing) {
                     Spacer()
+                    VStack {
+                        NavigationLink(isActive: $isShowingCreateView, destination: {
+                                                    CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            AddButton(size: CGSize(width: 60, height: 60))
+                        })
+                    }.padding(.bottom, addButtonBottomPadding)
+                }.padding(.trailing, 20)
+            }.frame(maxWidth: 700)
+        }
+        .background(backgroundColor)
+        .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+        .navigationTitle(WishKit.config.localization.featureWishlist)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
 
-                    VStack(alignment: .trailing) {
-                        Spacer()
-                        VStack {
-                            NavigationLink(
-                                destination: CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() }),
-                                isActive: $isShowingCreateView
-                            ) { EmptyView() }
-
-                            AddButton(size: CGSize(width: 60, height: 60)) {
-                                isShowingCreateView = true
-                            }
-                        }.padding(.bottom, addButtonBottomPadding)
-                    }.padding(.trailing, 20)
-                }.frame(maxWidth: 700)
+            ToolbarItem(placement: .topBarLeading) {
+                getRefreshButton()
             }
-            .background(backgroundColor)
-            .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
-            .navigationTitle(WishKit.config.localization.featureWishlist)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
 
-                ToolbarItem(placement: .topBarLeading) {
-                    getRefreshButton()
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    if !isInTabBar {
-                        Button(WishKit.config.localization.done) {
-                            presentationMode.wrappedValue.dismiss()
-                        }
+            ToolbarItem(placement: .topBarTrailing) {
+                if !isInTabBar {
+                    Button(WishKit.config.localization.done) {
+                        presentationMode.wrappedValue.dismiss()
                     }
                 }
             }
-        }.onAppear(perform: wishModel.fetchList)
+        }
+        .onAppear(perform: wishModel.fetchList)
+        .navigationViewStyle(.stack)
     }
 
     // MARK: - View
