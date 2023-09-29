@@ -95,19 +95,19 @@ struct WishlistViewIOS: View {
                 Text(WishKit.config.localization.noFeatureRequests)
             }
 
-            if getList().count > 0 {
-                ScrollView {
-                    VStack {
+            ScrollView {
+                VStack {
 
-                        if WishKit.config.buttons.segmentedControl.display == .show {
-                            Spacer(minLength: 15)
-
-                            SegmentedView(selectedWishState: $selectedWishState)
-                                .frame(maxWidth: 200)
-                        }
-
+                    if WishKit.config.buttons.segmentedControl.display == .show {
                         Spacer(minLength: 15)
 
+                        SegmentedView(selectedWishState: $selectedWishState)
+                            .frame(maxWidth: 200)
+                    }
+
+                    Spacer(minLength: 15)
+
+                    if getList().count > 0 {
                         ForEach(getList()) { wish in
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
@@ -116,16 +116,15 @@ struct WishlistViewIOS: View {
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })
-                        }
+                        }.transition(.opacity)
                     }
-
-                    Spacer(minLength: isInTabBar ? 100 : 25)
                 }
-                .refreshableCompat(action: { await wishModel.fetchList() })
-                .transition(.opacity)
-                .padding([.leading, .bottom, .trailing])
-                .frame(maxWidth: .infinity)
+
+                Spacer(minLength: isInTabBar ? 100 : 25)
             }
+            .refreshableCompat(action: { await wishModel.fetchList() })
+            .padding([.leading, .bottom, .trailing])
+
 
             HStack {
                 Spacer()
@@ -133,15 +132,19 @@ struct WishlistViewIOS: View {
                 VStack(alignment: .trailing) {
                     Spacer()
                     VStack {
-                        NavigationLink(isActive: $isShowingCreateView, destination: {
-                                                    CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
-                        }, label: {
-                            AddButton(size: CGSize(width: 60, height: 60))
-                        })
+                        NavigationLink(
+                            isActive: $isShowingCreateView,
+                            destination: {
+                                CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
+                            }, label: {
+                                AddButton(size: CGSize(width: 60, height: 60))
+                            }
+                        )
                     }.padding(.bottom, addButtonBottomPadding)
                 }.padding(.trailing, 20)
             }.frame(maxWidth: 700)
         }
+        .frame(maxWidth: .infinity)
         .background(backgroundColor)
         .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
         .navigationTitle(WishKit.config.localization.featureWishlist)
@@ -159,9 +162,7 @@ struct WishlistViewIOS: View {
                     }
                 }
             }
-        }
-        .onAppear(perform: wishModel.fetchList)
-        .navigationViewStyle(.stack)
+        }.onAppear(perform: wishModel.fetchList)
     }
 
     // MARK: - View
