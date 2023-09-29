@@ -54,21 +54,24 @@ struct WishlistView: View {
                 Text(WishKit.config.localization.noFeatureRequests)
             }
 
-            List(getList(), id: \.id) { wish in
-                Button(action: { selectedWish = wish }) {
-                    WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            if getList().count > 0 {
+                List(getList(), id: \.id) { wish in
+                    Button(action: { selectedWish = wish }) {
+                        WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                    }
+                    .listRowSeparatorCompat(.hidden)
+                    .buttonStyle(.plain)
                 }
-                .listRowSeparatorCompat(.hidden)
-                .buttonStyle(PlainButtonStyle())
+                .transition(.opacity)
+                .scrollIndicatorsCompat(.hidden)
+                .scrollContentBackgroundCompat(.hidden)
+                .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
+                    DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                        .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
+                        .background(backgroundColor)
+                }.onAppear(perform: { wishModel.fetchList() })
             }
-            .scrollIndicatorsCompat(.hidden)
-            .scrollContentBackgroundCompat(.hidden)
-            .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
-                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                    .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
-                    .background(backgroundColor)
-            }.onAppear(perform: { wishModel.fetchList() })
 
             if wishModel.shouldShowWatermark {
                 VStack {
@@ -84,7 +87,7 @@ struct WishlistView: View {
                 HStack {
                     Spacer()
                     AddButton(buttonAction: createWishAction)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 20))
+                        .padding([.bottom, .trailing], 20)
                         .sheet(isPresented: $showingSheet) {
                             CreateWishView(isShowing: $showingSheet, createActionCompletion: { wishModel.fetchList() })
                                 .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)

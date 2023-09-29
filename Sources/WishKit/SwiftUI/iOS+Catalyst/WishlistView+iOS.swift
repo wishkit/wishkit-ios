@@ -95,33 +95,37 @@ struct WishlistViewIOS: View {
                 Text(WishKit.config.localization.noFeatureRequests)
             }
 
-            ScrollView {
-                VStack {
+            if getList().count > 0 {
+                ScrollView {
+                    VStack {
 
-                    if WishKit.config.buttons.segmentedControl.display == .show {
+                        if WishKit.config.buttons.segmentedControl.display == .show {
+                            Spacer(minLength: 15)
+
+                            SegmentedView(selectedWishState: $selectedWishState)
+                                .frame(maxWidth: 200)
+                        }
+
                         Spacer(minLength: 15)
 
-                        SegmentedView(selectedWishState: $selectedWishState)
-                            .frame(maxWidth: 200)
+                        ForEach(getList()) { wish in
+                            NavigationLink(destination: {
+                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                            }, label: {
+                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                    .padding(.all, 5)
+                                    .frame(maxWidth: 700)
+                            })
+                        }
                     }
 
-                    Spacer(minLength: 15)
-
-                    ForEach(getList()) { wish in
-                        NavigationLink(destination: {
-                            DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                        }, label: {
-                            WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                .padding(.all, 5)
-                                .frame(maxWidth: 700)
-                        })
-                    }
+                    Spacer(minLength: isInTabBar ? 100 : 25)
                 }
-
-                Spacer(minLength: isInTabBar ? 100 : 25)
-            }.refreshableCompat(action: { await wishModel.fetchList() })
+                .refreshableCompat(action: { await wishModel.fetchList() })
+                .transition(.opacity)
                 .padding([.leading, .bottom, .trailing])
                 .frame(maxWidth: .infinity)
+            }
 
             HStack {
                 Spacer()
