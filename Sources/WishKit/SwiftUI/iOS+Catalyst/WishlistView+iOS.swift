@@ -149,7 +149,7 @@ struct WishlistViewIOS: View {
             }
 
             ToolbarItem(placement: .topBarTrailing) {
-                if !isInTabBar {
+                if WishKit.config.buttons.doneButton.display == .show {
                     Button(WishKit.config.localization.done) {
                         presentationMode.wrappedValue.dismiss()
                     }
