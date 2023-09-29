@@ -45,6 +45,15 @@ struct WishlistView: View {
     var body: some View {
         ZStack {
 
+            if wishModel.isLoading && !wishModel.hasFetched {
+                ProgressView()
+                    .imageScale(.small)
+            }
+
+            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
+                Text(WishKit.config.localization.noFeatureRequests)
+            }
+
             List(getList(), id: \.id) { wish in
                 Button(action: { selectedWish = wish }) {
                     WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
