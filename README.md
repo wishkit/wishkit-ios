@@ -68,7 +68,7 @@ class HomeViewController: UIViewController {
 
 # SwiftUI
 
-## 1. Add WishKit as a dependency in Xcode.
+## 1. Add WishKit (v4.0.0) as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
