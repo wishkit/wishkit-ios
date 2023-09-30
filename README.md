@@ -60,7 +60,7 @@ class HomeViewController: UIViewController {
   
     @objc func buttonTapped() {
         present(WishKit.viewController.withNavigation(), animated: true)  
-  }
+    }
 }
 ```
 ###### NOTE: If you are pushing the `WishKit.viewController`, you won't need to call `withNavigation()`.
@@ -81,11 +81,11 @@ import WishKit
 
 struct ContentView: View {
 
-  init() {
-    WishKit.configure(with: "your-api-key")
-  }
+    init() {
+        WishKit.configure(with: "your-api-key")
+    }
   
-  ...
+    ...
 }
 ```
 
@@ -96,13 +96,13 @@ import WishKit
 
 struct ContentView: View {
 
-  init() {
-    WishKit.configure(with: "your-api-key")
-  }
+    init() {
+        WishKit.configure(with: "your-api-key")
+    }
 
-  var body: some View {
-    WishKit.view.withNavigation()
-  }
+    var body: some View {
+        WishKit.view.withNavigation()
+    }
 }
 ```
 ###### NOTE: If one of the parent views is a NavigationView/NavigationStack, you won't need to call `withNavigation()`.
