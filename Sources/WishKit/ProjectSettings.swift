@@ -10,5 +10,5 @@ import Foundation
 
 struct ProjectSettings {
     static let apiUrl = "https://www.wishkit.io/api"
-    static let sdkVersion = "3.5.4"
+    static let sdkVersion = "4.0.0"
 }
