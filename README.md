@@ -110,7 +110,7 @@ struct ContentView: View {
 ---
 
 # Configuration
-#### You can configure a lof ot WishKit's UI elements.
+#### You can configure a lof of WishKit's UI elements.
 
 ```swift
 // Show the status badge of a feature request (e.g. pending, approved, etc.).
