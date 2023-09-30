@@ -68,7 +68,7 @@ struct WishlistView: View {
                 .scrollContentBackgroundCompat(.hidden)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                     DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                        .frame(minWidth: 500, idealWidth: 500, minHeight: 500, idealHeight: 500, maxHeight: 600)
+                        .frame(minWidth: 500, idealWidth: 500, minHeight: 450, maxHeight: 600)
                         .background(backgroundColor)
                 }.onAppear(perform: { wishModel.fetchList() })
             }

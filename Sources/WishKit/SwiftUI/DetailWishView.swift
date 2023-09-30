@@ -44,35 +44,38 @@ struct DetailWishView: View {
 
                 Spacer(minLength: 15)
 
-                SeparatorView()
-                    .padding([.top, .bottom], 15)
+                if WishKit.config.showCommentSection {
+                    SeparatorView()
+                        .padding([.top, .bottom], 15)
 
-                CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
-                    let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
+                    CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
+                        let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
 
-                    commentModel.isLoading = true
-                    let response = await CommentApi.createComment(request: request)
-                    commentModel.isLoading = false
+                        commentModel.isLoading = true
+                        let response = await CommentApi.createComment(request: request)
+                        commentModel.isLoading = false
 
-                    switch response {
-                    case .success(let commentResponse):
-                        withAnimation {
-                            commentList.insert(commentResponse, at: 0)
+                        switch response {
+                        case .success(let commentResponse):
+                            withAnimation {
+                                commentList.insert(commentResponse, at: 0)
+                            }
+
+                            commentModel.newCommentValue = ""
+                        case .failure(let error):
+                            print("❌ \(error.localizedDescription)")
                         }
+                    }.frame(maxWidth: 700)
 
-                        commentModel.newCommentValue = ""
-                    case .failure(let error):
-                        print("❌ \(error.localizedDescription)")
-                    }
-                }.frame(maxWidth: 700)
+                    Spacer(minLength: 20)
 
-                Spacer(minLength: 20)
-
-                CommentListView(commentList: $commentList)
-                    .frame(maxWidth: 700)
+                    CommentListView(commentList: $commentList)
+                        .frame(maxWidth: 700)
+                }
             }
             .padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
         .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
     }
