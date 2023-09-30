@@ -44,7 +44,7 @@ struct DetailWishView: View {
 
                 Spacer(minLength: 15)
 
-                if WishKit.config.showCommentSection {
+                if WishKit.config.commentSection == .show {
                     SeparatorView()
                         .padding([.top, .bottom], 15)
 

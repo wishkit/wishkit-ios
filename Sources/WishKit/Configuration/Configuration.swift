@@ -27,7 +27,7 @@ public struct Configuration {
 
     public var emailField: EmailField = .optional
 
-    public var showCommentSection = true
+    public var commentSection: Display = .show
 
     init(
         statusBadgeDisplay: Display = .hide,
