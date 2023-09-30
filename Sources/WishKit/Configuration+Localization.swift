@@ -78,6 +78,8 @@ extension Configuration {
 
         public var user: String
 
+        public var noFeatureRequests: String
+
         public init(
             requested: String = Localization.default().requested,
             pending: String = Localization.default().pending,
@@ -112,7 +114,8 @@ extension Configuration {
             comments: String = Localization.default().comments,
             writeAComment: String = Localization.default().writeAComment,
             admin: String = Localization.default().admin,
-            user: String = Localization.default().user
+            user: String = Localization.default().user,
+            noFeatureRequests: String = Localization.default().noFeatureRequests
         ) {
             self.requested = requested
             self.pending = pending
@@ -148,6 +151,7 @@ extension Configuration {
             self.writeAComment = writeAComment
             self.admin = admin
             self.user = user
+            self.noFeatureRequests = noFeatureRequests
         }
 
         public static func `default`() -> Localization {
@@ -185,7 +189,8 @@ extension Configuration {
                 comments: "Comments",
                 writeAComment: "Write a comment..",
                 admin: "Admin",
-                user: "User"
+                user: "User",
+                noFeatureRequests: "No feature requests, yet ✨"
             )
         }
     }

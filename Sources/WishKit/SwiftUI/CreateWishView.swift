@@ -2,7 +2,7 @@
 //  CreateWishView.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 3/8/23.
+//  Created by Martin Lasek on 8/26/23.
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
@@ -10,129 +10,282 @@ import SwiftUI
 import Combine
 import WishKitShared
 
-// Removes default background color and allows custom color for TextEditor
-
-#if os(macOS)
-extension NSTextView {
-    open override var frame: CGRect {
+#if os(iOS)
+extension UITextView {
+    open override var backgroundColor: UIColor? {
         didSet {
-            backgroundColor = .clear
-            drawsBackground = true
+            if backgroundColor != UIColor.clear {
+                backgroundColor = .clear
+            }
         }
     }
 }
+#endif
 
 struct CreateWishView: View {
 
-    @Environment (\.presentationMode)
-    var presentationMode
-
     @Environment(\.colorScheme)
-    var colorScheme
+    private var colorScheme
+
+    @ObservedObject
+    private var alertModel = AlertModel()
 
     @State
-    private var title: String = ""
+    private var titleCharCount = 0
 
     @State
-    private var description: String = ""
+    private var titleText = ""
+
+    @State
+    private var emailText = ""
+
+    @State
+    private var descriptionText = ""
+
+    @State
+    private var isButtonDisabled = true
 
     @State
     private var isButtonLoading: Bool? = false
 
-    @State
-    private var showAlert: Bool = false
+    @Binding
+    var isShowing: Bool
 
-    private var completion: () -> ()
+    let createActionCompletion: () -> Void
 
-    init(completion: @escaping () -> ()) {
-        self.completion = completion
+    var saveButtonSize: CGSize {
+        #if os(macOS)
+            return CGSize(width: 100, height: 30)
+        #else
+            return CGSize(width: 200, height: 45)
+        #endif
     }
 
-    private func createWishAction() {
-        if title.isEmpty || description.isEmpty {
-            showAlert = true
+    var body: some View {
+        ScrollView {
+            Spacer(minLength: 15)
+
+            VStack(spacing: 15) {
+                VStack(spacing: 0) {
+                    HStack {
+                        Text(WishKit.config.localization.title)
+                        Spacer()
+                        Text("\(titleText.count)/50")
+                    }
+                    .font(.caption2)
+                    .padding([.leading, .trailing, .bottom], 5)
+
+                    TextField("", text: $titleText)
+                        .padding(10)
+                        .textFieldStyle(.plain)
+                        .background(fieldBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                        .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
+                }
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text(WishKit.config.localization.description)
+                        Spacer()
+                        Text("\(descriptionText.count)/500")
+                    }
+                    .font(.caption2)
+                    .padding([.leading, .trailing, .bottom], 5)
+
+                    TextEditor(text: $descriptionText)
+                        .padding(5)
+                        .lineSpacing(3)
+                        .frame(height: 200)
+                        .background(fieldBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                        .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
+                }
+
+                if WishKit.config.emailField != .none {
+                    VStack(spacing: 0) {
+                        HStack {
+                            if WishKit.config.emailField == .optional {
+                                Text("Email (optional)")
+                                    .font(.caption2)
+                                    .padding([.leading, .trailing, .bottom], 5)
+                            }
+
+                            if WishKit.config.emailField == .required {
+                                Text("Email (required)")
+                                    .font(.caption2)
+                                    .padding([.leading, .trailing, .bottom], 5)
+                            }
+
+                            Spacer()
+                        }
+
+                        TextField("", text: $emailText)
+                            .padding(10)
+                            .textFieldStyle(.plain)
+                            .background(fieldBackgroundColor)
+                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                    }
+                }
+
+                #if os(macOS)
+                    Spacer()
+                #endif
+
+                WKButton(
+                    text: WishKit.config.localization.save,
+                    action: submitAction,
+                    style: .primary,
+                    isLoading: $isButtonLoading,
+                    size: saveButtonSize
+                )
+                .disabled(isButtonDisabled)
+                .alert(isPresented: $alertModel.showAlert) {
+
+                    switch alertModel.alertReason {
+                    case .successfullyCreated:
+                        let button = Alert.Button.default(
+                            Text(WishKit.config.localization.ok),
+                            action: {
+                                createActionCompletion()
+                                dismissAction()
+                            }
+                        )
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text(WishKit.config.localization.successfullyCreated),
+                            dismissButton: button
+                        )
+                    case .createReturnedError(let errorText):
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text(errorText),
+                            dismissButton: button
+                        )
+                    case .emailRequired:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text(WishKit.config.localization.emailRequiredText),
+                            dismissButton: button
+                        )
+                    case .emailFormatWrong:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                        return Alert(
+                            title: Text(WishKit.config.localization.info),
+                            message: Text(WishKit.config.localization.emailFormatWrongText),
+                            dismissButton: button
+                        )
+                    case .none:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                        return Alert(title: Text(""), dismissButton: button)
+                    default:
+                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                        return Alert(title: Text(""), dismissButton: button)
+                    }
+
+                }
+            }
+            .frame(maxWidth: 700)
+            .padding()
+
+            #if os(iOS)
+                Spacer()
+            #endif
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(backgroundColor)
+        .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+    }
+
+    private func handleTitleAndDescriptionChange() {
+
+        // Keep characters within limits
+        let titleLimit = 50
+        let descriptionLimit = 500
+        
+        if titleText.count > titleLimit {
+            titleText = String(titleText.prefix(titleLimit))
+        }
+
+        if descriptionText.count > descriptionLimit {
+            descriptionText = String(descriptionText.prefix(descriptionLimit))
+        }
+
+        // Enable/Disable button
+        isButtonDisabled = titleText.isEmpty || descriptionText.isEmpty
+    }
+
+    private func submitAction() {
+
+        if WishKit.config.emailField == .required && emailText.isEmpty {
+            alertModel.alertReason = .emailRequired
+            alertModel.showAlert = true
+            return
+        }
+
+        let isInvalidEmailFormat = (emailText.count < 6 || !emailText.contains("@") || !emailText.contains("."))
+        if !emailText.isEmpty && isInvalidEmailFormat {
+            alertModel.alertReason = .emailFormatWrong
+            alertModel.showAlert = true
             return
         }
 
         isButtonLoading = true
-        let request = CreateWishRequest(title: title, description: description)
-        WishApi.createWish(createRequest: request) { _ in
+
+        let createRequest = CreateWishRequest(title: titleText, description: descriptionText, email: emailText)
+        WishApi.createWish(createRequest: createRequest) { result in
             isButtonLoading = false
-            completion()
-        }
-    }
-
-    func keepTitleAndTextWithinLimit() {
-        let titleLimit = 50
-        let descriptionLimit = 500
-
-        if title.count > titleLimit {
-            title = String(title.prefix(titleLimit))
-        }
-
-        if description.count > descriptionLimit {
-            description = String(description.prefix(descriptionLimit))
-        }
-    }
-
-    var body: some View {
-        VStack {
-            VStack {
-                HStack {
-                    Text(WishKit.config.localization.title)
-                        .font(.system(size: 10))
-                    Spacer()
-                    Text("\(title.count)/50")
-                        .font(.system(size: 10))
-                }.padding(EdgeInsets(top: 15, leading: 20, bottom: 0, trailing: 20))
-
-                TextField(WishKit.config.localization.titleOfWish, text: $title)
-                    .foregroundColor(textColor)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .frame(height: 35)
-                    .padding([.horizontal], 10)
-                    .background(backgroundColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
-                    .onReceive(Just(title)) { _ in keepTitleAndTextWithinLimit() }
-
-                HStack {
-                    Text(WishKit.config.localization.description)
-                        .font(.system(size: 10))
-                    Spacer()
-                    Text("\(description.count)/500")
-                        .font(.system(size: 10))
-                }.padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
-
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(backgroundColor)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-
-                    TextEditor(text: $description)
-                        .foregroundColor(textColor)
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20))
-                        .lineSpacing(3)
-                        .onReceive(Just(description)) { _ in keepTitleAndTextWithinLimit() }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    alertModel.alertReason = .successfullyCreated
+                    alertModel.showAlert = true
+                case .failure(let error):
+                    alertModel.alertReason = .createReturnedError(error.reason.description)
+                    alertModel.showAlert = true
                 }
-
             }
-
-            HStack {
-                WKButton(text: WishKit.config.localization.cancel, action: { self.presentationMode.wrappedValue.dismiss() }, style: .secondary)
-                .interactiveDismissDisabled()
-                WKButton(text: WishKit.config.localization.save, action: createWishAction, isLoading: $isButtonLoading)
-            }
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-        }.alert(String(WishKit.config.localization.info), isPresented: $showAlert) {
-            Button(WishKit.config.localization.ok, role: .cancel) { }
-        } message: {
-            Text(WishKit.config.localization.titleDescriptionCannotBeEmpty)
         }
     }
+
+    private func dismissAction() {
+        self.isShowing = false
+    }
+}
+
+// MARK: - Color Scheme
+
+extension CreateWishView {
 
     var backgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
+        case .dark:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.dark
+            }
+
+            return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
+        }
+    }
+
+    var fieldBackgroundColor: Color {
         switch colorScheme {
         case .light:
             if let color = WishKit.theme.secondaryColor {
@@ -146,24 +299,12 @@ struct CreateWishView: View {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
-        }
-    }
-
-    var textColor: Color {
-        switch colorScheme {
-        case .light:
-            if let color = WishKit.theme.textColor?.light {
-                return color
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
             }
 
-            return .primary
-        case .dark:
-            if let color = WishKit.theme.textColor?.dark {
-                return color
-            }
-
-            return .primary
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }
-#endif

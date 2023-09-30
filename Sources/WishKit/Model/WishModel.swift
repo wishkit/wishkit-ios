@@ -9,6 +9,7 @@
 import Combine
 import WishKitShared
 import Foundation
+import SwiftUI
 
 final class WishModel: ObservableObject {
 
@@ -21,23 +22,41 @@ final class WishModel: ObservableObject {
     @Published
     var shouldShowWatermark: Bool = false
 
+    @Published
+    var isLoading: Bool = false
+
+    // Used to differentiate empty list from fetch vs. from initial instance creation.
+    @Published
+    var hasFetched: Bool = false
+
+    @MainActor
     func fetchList(completion: (() -> ())? = nil) {
+        isLoading = true
+        
         WishApi.fetchWishList { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
-                    self.updateApprovedWishlist(with: response.list)
-                    self.updateImplementedWishlist(with: response.list)
-                    self.shouldShowWatermark = response.shouldShowWatermark
+                    withAnimation {
+                        self.updateApprovedWishlist(with: response.list)
+                        self.updateImplementedWishlist(with: response.list)
+                        self.shouldShowWatermark = response.shouldShowWatermark
+                    }
                 }
             case .failure(let error):
                 printError(self, error.reason.description)
             }
 
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.hasFetched = true
+            }
+            
             completion?()
         }
     }
 
+    @MainActor
     func fetchList() {
         fetchList(completion: nil)
     }

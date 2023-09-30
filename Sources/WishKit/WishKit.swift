@@ -12,8 +12,11 @@ import UIKit
 
 import SwiftUI
 import WishKitShared
+import Combine
 
 public struct WishKit {
+    
+    private static var subscribers: Set<AnyCancellable> = []
 
     static var apiKey = "my-fancy-api-key"
 
@@ -26,7 +29,7 @@ public struct WishKit {
     #if canImport(UIKit)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
-        return WishListVC()
+        UIHostingController(rootView: WishlistViewIOS(wishModel: WishModel()))
     }
     #endif
     
@@ -35,7 +38,7 @@ public struct WishKit {
         #if os(macOS)
             return WishlistContainer(wishModel: WishModel())
         #else
-            return WishListView()
+            return WishlistViewIOS(wishModel: WishModel())
         #endif
     }
 
