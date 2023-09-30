@@ -60,7 +60,7 @@ class HomeViewController: UIViewController {
   
     @objc func buttonTapped() {
         present(WishKit.viewController.withNavigation(), animated: true)  
-  }
+    }
 }
 ```
 ###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you present the viewController.
@@ -81,11 +81,11 @@ import WishKit
 
 struct ContentView: View {
 
-  init() {
-    WishKit.configure(with: "your-api-key")
-  }
+    init() {
+        WishKit.configure(with: "your-api-key")
+    }
   
-  ...
+    ...
 }
 ```
 
@@ -96,13 +96,13 @@ import WishKit
 
 struct ContentView: View {
 
-  init() {
-    WishKit.configure(with: "your-api-key")
-  }
+    init() {
+        WishKit.configure(with: "your-api-key")
+    }
 
-  var body: some View {
-    WishKit.view.withNavigation()
-  }
+    var body: some View {
+        WishKit.view.withNavigation()
+    }
 }
 ```
 ###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you use the view.
