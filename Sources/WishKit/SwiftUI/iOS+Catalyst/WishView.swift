@@ -100,7 +100,7 @@ struct WishView: View {
                             .opacity(0.8)
                             .font(.system(size: 10, weight: .medium))
                             .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
-                            .foregroundColor(badgeColor(for: wishResponse.state))
+                            .foregroundColor(.primary)
                             .background(badgeColor(for: wishResponse.state).opacity(1/3))
                             .cornerRadius(6)
                     }
