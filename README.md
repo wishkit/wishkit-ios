@@ -27,7 +27,7 @@ WishKit allows your users to request and vote on features in your app that <b>ju
 
 # UIKit
 
-## 1. Add WishKit as a dependency in Xcode.
+## 1. Add WishKit (v4.0.0) as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
@@ -63,7 +63,7 @@ class HomeViewController: UIViewController {
   }
 }
 ```
-###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you present the viewController.
+###### NOTE: If you are pushing the `WishKit.viewController`, you won't need to call `withNavigation()`.
 ---
 
 # SwiftUI
@@ -105,7 +105,33 @@ struct ContentView: View {
   }
 }
 ```
-###### NOTE: You can configure WishKit anywhere you want as long as you configure it **before** you use the view.
+###### NOTE: If one of the parent views is a NavigationView/NavigationStack, you won't need to call `withNavigation()`.
+
+---
+
+# Configuration
+#### You can configure a lof ot WishKit's UI elements.
+
+```swift
+// Show the status badge of a feature request (e.g. pending, approved, etc.).
+WishKit.config.statusBadge = .show
+
+// Shows full description of a feature request in the list.
+WishKit.config.expandDescriptionInList = true
+
+// Hide the segmented control.
+WishKit.config.buttons.segmentedControl.display = .hide
+
+// Remove drop shadow.
+WishKit.config.dropShadow = .hide
+
+// Hide comment section
+WishKit.config.commentSection = .hide
+
+// Position the Add-Button.
+WishKit.config.buttons.addButton.bottomPadding = .large
+
+```
 
 ---
 
@@ -153,23 +179,6 @@ WishKit.updateUser(name: "Steve")
 
 // If you manage user IDs yourself you can let WishKit prioritize it.
 WishKit.updateUser(customID: "8AHD1IL03ACIP")
-```
-
----
-
-# UI Elements
-#### You can control some WishKit UI elements.
-
-```swift
-// Show the status badge of a wish (e.g. pending, approved, etc.).
-WishKit.config.statusBadge = .show
-
-// Hide the segmented control.
-WishKit.config.buttons.segmentedControl.display = .hide
-
-// Position the Add-Button.
-WishKit.config.buttons.addButton.bottomPadding = .large
-
 ```
 
 ---
