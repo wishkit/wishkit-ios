@@ -56,10 +56,10 @@ import UIKit
 import WishKit
 
 class HomeViewController: UIViewController {
-  ...
+    ...
   
-  @objc func buttonTapped() {
-    present(WishKit.viewController, animated: true)  
+    @objc func buttonTapped() {
+        present(WishKit.viewController.withNavigation(), animated: true)  
   }
 }
 ```
@@ -101,7 +101,7 @@ struct ContentView: View {
   }
 
   var body: some View {
-    WishKit.view
+    WishKit.view.withNavigation()
   }
 }
 ```
