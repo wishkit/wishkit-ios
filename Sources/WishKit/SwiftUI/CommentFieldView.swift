@@ -39,6 +39,7 @@ struct CommentFieldView: View {
                 .font(.footnote)
                 .padding([.top, .leading, .bottom], 15)
                 .padding([.trailing], 40)
+                .foregroundColor(textColor)
                 .background(backgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
@@ -63,6 +64,25 @@ struct CommentFieldView: View {
 }
 
 extension CommentFieldView {
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        }
+    }
+
     var backgroundColor: Color {
         switch colorScheme {
         case .light:

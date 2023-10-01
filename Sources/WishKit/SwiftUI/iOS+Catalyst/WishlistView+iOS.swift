@@ -194,24 +194,6 @@ extension WishlistViewIOS {
         }
     }
 
-    var textColor: Color {
-        switch colorScheme {
-        case .light:
-
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
-        case .dark:
-            if let color = WishKit.theme.textColor {
-                return color.dark
-            }
-
-            return .white
-        }
-    }
-
     var cellBackgroundColor: Color {
         switch colorScheme {
         case .light:

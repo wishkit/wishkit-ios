@@ -78,6 +78,7 @@ struct CreateWishView: View {
                     TextField("", text: $titleText)
                         .padding(10)
                         .textFieldStyle(.plain)
+                        .foregroundColor(textColor)
                         .background(fieldBackgroundColor)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                         .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
@@ -96,6 +97,7 @@ struct CreateWishView: View {
                         .padding(5)
                         .lineSpacing(3)
                         .frame(height: 200)
+                        .foregroundColor(textColor)
                         .background(fieldBackgroundColor)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                         .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
@@ -122,6 +124,7 @@ struct CreateWishView: View {
                         TextField("", text: $emailText)
                             .padding(10)
                             .textFieldStyle(.plain)
+                            .foregroundColor(textColor)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
@@ -261,6 +264,24 @@ struct CreateWishView: View {
 // MARK: - Color Scheme
 
 extension CreateWishView {
+
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        }
+    }
 
     var backgroundColor: Color {
         switch colorScheme {
