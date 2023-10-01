@@ -27,9 +27,6 @@ struct WishlistViewIOS: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @Environment (\.presentationMode)
-    var presentationMode
-
     @State
     private var selectedWishState: WishState = .approved
 
@@ -158,7 +155,7 @@ struct WishlistViewIOS: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if WishKit.config.buttons.doneButton.display == .show {
                     Button(WishKit.config.localization.done) {
-                        presentationMode.wrappedValue.dismiss()
+                        UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController?.dismiss(animated: true)
                     }
                 }
             }
