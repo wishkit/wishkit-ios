@@ -10,18 +10,6 @@ import SwiftUI
 import Combine
 import WishKitShared
 
-#if os(iOS)
-extension UITextView {
-    open override var backgroundColor: UIColor? {
-        didSet {
-            if backgroundColor != UIColor.clear {
-                backgroundColor = .clear
-            }
-        }
-    }
-}
-#endif
-
 struct CreateWishView: View {
 
     @Environment(\.colorScheme)
@@ -98,6 +86,7 @@ struct CreateWishView: View {
                         .lineSpacing(3)
                         .frame(height: 200)
                         .foregroundColor(textColor)
+                        .scrollContentBackgroundCompat(.hidden)
                         .background(fieldBackgroundColor)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                         .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
