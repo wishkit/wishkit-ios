@@ -82,7 +82,8 @@ struct CreateWishView: View {
                     .padding([.leading, .trailing, .bottom], 5)
 
                     TextEditor(text: $descriptionText)
-                        .padding(5)
+                        .padding([.leading, .trailing], 5)
+                        .padding([.top, .bottom], 10)
                         .lineSpacing(3)
                         .frame(height: 200)
                         .foregroundColor(textColor)
