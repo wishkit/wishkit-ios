@@ -148,7 +148,7 @@ extension WishKit {
         sendUserToBackend()
     }
 
-    public static func updateUser(payment: Payment) {
+    public static func updateUser(payment: Payment?) {
         self.user.payment = payment
         sendUserToBackend()
     }
