@@ -76,19 +76,6 @@ public struct Payment {
         return Payment(amount: amountPerMonth)
     }
 
-    /// Accepts a price expressed in `Double` e.g: 2.99 or 11.49
-    public static func weekly(_ amount: Double) -> Payment {
-        let amount = Int(amount * 100)
-        let amountPerMonth = amount * 4
-        return Payment(amount: amountPerMonth)
-    }
-
-    /// Accepts a price expressed in cents as `Int` e.g. instead of 2.99 (dollar) pass in 299 (cents).
-    public static func weekly(_ amount: Int) -> Payment {
-        let amountPerMonth = amount * 4
-        return Payment(amount: amountPerMonth)
-    }
-
     // MARK: - Monthly
 
     /// Accepts a price expressed in `Decimal` e.g: 6.99 or 19.49
@@ -97,35 +84,11 @@ public struct Payment {
         return Payment(amount: amount)
     }
 
-    /// Accepts a price expressed in `Double` e.g: 6.99 or 19.49
-    public static func monthly(_ amount: Double) -> Payment {
-        let amount = Int(amount * 100)
-        return Payment(amount: amount)
-    }
-
-    /// Accepts a price expressed in cents as `Int` e.g. instead of 19.49 (dollar) pass in 1949 (cents).
-    public static func monthly(_ amount: Int) -> Payment {
-        return Payment(amount: amount)
-    }
-
     // MARK: - Yearly
 
     /// Accepts a price expressed in `Decimal` e.g: 6.99 or 19.49
     public static func yearly(_ amount: Decimal) -> Payment {
         let amountPerMonth = NSDecimalNumber(decimal: (amount * 100) / 12).rounding(accordingToBehavior: RoundUp()).intValue
-        return Payment(amount: amountPerMonth)
-    }
-
-    /// Accepts a price expressed in `Double` e.g: 6.99 or 19.49
-    public static func yearly(_ amount: Double) -> Payment {
-        let amountPerMonth = Int((Double(amount * 100) / 12).rounded(.up))
-        return Payment(amount: amountPerMonth)
-    }
-
-    /// Accepts a price expressed in `Int`.
-    /// For example instead of 19.49 (dollar) pass in 1949 (cents).
-    public static func yearly(_ amount: Int) -> Payment {
-        let amountPerMonth = Int((Double(amount) / 12).rounded(.up))
         return Payment(amount: amountPerMonth)
     }
 }
