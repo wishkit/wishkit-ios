@@ -12,6 +12,8 @@ import WishKitShared
 
 struct CreateWishView: View {
 
+    @Environment(\.presentationMode) var presentationMode
+
     @Environment(\.colorScheme)
     private var colorScheme
 
@@ -35,9 +37,6 @@ struct CreateWishView: View {
 
     @State
     private var isButtonLoading: Bool? = false
-
-    @Binding
-    var isShowing: Bool
 
     let createActionCompletion: () -> Void
 
@@ -247,7 +246,7 @@ struct CreateWishView: View {
     }
 
     private func dismissAction() {
-        self.isShowing = false
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

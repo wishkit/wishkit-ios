@@ -37,9 +37,6 @@ struct WishlistViewIOS: View {
     var selectedWish: WishResponse? = nil
 
     @State
-    private var isShowingCreateView = false
-
-    @State
     private var currentWishList: [WishResponse] = []
 
     private var isInTabBar: Bool {
@@ -130,9 +127,8 @@ struct WishlistViewIOS: View {
                     Spacer()
                     VStack {
                         NavigationLink(
-                            isActive: $isShowingCreateView,
                             destination: {
-                                CreateWishView(isShowing: $isShowingCreateView, createActionCompletion: { wishModel.fetchList() })
+                                CreateWishView(createActionCompletion: { wishModel.fetchList() })
                             }, label: {
                                 AddButton(size: CGSize(width: 60, height: 60))
                             }
