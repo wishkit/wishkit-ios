@@ -89,7 +89,7 @@ struct WishlistView: View {
                     AddButton(buttonAction: createWishAction)
                         .padding([.bottom, .trailing], 20)
                         .sheet(isPresented: $showingSheet) {
-                            CreateWishView(isShowing: $showingSheet, createActionCompletion: { wishModel.fetchList() })
+                            CreateWishView(createActionCompletion: { wishModel.fetchList() })
                                 .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
                             .background(backgroundColor)
                         }
