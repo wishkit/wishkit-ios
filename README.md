@@ -165,9 +165,11 @@ WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 #### 💰 Revenue Indication: Share how much a user is paying in your app.
 ```swift
 // How much a user is paying per week or month or year.
+// WishKit supports weekly, monthly and yearly payments.
 WishKit.updateUser(payment: .monthly(7.99))
 ```
-WishKit supports weekly, monthly and yearly payments.
+By sharing the revenue of a user you will be able to see "how much money" is behind a feature request.
+This allows you to prioritize a feature with only 2 votes but $13 over a feature with 7 votes and $0.
 
 #### 📧 Additional: Share optional user information with WishKit.
 ```swift
