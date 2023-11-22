@@ -10,6 +10,24 @@ import SwiftUI
 import Combine
 import WishKitShared
 
+extension View {
+    @ViewBuilder
+    func toolbarKeyboardDoneButton() -> some View {
+        if #available(macOS 13.0, iOS 15, *) {
+            self.toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(action: { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }, label: { Text("Done") })
+
+                    }
+                }
+            }
+        } else {
+            self
+        }
+    }
+}
 struct CreateWishView: View {
 
     @Environment(\.presentationMode) var presentationMode
@@ -192,6 +210,7 @@ struct CreateWishView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
         .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+        .toolbarKeyboardDoneButton()
     }
 
     private func handleTitleAndDescriptionChange() {
