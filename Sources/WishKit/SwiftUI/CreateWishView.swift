@@ -96,13 +96,13 @@ struct CreateWishView: View {
                     VStack(spacing: 0) {
                         HStack {
                             if WishKit.config.emailField == .optional {
-                                Text("Email (optional)")
+                                Text(WishKit.config.localization.emailOptional)
                                     .font(.caption2)
                                     .padding([.leading, .trailing, .bottom], 5)
                             }
 
                             if WishKit.config.emailField == .required {
-                                Text("Email (required)")
+                                Text(WishKit.config.localization.emailRequired)
                                     .font(.caption2)
                                     .padding([.leading, .trailing, .bottom], 5)
                             }
