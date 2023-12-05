@@ -80,6 +80,10 @@ extension Configuration {
 
         public var noFeatureRequests: String
 
+        public var emailOptional: String
+
+        public var emailRequired: String
+
         public init(
             requested: String = Localization.default().requested,
             pending: String = Localization.default().pending,
@@ -115,7 +119,9 @@ extension Configuration {
             writeAComment: String = Localization.default().writeAComment,
             admin: String = Localization.default().admin,
             user: String = Localization.default().user,
-            noFeatureRequests: String = Localization.default().noFeatureRequests
+            noFeatureRequests: String = Localization.default().noFeatureRequests,
+            emailOptional: String = Localization.default().emailOptional,
+            emailRequired: String = Localization.default().emailRequired
         ) {
             self.requested = requested
             self.pending = pending
@@ -152,6 +158,8 @@ extension Configuration {
             self.admin = admin
             self.user = user
             self.noFeatureRequests = noFeatureRequests
+            self.emailOptional = emailOptional
+            self.emailRequired = emailRequired
         }
 
         public static func `default`() -> Localization {
@@ -190,7 +198,9 @@ extension Configuration {
                 writeAComment: "Write a comment..",
                 admin: "Admin",
                 user: "User",
-                noFeatureRequests: "No feature requests, yet ✨"
+                noFeatureRequests: "No feature requests, yet ✨",
+                emailOptional: "Email (optional)",
+                emailRequired: "Email (required)"
             )
         }
     }
