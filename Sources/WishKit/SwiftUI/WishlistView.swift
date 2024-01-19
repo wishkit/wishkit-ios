@@ -9,7 +9,7 @@
 import SwiftUI
 import WishKitShared
 
-#if os(macOS)
+#if os(macOS) || os(visionOS)
 struct WishlistView: View {
 
     @Environment(\.colorScheme)
@@ -19,7 +19,7 @@ struct WishlistView: View {
     var wishModel: WishModel
 
     @State
-    var showingSheet = false
+    var showingCreateSheet = false
 
     @State
     var selectedWish: WishResponse? = nil
@@ -39,7 +39,7 @@ struct WishlistView: View {
     }
 
     private func createWishAction() {
-        self.showingSheet.toggle()
+        self.showingCreateSheet.toggle()
     }
 
     var body: some View {
@@ -56,7 +56,7 @@ struct WishlistView: View {
 
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
-                    Button(action: { selectedWish = wish }) {
+                    Button(action: { selectWish(wish: wish) }) {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                             .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                     }
@@ -66,10 +66,16 @@ struct WishlistView: View {
                 .transition(.opacity)
                 .scrollIndicatorsCompat(.hidden)
                 .scrollContentBackgroundCompat(.hidden)
+                .listStyle(PlainListStyle())
+                .background(.clear)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
-                    DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                        .frame(minWidth: 500, idealWidth: 500, minHeight: 450, maxHeight: 600)
-                        .background(backgroundColor)
+                    DetailWishView(
+                        wishResponse: wish,
+                        voteActionCompletion: { wishModel.fetchList() },
+                        closeAction: { self.selectedWish = nil }
+                    )
+                    .frame(minWidth: 500, idealWidth: 500, minHeight: 450, maxHeight: 600)
+                    .background(backgroundColor)
                 }.onAppear(perform: { wishModel.fetchList() })
             }
 
@@ -88,14 +94,18 @@ struct WishlistView: View {
                     Spacer()
                     AddButton(buttonAction: createWishAction)
                         .padding([.bottom, .trailing], 20)
-                        .sheet(isPresented: $showingSheet) {
+                        .sheet(isPresented: $showingCreateSheet) {
                             CreateWishView(createActionCompletion: { wishModel.fetchList() })
                                 .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                            .background(backgroundColor)
+                                .background(backgroundColor)
                         }
                 }
             }
         }
+    }
+
+    private func selectWish(wish: WishResponse) {
+        self.selectedWish = wish
     }
 
     var backgroundColor: Color {
