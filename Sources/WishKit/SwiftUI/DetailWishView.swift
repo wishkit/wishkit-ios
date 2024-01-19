@@ -37,15 +37,13 @@ struct DetailWishView: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button(action: closeAction, label: { Image(systemName: "x.circle.fill") })
-                    .buttonStyle(PlainButtonStyle())
-                    .foregroundStyle(Color.secondary)
+        VStack(spacing: 0) {
+            if showCloseButton() {
+                HStack {
+                    Spacer()
+                    CloseButton(closeAction: closeAction)
+                }
             }
-            .padding(.top, getButtonPadding().0)
-            .padding(.trailing, getButtonPadding().1)
 
             ScrollView {
                 VStack {
@@ -94,11 +92,11 @@ struct DetailWishView: View {
         .background(backgroundColor)
     }
 
-    private func getButtonPadding() -> (CGFloat, CGFloat) {
-        #if os(visionOS)
-            return (15, 25)
+    private func showCloseButton() -> Bool {
+        #if os(macOS) || os(visionOS)
+            return true
         #else
-            return (15, 15)
+            return false
         #endif
     }
 }
