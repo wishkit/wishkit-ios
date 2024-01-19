@@ -17,11 +17,15 @@ struct CloseButton: View {
     }
     
     var body: some View {
+        #if os(macOS) || os(visionOS)
         Button(action: closeAction, label: { Image(systemName: "x.circle.fill") })
             .buttonStyle(PlainButtonStyle())
             .foregroundStyle(Color.secondary)
             .padding(.top, getButtonPadding().0)
             .padding(.trailing, getButtonPadding().1)
+        #else
+        Text("Should never be rendered since close button should not be used on iOS").opacity(0)
+        #endif
     }
 
     private func getButtonPadding() -> (CGFloat, CGFloat) {

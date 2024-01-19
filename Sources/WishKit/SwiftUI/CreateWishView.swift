@@ -40,7 +40,7 @@ struct CreateWishView: View {
 
     let createActionCompletion: () -> Void
 
-    let closeAction: () -> Void
+    var closeAction: (() -> Void)? = nil
 
     var saveButtonSize: CGSize {
         #if os(macOS) || os(visionOS)
@@ -55,7 +55,7 @@ struct CreateWishView: View {
             if showCloseButton() {
                 HStack {
                     Spacer()
-                    CloseButton(closeAction: closeAction)
+                    CloseButton(closeAction: { closeAction?() })
                 }
             }
 

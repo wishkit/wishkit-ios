@@ -27,9 +27,13 @@ struct DetailWishView: View {
 
     private let voteActionCompletion: () -> Void
 
-    private let closeAction: () -> Void
+    private let closeAction: (() -> Void)?
 
-    init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void), closeAction: @escaping (() -> Void)) {
+    init(
+        wishResponse: WishResponse,
+        voteActionCompletion: @escaping (() -> Void),
+        closeAction: (() -> Void)? = nil
+    ) {
         self.wishResponse = wishResponse
         self.voteActionCompletion = voteActionCompletion
         self.closeAction = closeAction
@@ -41,7 +45,7 @@ struct DetailWishView: View {
             if showCloseButton() {
                 HStack {
                     Spacer()
-                    CloseButton(closeAction: closeAction)
+                    CloseButton(closeAction: { closeAction?() })
                 }
             }
 
