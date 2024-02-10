@@ -12,7 +12,7 @@ extension View {
     
     @ViewBuilder
     func scrollContentBackgroundCompat(_ visibility: Compatability.Visibility) -> some View {
-        if #available(macOS 13.0, iOS 16, *) {
+        if #available(macOS 13.0, iOS 16, visionOS 1, *) {
             switch visibility {
             case .automatic:
                 self.scrollContentBackground(.automatic)
@@ -26,7 +26,7 @@ extension View {
 
     @ViewBuilder
     func scrollIndicatorsCompat(_ visibility: Compatability.Visibility) -> some View {
-        if #available(macOS 13.0, iOS 16, *) {
+        if #available(macOS 13.0, iOS 16, visionOS 1, *) {
             switch visibility {
             case .automatic:
                 self.scrollIndicators(.automatic)

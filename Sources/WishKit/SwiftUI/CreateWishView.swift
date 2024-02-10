@@ -40,8 +40,10 @@ struct CreateWishView: View {
 
     let createActionCompletion: () -> Void
 
+    var closeAction: (() -> Void)? = nil
+
     var saveButtonSize: CGSize {
-        #if os(macOS)
+        #if os(macOS) || os(visionOS)
             return CGSize(width: 100, height: 30)
         #else
             return CGSize(width: 200, height: 45)
@@ -49,145 +51,152 @@ struct CreateWishView: View {
     }
 
     var body: some View {
-        ScrollView {
-            Spacer(minLength: 15)
-
-            VStack(spacing: 15) {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(WishKit.config.localization.title)
-                        Spacer()
-                        Text("\(titleText.count)/50")
-                    }
-                    .font(.caption2)
-                    .padding([.leading, .trailing, .bottom], 5)
-
-                    TextField("", text: $titleText)
-                        .padding(10)
-                        .textFieldStyle(.plain)
-                        .foregroundColor(textColor)
-                        .background(fieldBackgroundColor)
-                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                        .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
+        VStack(spacing: 0) {
+            if showCloseButton() {
+                HStack {
+                    Spacer()
+                    CloseButton(closeAction: { closeAction?() })
                 }
+            }
 
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(WishKit.config.localization.description)
-                        Spacer()
-                        Text("\(descriptionText.count)/500")
-                    }
-                    .font(.caption2)
-                    .padding([.leading, .trailing, .bottom], 5)
-
-                    TextEditor(text: $descriptionText)
-                        .padding([.leading, .trailing], 5)
-                        .padding([.top, .bottom], 10)
-                        .lineSpacing(3)
-                        .frame(height: 200)
-                        .foregroundColor(textColor)
-                        .scrollContentBackgroundCompat(.hidden)
-                        .background(fieldBackgroundColor)
-                        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                        .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
-                }
-
-                if WishKit.config.emailField != .none {
+            ScrollView {
+                VStack(spacing: 15) {
                     VStack(spacing: 0) {
                         HStack {
-                            if WishKit.config.emailField == .optional {
-                                Text(WishKit.config.localization.emailOptional)
-                                    .font(.caption2)
-                                    .padding([.leading, .trailing, .bottom], 5)
-                            }
-
-                            if WishKit.config.emailField == .required {
-                                Text(WishKit.config.localization.emailRequired)
-                                    .font(.caption2)
-                                    .padding([.leading, .trailing, .bottom], 5)
-                            }
-
+                            Text(WishKit.config.localization.title)
                             Spacer()
+                            Text("\(titleText.count)/50")
                         }
+                        .font(.caption2)
+                        .padding([.leading, .trailing, .bottom], 5)
 
-                        TextField("", text: $emailText)
+                        TextField("", text: $titleText)
                             .padding(10)
                             .textFieldStyle(.plain)
                             .foregroundColor(textColor)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                            .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
                     }
-                }
 
-                #if os(macOS)
-                    Spacer()
-                #endif
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text(WishKit.config.localization.description)
+                            Spacer()
+                            Text("\(descriptionText.count)/500")
+                        }
+                        .font(.caption2)
+                        .padding([.leading, .trailing, .bottom], 5)
 
-                WKButton(
-                    text: WishKit.config.localization.save,
-                    action: submitAction,
-                    style: .primary,
-                    isLoading: $isButtonLoading,
-                    size: saveButtonSize
-                )
-                .disabled(isButtonDisabled)
-                .alert(isPresented: $alertModel.showAlert) {
+                        TextEditor(text: $descriptionText)
+                            .padding([.leading, .trailing], 5)
+                            .padding([.top, .bottom], 10)
+                            .lineSpacing(3)
+                            .frame(height: 200)
+                            .foregroundColor(textColor)
+                            .scrollContentBackgroundCompat(.hidden)
+                            .background(fieldBackgroundColor)
+                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                            .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
+                    }
 
-                    switch alertModel.alertReason {
-                    case .successfullyCreated:
-                        let button = Alert.Button.default(
-                            Text(WishKit.config.localization.ok),
-                            action: {
-                                createActionCompletion()
-                                dismissAction()
+                    if WishKit.config.emailField != .none {
+                        VStack(spacing: 0) {
+                            HStack {
+                                if WishKit.config.emailField == .optional {
+                                    Text(WishKit.config.localization.emailOptional)
+                                        .font(.caption2)
+                                        .padding([.leading, .trailing, .bottom], 5)
+                                }
+
+                                if WishKit.config.emailField == .required {
+                                    Text(WishKit.config.localization.emailRequired)
+                                        .font(.caption2)
+                                        .padding([.leading, .trailing, .bottom], 5)
+                                }
+
+                                Spacer()
                             }
-                        )
 
-                        return Alert(
-                            title: Text(WishKit.config.localization.info),
-                            message: Text(WishKit.config.localization.successfullyCreated),
-                            dismissButton: button
-                        )
-                    case .createReturnedError(let errorText):
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                        return Alert(
-                            title: Text(WishKit.config.localization.info),
-                            message: Text(errorText),
-                            dismissButton: button
-                        )
-                    case .emailRequired:
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                        return Alert(
-                            title: Text(WishKit.config.localization.info),
-                            message: Text(WishKit.config.localization.emailRequiredText),
-                            dismissButton: button
-                        )
-                    case .emailFormatWrong:
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                        return Alert(
-                            title: Text(WishKit.config.localization.info),
-                            message: Text(WishKit.config.localization.emailFormatWrongText),
-                            dismissButton: button
-                        )
-                    case .none:
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-                        return Alert(title: Text(""), dismissButton: button)
-                    default:
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-                        return Alert(title: Text(""), dismissButton: button)
+                            TextField("", text: $emailText)
+                                .padding(10)
+                                .textFieldStyle(.plain)
+                                .foregroundColor(textColor)
+                                .background(fieldBackgroundColor)
+                                .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                        }
                     }
 
-                }
-            }
-            .frame(maxWidth: 700)
-            .padding()
+                    #if os(macOS) || os(visionOS)
+                    Spacer()
+                    #endif
 
-            #if os(iOS)
+                    WKButton(
+                        text: WishKit.config.localization.save,
+                        action: submitAction,
+                        style: .primary,
+                        isLoading: $isButtonLoading,
+                        size: saveButtonSize
+                    )
+                    .disabled(isButtonDisabled)
+                    .alert(isPresented: $alertModel.showAlert) {
+
+                        switch alertModel.alertReason {
+                        case .successfullyCreated:
+                            let button = Alert.Button.default(
+                                Text(WishKit.config.localization.ok),
+                                action: {
+                                    createActionCompletion()
+                                    dismissAction()
+                                }
+                            )
+
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(WishKit.config.localization.successfullyCreated),
+                                dismissButton: button
+                            )
+                        case .createReturnedError(let errorText):
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(errorText),
+                                dismissButton: button
+                            )
+                        case .emailRequired:
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(WishKit.config.localization.emailRequiredText),
+                                dismissButton: button
+                            )
+                        case .emailFormatWrong:
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(WishKit.config.localization.emailFormatWrongText),
+                                dismissButton: button
+                            )
+                        case .none:
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                            return Alert(title: Text(""), dismissButton: button)
+                        default:
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+                            return Alert(title: Text(""), dismissButton: button)
+                        }
+
+                    }
+                }
+                .frame(maxWidth: 700)
+                .padding()
+
+                #if os(iOS)
                 Spacer()
-            #endif
+                #endif
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
@@ -195,12 +204,20 @@ struct CreateWishView: View {
         .toolbarKeyboardDoneButton()
     }
 
+    private func showCloseButton() -> Bool {
+        #if os(macOS) || os(visionOS)
+            return true
+        #else
+            return false
+        #endif
+    }
+
     private func handleTitleAndDescriptionChange() {
 
         // Keep characters within limits
         let titleLimit = 50
         let descriptionLimit = 500
-        
+
         if titleText.count > titleLimit {
             titleText = String(titleText.prefix(titleLimit))
         }

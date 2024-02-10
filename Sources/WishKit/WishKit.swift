@@ -26,7 +26,7 @@ public struct WishKit {
 
     public static var config = Configuration()
 
-    #if canImport(UIKit)
+    #if canImport(UIKit) && !os(visionOS)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
         UIHostingController(rootView: WishlistViewIOS(wishModel: WishModel()))
@@ -35,7 +35,7 @@ public struct WishKit {
     
     /// (SwiftUI) The WishList view.
     public static var view: some View {
-        #if os(macOS)
+        #if os(macOS) || os(visionOS)
             return WishlistContainer(wishModel: WishModel())
         #else
             return WishlistViewIOS(wishModel: WishModel())

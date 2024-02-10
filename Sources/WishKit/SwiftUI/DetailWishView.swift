@@ -27,57 +27,81 @@ struct DetailWishView: View {
 
     private let voteActionCompletion: () -> Void
 
-    init(wishResponse: WishResponse, voteActionCompletion: @escaping (() -> Void)) {
+    private let closeAction: (() -> Void)?
+
+    init(
+        wishResponse: WishResponse,
+        voteActionCompletion: @escaping (() -> Void),
+        closeAction: (() -> Void)? = nil
+    ) {
         self.wishResponse = wishResponse
         self.voteActionCompletion = voteActionCompletion
+        self.closeAction = closeAction
         self._commentList = State(wrappedValue: wishResponse.commentList)
     }
 
     var body: some View {
-        ScrollView {
-            VStack {
-
-                Spacer(minLength: 15)
-
-                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
-                    .frame(maxWidth: 700)
-
-                Spacer(minLength: 15)
-
-                if WishKit.config.commentSection == .show {
-                    SeparatorView()
-                        .padding([.top, .bottom], 15)
-
-                    CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
-                        let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
-
-                        commentModel.isLoading = true
-                        let response = await CommentApi.createComment(request: request)
-                        commentModel.isLoading = false
-
-                        switch response {
-                        case .success(let commentResponse):
-                            withAnimation {
-                                commentList.insert(commentResponse, at: 0)
-                            }
-
-                            commentModel.newCommentValue = ""
-                        case .failure(let error):
-                            print("❌ \(error.localizedDescription)")
-                        }
-                    }.frame(maxWidth: 700)
-
-                    Spacer(minLength: 20)
-
-                    CommentListView(commentList: $commentList)
-                        .frame(maxWidth: 700)
+        VStack(spacing: 0) {
+            if showCloseButton() {
+                HStack {
+                    Spacer()
+                    CloseButton(closeAction: { closeAction?() })
                 }
             }
-            .padding()
+
+            ScrollView {
+                VStack {
+
+                    Spacer(minLength: 15)
+
+                    WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                        .frame(maxWidth: 700)
+
+                    Spacer(minLength: 15)
+
+                    if WishKit.config.commentSection == .show {
+                        SeparatorView()
+                            .padding([.top, .bottom], 15)
+
+                        CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
+                            let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
+
+                            commentModel.isLoading = true
+                            let response = await CommentApi.createComment(request: request)
+                            commentModel.isLoading = false
+
+                            switch response {
+                            case .success(let commentResponse):
+                                withAnimation {
+                                    commentList.insert(commentResponse, at: 0)
+                                }
+
+                                commentModel.newCommentValue = ""
+                            case .failure(let error):
+                                print("❌ \(error.localizedDescription)")
+                            }
+                        }.frame(maxWidth: 700)
+
+                        Spacer(minLength: 20)
+
+                        CommentListView(commentList: $commentList)
+                            .frame(maxWidth: 700)
+                    }
+                }.padding([.leading, .bottom, .trailing])
+            }.ignoresSafeArea(edges: [.bottom, .leading, .trailing])
+
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
-        .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
+    }
+
+    private func showCloseButton() -> Bool {
+        #if os(macOS) || os(visionOS)
+            return true
+        #else
+            return false
+        #endif
     }
 }
 

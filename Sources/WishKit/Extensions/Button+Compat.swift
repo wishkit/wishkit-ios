@@ -12,7 +12,7 @@ extension Button {
 
     @ViewBuilder
     func listRowSeparatorCompat(_ visibility: Compatability.Visibility) -> some View {
-        if #available(macOS 13.0, iOS 15, *) {
+        if #available(macOS 13.0, iOS 15, visionOS 1, *) {
             switch visibility {
             case .automatic:
                 self.listRowSeparator(.automatic)

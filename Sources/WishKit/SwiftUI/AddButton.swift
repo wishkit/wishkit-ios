@@ -26,7 +26,7 @@ struct AddButton: View {
     }
 
     var body: some View {
-        #if os(macOS)
+        #if os(macOS) || os(visionOS)
             Button(action: buttonAction) {
                 Image(systemName: "plus")
                     .frame(width: size.width, height: size.height)

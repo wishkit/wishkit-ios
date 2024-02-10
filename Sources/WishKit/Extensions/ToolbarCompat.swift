@@ -11,7 +11,7 @@ import SwiftUI
 extension View {
     @ViewBuilder
     func toolbarKeyboardDoneButton() -> some View {
-        #if canImport(UIKit)
+        #if canImport(UIKit) && !os(visionOS)
         if #available(macOS 13.0, iOS 15, *) {
             self.toolbar {
                 ToolbarItem(placement: .keyboard) {
