@@ -287,6 +287,12 @@ extension CreateWishView {
             }
 
             return .white
+        @unknown default:
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
         }
     }
 

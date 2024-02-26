@@ -12,8 +12,10 @@ import WishKitShared
 import Combine
 
 extension View {
-    // MARK: Public - Wrap in Navigation
 
+    // MARK: - Public
+
+    /// Wrap feedback list in `NavigationView`
     @ViewBuilder
     public func withNavigation() -> some View {
         NavigationView {
@@ -39,44 +41,6 @@ struct WishlistViewIOS: View {
     @State
     private var currentWishList: [WishResponse] = []
 
-    private var isInTabBar: Bool {
-        let rootViewController = if #available(iOS 15, *) {
-            UIApplication
-                .shared
-                .connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-                .first?
-                .rootViewController
-        } else {
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
-        }
-
-        return rootViewController is UITabBarController
-    }
-
-    private var addButtonBottomPadding: CGFloat {
-        let basePadding: CGFloat = isInTabBar ? 80 : 30
-        switch WishKit.config.buttons.addButton.bottomPadding {
-        case .small:
-            return basePadding + 15
-        case .medium:
-            return basePadding + 30
-        case .large:
-            return basePadding + 60
-        }
-    }
-
-    private func getList() -> [WishResponse] {
-        switch selectedWishState {
-        case .approved:
-            return wishModel.approvedWishlist
-        case .implemented:
-            return wishModel.implementedWishlist
-        default:
-            return []
-        }
-    }
-
     var body: some View {
         ZStack {
 
@@ -85,7 +49,7 @@ struct WishlistViewIOS: View {
                     .imageScale(.large)
             }
 
-            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
+            if wishModel.hasFetched && !wishModel.isLoading && list.isEmpty {
                 Text(WishKit.config.localization.noFeatureRequests)
             }
 
@@ -101,24 +65,21 @@ struct WishlistViewIOS: View {
 
                     Spacer(minLength: 15)
 
-                    if getList().count > 0 {
-                        ForEach(getList()) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                            }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }.transition(.opacity)
-                    }
+                    ForEach(list) { wish in
+                        NavigationLink(destination: {
+                            DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                .padding(.all, 5)
+                                .frame(maxWidth: 700)
+                        })
+                    }.transition(.opacity)
                 }
 
                 Spacer(minLength: isInTabBar ? 100 : 25)
             }
             .refreshableCompat(action: { await wishModel.fetchList() })
             .padding([.leading, .bottom, .trailing])
-
 
             HStack {
                 Spacer()
@@ -160,6 +121,44 @@ struct WishlistViewIOS: View {
 
     // MARK: - View
 
+    private var isInTabBar: Bool {
+        let rootViewController = if #available(iOS 15, *) {
+            UIApplication
+                .shared
+                .connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first?
+                .rootViewController
+        } else {
+            UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
+        }
+
+        return rootViewController is UITabBarController
+    }
+
+    private var addButtonBottomPadding: CGFloat {
+        let basePadding: CGFloat = isInTabBar ? 80 : 30
+        switch WishKit.config.buttons.addButton.bottomPadding {
+        case .small:
+            return basePadding + 15
+        case .medium:
+            return basePadding + 30
+        case .large:
+            return basePadding + 60
+        }
+    }
+
+    private var list: [WishResponse] {
+        switch selectedWishState {
+        case .approved:
+            return wishModel.approvedWishlist
+        case .implemented:
+            return wishModel.implementedWishlist
+        default:
+            return []
+        }
+    }
+
     func getRefreshButton() -> some View {
         if #unavailable(iOS 15) {
             return Button(action: wishModel.fetchList) {
@@ -187,6 +186,8 @@ extension WishlistViewIOS {
             return WishKit.config.buttons.voteButton.arrowColor.light
         case .dark:
             return WishKit.config.buttons.voteButton.arrowColor.dark
+        @unknown default:
+            return WishKit.config.buttons.voteButton.arrowColor.light
         }
     }
 
@@ -205,6 +206,12 @@ extension WishlistViewIOS {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        @unknown default:
+                if let color = WishKit.theme.secondaryColor {
+                    return color.light
+                }
+
+                return PrivateTheme.elementBackgroundColor.light
         }
     }
 
@@ -222,6 +229,12 @@ extension WishlistViewIOS {
             }
 
             return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }

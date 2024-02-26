@@ -34,13 +34,13 @@ public struct WishKit {
     #endif
     
     /// (SwiftUI) The WishList view.
-    public static var view: some View {
+    public static var view: some View = {
         #if os(macOS) || os(visionOS)
             return WishlistContainer(wishModel: WishModel())
         #else
             return WishlistViewIOS(wishModel: WishModel())
         #endif
-    }
+    }()
 
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
