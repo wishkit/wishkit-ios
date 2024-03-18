@@ -10,6 +10,7 @@ import SwiftUI
 
 extension Configuration {
     public struct AddButton {
+        public var display: Display = .show
 
         public var textColor = Theme.Scheme(light: .black, dark: .white)
 
