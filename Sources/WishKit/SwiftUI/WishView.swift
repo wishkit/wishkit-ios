@@ -156,7 +156,9 @@ struct WishView: View {
             case .success:
                 voteCount += 1
                 hasVoted = true
-                voteActionCompletion()
+                DispatchQueue.main.async {
+                    voteActionCompletion()
+                }
             case .failure(let error):
                 alertModel.alertReason = .voteReturnedError(error.localizedDescription)
                 alertModel.showAlert = true
