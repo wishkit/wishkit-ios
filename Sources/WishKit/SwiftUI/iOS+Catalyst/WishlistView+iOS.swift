@@ -207,11 +207,11 @@ extension WishlistViewIOS {
 
             return PrivateTheme.elementBackgroundColor.dark
         @unknown default:
-                if let color = WishKit.theme.secondaryColor {
-                    return color.light
-                }
+            if let color = WishKit.theme.secondaryColor {
+                return color.light
+            }
 
-                return PrivateTheme.elementBackgroundColor.light
+            return PrivateTheme.elementBackgroundColor.light
         }
     }
 
