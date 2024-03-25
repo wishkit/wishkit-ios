@@ -12,7 +12,8 @@ import WishKitShared
 
 struct CreateWishView: View {
 
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode)
+    var presentationMode
 
     @Environment(\.colorScheme)
     private var colorScheme
@@ -38,6 +39,9 @@ struct CreateWishView: View {
     @State
     private var isButtonLoading: Bool? = false
 
+    @State
+    private var showConfirmationAlert = false
+
     let createActionCompletion: () -> Void
 
     var closeAction: (() -> Void)? = nil
@@ -55,7 +59,7 @@ struct CreateWishView: View {
             if showCloseButton() {
                 HStack {
                     Spacer()
-                    CloseButton(closeAction: { closeAction?() })
+                    CloseButton(closeAction: dismissViewAction)
                 }
             }
 
@@ -190,6 +194,14 @@ struct CreateWishView: View {
 
                     }
                 }
+                .alert(isPresented: $showConfirmationAlert) {
+                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
+                    return Alert(
+                        title: Text(WishKit.config.localization.info),
+                        message: Text(WishKit.config.localization.discardEnteredInformation),
+                        dismissButton: button
+                    )
+                }
                 .frame(maxWidth: 700)
                 .padding()
 
@@ -263,6 +275,22 @@ struct CreateWishView: View {
         }
     }
 
+    private func dismissViewAction() {
+        if !titleText.isEmpty || !descriptionText.isEmpty || !emailText.isEmpty {
+            showConfirmationAlert = true
+        } else {
+            crossPlatformDismiss()
+        }
+    }
+
+    private func crossPlatformDismiss() {
+        #if os(macOS) || os(visionOS)
+        closeAction?()
+        #else
+        dismissViewAction()
+        #endif
+    }
+
     private func dismissAction() {
         presentationMode.wrappedValue.dismiss()
     }
@@ -287,6 +315,12 @@ extension CreateWishView {
             }
 
             return .white
+        @unknown default:
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
         }
     }
 
