@@ -13,5 +13,5 @@ struct ProjectSettings {
         let wishKitUrl = ProcessInfo.processInfo.environment["wishkit-url"]
         return wishKitUrl ?? "https://www.wishkit.io/api"
     }
-    static let sdkVersion = "4.1.0"
+    static let sdkVersion = "4.1.1"
 }
