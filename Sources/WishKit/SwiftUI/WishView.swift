@@ -125,13 +125,41 @@ struct WishView: View {
     func badgeColor(for wishState: WishState) -> Color {
         switch wishState {
         case .pending:
-            return WishKit.theme.badgeColor.pending
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.pending.light
+            case .dark:
+                return WishKit.theme.badgeColor.pending.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.pending.light
+            }
         case .approved:
-            return WishKit.theme.badgeColor.approved
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.approved.light
+            case .dark:
+                return WishKit.theme.badgeColor.approved.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.approved.light
+            }
         case .implemented:
-            return WishKit.theme.badgeColor.implemented
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.implemented.light
+            case .dark:
+                return WishKit.theme.badgeColor.implemented.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.implemented.light
+            }
         case .rejected:
-            return WishKit.theme.badgeColor.rejected
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.rejected.light
+            case .dark:
+                return WishKit.theme.badgeColor.rejected.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.rejected.light
+            }
         }
     }
 
