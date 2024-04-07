@@ -151,7 +151,7 @@ struct CreateWishView: View {
                                 Text(WishKit.config.localization.ok),
                                 action: {
                                     createActionCompletion()
-                                    dismissAction()
+                                    crossPlatformDismiss()
                                 }
                             )
 
@@ -287,7 +287,7 @@ struct CreateWishView: View {
         #if os(macOS) || os(visionOS)
         closeAction?()
         #else
-        dismissViewAction()
+        dismissAction()
         #endif
     }
 
