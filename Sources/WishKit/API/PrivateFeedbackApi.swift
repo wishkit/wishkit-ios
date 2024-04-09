@@ -13,11 +13,11 @@ struct PrivateFeedbackApi: RequestCreatable {
 
     private static let baseUrl = "\(ProjectSettings.apiUrl)"
 
-    private static var endpoint = URL(string: "\(baseUrl)/wish")
+    private static var endpoint = URL(string: "\(baseUrl)/private-feedback")
 
     // MARK: - URLRequests
 
-    private static func createPrivateFeedback(_ createRequest: CreateWishRequest) -> URLRequest? {
+    private static func createPrivateFeedback(_ createRequest: CreatePrivateFeedbackRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
         return createAuthedPOSTReuqest(to: url, with: createRequest)
@@ -25,16 +25,12 @@ struct PrivateFeedbackApi: RequestCreatable {
 
     // MARK: - Api Requests
 
-    static func createWish(
-        createRequest: CreatePrivateFeedbackRequest,
-        completionHandler: @escaping (ApiResult<CreateWishResponse, ApiError>) -> Void
-    ) {
+    static func createPrivateFeedback(createRequest: CreatePrivateFeedbackRequest) async -> ApiResult<CreatePrivateFeedbackResponse, ApiError> {
 
-        guard let request = createWish(createRequest) else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
-            return
+        guard let request = createPrivateFeedback(createRequest) else {
+            return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        return await Api.send(request: request)
     }
 }

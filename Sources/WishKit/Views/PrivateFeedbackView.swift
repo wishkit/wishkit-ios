@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import WishKitShared
 
 /// A private feedback view to gather one time feedback.
 /// It allows you to receive feedback privately that is only
@@ -96,18 +97,27 @@ struct PrivateFeedbackView: View {
                             .scrollContentBackgroundCompat(.hidden)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                            .toolbarKeyboardDoneButton()
                     }
                 }
 
                 Spacer(minLength: 30)
 
-                WKButton(text: "Submit", action: submitPrivateFeedback, isLoading: $isButtonLoading, size: saveButtonSize)
+                WKButton(text: "Submit", action: {
+                    Task {
+                        await submitPrivateFeedback()
+                    }
+                }, isLoading: $isButtonLoading, size: saveButtonSize)
                     .alert(isPresented: $alertModel.showAlert, content: alertView)
             }.padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(backgroundColor)
+        .ignoresSafeArea(edges: [.leading, .trailing])
+        .toolbarKeyboardDoneButton()
     }
 
-    private func submitPrivateFeedback() {
+    private func submitPrivateFeedback() async {
         if descriptionText.isEmpty {
             alertModel.alertReason = .descriptionRequired
             alertModel.showAlert = true
@@ -120,7 +130,16 @@ struct PrivateFeedbackView: View {
             return
         }
 
-        
+        let request = CreatePrivateFeedbackRequest(email: emailText.isEmpty ? nil : emailText, description: descriptionText)
+
+        isButtonLoading = true
+
+        _ = await PrivateFeedbackApi.createPrivateFeedback(createRequest: request)
+
+        isButtonLoading = false
+
+        alertModel.alertReason = .successfullyCreated
+        alertModel.showAlert = true
     }
 
     private func crossPlatformDismiss() {
@@ -262,9 +281,4 @@ extension PrivateFeedbackView {
             return PrivateTheme.systemBackgroundColor.light
         }
     }
-}
-
-
-#Preview {
-    PrivateFeedbackView()
 }

@@ -42,6 +42,22 @@ public struct WishKit {
         #endif
     }
 
+    #if canImport(UIKit) && !os(visionOS)
+    /// (UIKit) The WishList viewcontroller.
+    public static var privateFeedbackViewController: UIViewController {
+        UIHostingController(rootView: PrivateFeedbackView())
+    }
+    #endif
+
+    /// (SwiftUI) The WishList view.
+    public static var privateFeedbackView: some View {
+        #if os(macOS) || os(visionOS)
+            return PrivateFeedbackView()
+        #else
+            return PrivateFeedbackView()
+        #endif
+    }
+
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
     }

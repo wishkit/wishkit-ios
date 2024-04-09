@@ -12,13 +12,11 @@ import WishKitShared
 import Combine
 
 extension View {
-    // MARK: Public - Wrap in Navigation
+    // MARK: - Wrap in Navigation
 
     @ViewBuilder
     public func withNavigation() -> some View {
-        NavigationView {
-            self
-        }.navigationViewStyle(.stack)
+        NavigationView { self }.navigationViewStyle(.stack)
     }
 }
 
@@ -119,7 +117,6 @@ struct WishlistViewIOS: View {
             .refreshableCompat(action: { await wishModel.fetchList() })
             .padding([.leading, .bottom, .trailing])
 
-
             HStack {
                 Spacer()
 
@@ -190,6 +187,8 @@ extension WishlistViewIOS {
             return WishKit.config.buttons.voteButton.arrowColor.light
         case .dark:
             return WishKit.config.buttons.voteButton.arrowColor.dark
+        @unknown default:
+            return WishKit.config.buttons.voteButton.arrowColor.light
         }
     }
 
@@ -208,6 +207,12 @@ extension WishlistViewIOS {
             }
 
             return PrivateTheme.elementBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.secondaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.elementBackgroundColor.light
         }
     }
 
@@ -225,6 +230,12 @@ extension WishlistViewIOS {
             }
 
             return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }
