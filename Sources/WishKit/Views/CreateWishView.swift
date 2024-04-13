@@ -18,7 +18,7 @@ struct CreateWishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
+    @StateObject
     private var alertModel = AlertModel()
 
     @State
@@ -39,9 +39,6 @@ struct CreateWishView: View {
     @State
     private var isButtonLoading: Bool? = false
 
-    @State
-    private var showConfirmationAlert = false
-
     let createActionCompletion: () -> Void
 
     var closeAction: (() -> Void)? = nil
@@ -59,7 +56,7 @@ struct CreateWishView: View {
             if showCloseButton() {
                 HStack {
                     Spacer()
-                    CloseButton(closeAction: dismissViewAction)
+                    CloseButton(closeAction: crossPlatformDismiss)
                 }
             }
 
@@ -194,14 +191,6 @@ struct CreateWishView: View {
 
                     }
                 }
-                .alert(isPresented: $showConfirmationAlert) {
-                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
-                    return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text(WishKit.config.localization.discardEnteredInformation),
-                        dismissButton: button
-                    )
-                }
                 .frame(maxWidth: 700)
                 .padding()
 
@@ -272,14 +261,6 @@ struct CreateWishView: View {
                     alertModel.showAlert = true
                 }
             }
-        }
-    }
-
-    private func dismissViewAction() {
-        if !titleText.isEmpty || !descriptionText.isEmpty || !emailText.isEmpty {
-            showConfirmationAlert = true
-        } else {
-            crossPlatformDismiss()
         }
     }
 
