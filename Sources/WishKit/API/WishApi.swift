@@ -11,9 +11,9 @@ import WishKitShared
 
 struct WishApi: RequestCreatable {
 
-    private static let baseUrl = "\(ProjectSettings.apiUrl)"
+    private static let baseUrl = ProjectSettings.apiUrl
 
-    private static var endpoint = URL(string: "\(baseUrl)/wish")
+    private static let endpoint = URL(string: "\(baseUrl)/wish")
 
     // MARK: - URLRequests
 

@@ -11,9 +11,9 @@ import WishKitShared
 
 struct CommentApi: RequestCreatable {
 
-    private static let baseUrl = "\(ProjectSettings.apiUrl)"
+    private static let baseUrl = ProjectSettings.apiUrl
 
-    private static var endpoint = URL(string: "\(baseUrl)/comment")
+    private static let endpoint = URL(string: "\(baseUrl)/comment")
 
     // MARK: - URLRequests
 

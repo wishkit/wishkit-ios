@@ -22,6 +22,9 @@ struct PrivateFeedbackView: View {
     @Environment(\.presentationMode)
     var presentationMode
 
+    @StateObject
+    private var alertModel = AlertModel()
+
     @State
     private var emailText = ""
 
@@ -31,8 +34,7 @@ struct PrivateFeedbackView: View {
     @State
     private var isButtonLoading: Bool? = false
 
-    @ObservedObject
-    private var alertModel = AlertModel()
+    var closeAction: (() -> Void)? = nil
 
     var saveButtonSize: CGSize {
         #if os(macOS) || os(visionOS)

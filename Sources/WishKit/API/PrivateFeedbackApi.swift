@@ -11,9 +11,9 @@ import WishKitShared
 
 struct PrivateFeedbackApi: RequestCreatable {
 
-    private static let baseUrl = "\(ProjectSettings.apiUrl)"
+    private static let baseUrl = ProjectSettings.apiUrl
 
-    private static var endpoint = URL(string: "\(baseUrl)/private-feedback")
+    private static let endpoint = URL(string: "\(baseUrl)/private-feedback")
 
     // MARK: - URLRequests
 
