@@ -28,14 +28,14 @@ struct WishlistViewIOS: View {
     @State
     private var selectedWishState: WishState = .approved
 
-    @ObservedObject
-    var wishModel: WishModel
-
     @State
     var selectedWish: WishResponse? = nil
 
     @State
     private var currentWishList: [WishResponse] = []
+
+    @ObservedObject
+    var wishModel: WishModel
 
     private var isInTabBar: Bool {
         let rootViewController = if #available(iOS 15, *) {
@@ -104,7 +104,7 @@ struct WishlistViewIOS: View {
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                             }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() }, wishApi: WishApi())
                                     .padding(.all, 5)
                                     .frame(maxWidth: 700)
                             })
@@ -127,7 +127,7 @@ struct WishlistViewIOS: View {
                         if WishKit.config.buttons.addButton.display == .show {
                             NavigationLink(
                                 destination: {
-                                    CreateWishView(createActionCompletion: { wishModel.fetchList() })
+                                    CreateWishView(createActionCompletion: { wishModel.fetchList() }, wishApi: WishApi())
                                 }, label: {
                                     AddButton(size: CGSize(width: 60, height: 60))
                                 }
