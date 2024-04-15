@@ -22,15 +22,29 @@ class WishModelTest: XCTestCase {
         XCTAssertTrue(wishModel.implementedWishlist.isEmpty)
     }
 
-    func testFetchWishList() async {
-        
+    func testFetchWishList() async throws {
+
         // Uses mock data. Zero delay. Just potentially slower thread than assert.
         await wishModel.fetchList()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            XCTAssertEqual(self.wishModel.approvedWishlist.count, 1)
-            XCTAssertEqual(self.wishModel.implementedWishlist.count, 1)
-        }
+        try await Task.sleep(for: .seconds(0.2))
+
+        XCTAssertEqual(wishModel.approvedWishlist.count, 1)
+        XCTAssertEqual(wishModel.implementedWishlist.count, 1)
+    }
+
+    func testFilteringCorrectWishesIntoApprovedAndImplementedLists() async throws {
+
+        // Uses mock data. Zero delay. Just potentially slower thread than assert.
+        await wishModel.fetchList()
+
+        try await Task.sleep(for: .seconds(0.2))
+        
+        let approvedWish = wishModel.approvedWishlist[0]
+        XCTAssertEqual(approvedWish.title, MockData.approvedWish.title)
+
+        let implementedWish = wishModel.implementedWishlist[0]
+        XCTAssertEqual(implementedWish.title, MockData.implementedWish.title)
     }
 }
 
