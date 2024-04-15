@@ -10,14 +10,14 @@ import Foundation
 import WishKitShared
 
 protocol WishApiProvider {
-    static func fetchWishList(completion: @escaping (Result<ListWishResponse, ApiError>) -> Void)
+    func fetchWishList(completion: @escaping (Result<ListWishResponse, ApiError>) -> Void)
 
-    static func createWish(
+    func createWish(
         createRequest: CreateWishRequest,
         completion: @escaping (Result<CreateWishResponse, ApiError>) -> Void
     )
 
-    static func voteWish(
+    func voteWish(
         voteRequest: VoteWishRequest,
         completion: @escaping (Result<VoteWishResponse, ApiError>) -> Void
     )
@@ -54,10 +54,10 @@ struct WishApi: RequestCreatable {
 
 extension WishApi: WishApiProvider {
 
-    static func fetchWishList(
+    func fetchWishList(
         completion: @escaping (Result<ListWishResponse, ApiError>) -> Void
     ) {
-        guard let request = fetchWishList() else {
+        guard let request = WishApi.fetchWishList() else {
             completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
@@ -65,12 +65,12 @@ extension WishApi: WishApiProvider {
         Api.send(request: request, completionHandler: completion)
     }
 
-    static func createWish(
+    func createWish(
         createRequest: CreateWishRequest,
         completion: @escaping (Result<CreateWishResponse, ApiError>) -> Void
     ) {
 
-        guard let request = createWish(createRequest) else {
+        guard let request = WishApi.createWish(createRequest) else {
             completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
@@ -78,12 +78,12 @@ extension WishApi: WishApiProvider {
         Api.send(request: request, completionHandler: completion)
     }
 
-    static func voteWish(
+    func voteWish(
         voteRequest: VoteWishRequest,
         completion: @escaping (Result<VoteWishResponse, ApiError>) -> Void
     ) {
 
-        guard let request = voteWish(voteRequest) else {
+        guard let request = WishApi.voteWish(voteRequest) else {
             completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }

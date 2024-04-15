@@ -43,6 +43,14 @@ struct CreateWishView: View {
 
     var closeAction: (() -> Void)? = nil
 
+    private let wishApi: WishApiProvider
+
+    init(createActionCompletion: @escaping (() -> Void), closeAction: (() -> Void)? = nil, wishApi: WishApiProvider) {
+        self.createActionCompletion = createActionCompletion
+        self.closeAction = closeAction
+        self.wishApi = wishApi
+    }
+
     var saveButtonSize: CGSize {
         #if os(macOS) || os(visionOS)
             return CGSize(width: 100, height: 30)
@@ -253,7 +261,7 @@ struct CreateWishView: View {
         isButtonLoading = true
 
         let createRequest = CreateWishRequest(title: titleText, description: descriptionText, email: emailText)
-        WishApi.createWish(createRequest: createRequest) { result in
+        wishApi.createWish(createRequest: createRequest) { result in
             isButtonLoading = false
             DispatchQueue.main.async {
                 switch result {

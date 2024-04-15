@@ -36,7 +36,7 @@ public struct WishKit {
     /// (SwiftUI) The WishList view.
     public static var view: some View {
         #if os(macOS) || os(visionOS)
-            return WishlistContainer(wishModel: WishModel())
+            return WishlistContainer(wishModel: WishModel(wishApi: WishApi()))
         #else
             return WishlistViewIOS(wishModel: WishModel())
         #endif
