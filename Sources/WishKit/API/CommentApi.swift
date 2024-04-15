@@ -20,10 +20,10 @@ struct CommentApi: RequestCreatable {
     private static func createComment(_ request: CreateCommentRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
-        return createAuthedPOSTReuqest(to: url, with: request)
+        return createAuthedPOSTRequest(to: url, with: request)
     }
 
-    static func createComment(request: CreateCommentRequest) async -> ApiResult<CommentResponse, ApiError> {
+    static func createComment(request: CreateCommentRequest) async -> Result<CommentResponse, ApiError> {
 
         guard let request = createComment(request) else {
             return .failure(ApiError(reason: .couldNotCreateRequest))

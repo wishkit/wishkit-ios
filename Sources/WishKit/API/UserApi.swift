@@ -20,10 +20,10 @@ struct UserApi: RequestCreatable {
     private static func updateUser(_ userRequest: UserRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("update")
-        return createAuthedPOSTReuqest(to: url, with: userRequest)
+        return createAuthedPOSTRequest(to: url, with: userRequest)
     }
 
-    static func updateUser(userRequest: UserRequest) async -> ApiResult<UserResponse, ApiError> {
+    static func updateUser(userRequest: UserRequest) async -> Result<UserResponse, ApiError> {
 
         guard let request = updateUser(userRequest) else {
             return .failure(ApiError(reason: .couldNotCreateRequest))

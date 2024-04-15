@@ -20,12 +20,12 @@ struct PrivateFeedbackApi: RequestCreatable {
     private static func createPrivateFeedback(_ createRequest: CreatePrivateFeedbackRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
-        return createAuthedPOSTReuqest(to: url, with: createRequest)
+        return createAuthedPOSTRequest(to: url, with: createRequest)
     }
 
     // MARK: - Api Requests
 
-    static func createPrivateFeedback(createRequest: CreatePrivateFeedbackRequest) async -> ApiResult<CreatePrivateFeedbackResponse, ApiError> {
+    static func createPrivateFeedback(createRequest: CreatePrivateFeedbackRequest) async -> Result<CreatePrivateFeedbackResponse, ApiError> {
 
         guard let request = createPrivateFeedback(createRequest) else {
             return .failure(ApiError(reason: .couldNotCreateRequest))

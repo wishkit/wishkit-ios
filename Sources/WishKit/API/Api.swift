@@ -15,17 +15,12 @@ struct Api: RequestCreatable {
     }
 }
 
-enum ApiResult<Success, Error> {
-    case success(Success)
-    case failure(Error)
-}
-
 // MARK: - Generic Send Functions
 
 extension Api {
     /// Generic Send Function. You need to specify the Result<T, Error> type to help inferring it.
     /// e.g: Api.send(request: resetRequest) { (result: Result<ResetPasswordResponse, ApiError.Kind>) in ... }
-    static func send<T: Decodable>(request: URLRequest, completionHandler: @escaping (ApiResult<T, ApiError>) -> Void) {
+    static func send<T: Decodable>(request: URLRequest, completionHandler: @escaping (Result<T, ApiError>) -> Void) {
         let method = request.httpMethod ?? ""
 
         print("🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
@@ -69,7 +64,7 @@ extension Api {
 
     /// Generic Send Function. You need to specify the Result<T, Error> type to help inferring it.
     /// e.g: Api.send(request: resetRequest) { (result: Result<ResetPasswordResponse, ApiError.Kind>) in ... }
-    static func send<T: Decodable>(request: URLRequest) async -> ApiResult<T, ApiError> {
+    static func send<T: Decodable>(request: URLRequest) async -> Result<T, ApiError> {
         let method = request.httpMethod ?? ""
 
         print("🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
