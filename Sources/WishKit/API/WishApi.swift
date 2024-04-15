@@ -9,68 +9,85 @@
 import Foundation
 import WishKitShared
 
+protocol WishApiProvider {
+    func fetchWishList(completion: @escaping (Result<ListWishResponse, ApiError>) -> Void)
+
+    func createWish(
+        createRequest: CreateWishRequest,
+        completion: @escaping (Result<CreateWishResponse, ApiError>) -> Void
+    )
+
+    func voteWish(
+        voteRequest: VoteWishRequest,
+        completion: @escaping (Result<VoteWishResponse, ApiError>) -> Void
+    )
+}
+
 struct WishApi: RequestCreatable {
 
-    private static let baseUrl = "\(ProjectSettings.apiUrl)"
+    private static let baseUrl = ProjectSettings.apiUrl
 
-    private static var endpoint = URL(string: "\(baseUrl)/wish")
+    private static let endpoint = URL(string: "\(baseUrl)/wish")
 
     // MARK: - URLRequests
 
     private static func fetchWishList() -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("list")
-        return createAuthedGETReuqest(to: url)
+        return createAuthedGETRequest(to: url)
     }
 
     private static func createWish(_ createRequest: CreateWishRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
-        return createAuthedPOSTReuqest(to: url, with: createRequest)
+        return createAuthedPOSTRequest(to: url, with: createRequest)
     }
 
     private static func voteWish(_ voteRequest: VoteWishRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("vote")
-        return createAuthedPOSTReuqest(to: url, with: voteRequest)
+        return createAuthedPOSTRequest(to: url, with: voteRequest)
     }
+}
 
-    // MARK: - Api Requests
+// MARK: - WishApiProvider
 
-    static func fetchWishList(
-        completionHandler: @escaping (ApiResult<ListWishResponse, ApiError>) -> Void
+extension WishApi: WishApiProvider {
+
+    func fetchWishList(
+        completion: @escaping (Result<ListWishResponse, ApiError>) -> Void
     ) {
-        guard let request = fetchWishList() else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
+        guard let request = WishApi.fetchWishList() else {
+            completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        Api.send(request: request, completionHandler: completion)
     }
 
-    static func createWish(
+    func createWish(
         createRequest: CreateWishRequest,
-        completionHandler: @escaping (ApiResult<CreateWishResponse, ApiError>) -> Void
+        completion: @escaping (Result<CreateWishResponse, ApiError>) -> Void
     ) {
 
-        guard let request = createWish(createRequest) else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
+        guard let request = WishApi.createWish(createRequest) else {
+            completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        Api.send(request: request, completionHandler: completion)
     }
 
-    static func voteWish(
+    func voteWish(
         voteRequest: VoteWishRequest,
-        completionHandler: @escaping (ApiResult<VoteWishResponse, ApiError>) -> Void
+        completion: @escaping (Result<VoteWishResponse, ApiError>) -> Void
     ) {
 
-        guard let request = voteWish(voteRequest) else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
+        guard let request = WishApi.voteWish(voteRequest) else {
+            completion(.failure(ApiError(reason: .couldNotCreateRequest)))
             return
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        Api.send(request: request, completionHandler: completion)
     }
 }

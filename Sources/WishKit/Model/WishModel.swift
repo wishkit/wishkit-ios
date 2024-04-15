@@ -29,11 +29,17 @@ final class WishModel: ObservableObject {
     @Published
     var hasFetched: Bool = false
 
+    let wishApi: WishApiProvider
+
+    init(wishApi: WishApiProvider) {
+        self.wishApi = wishApi
+    }
+
     @MainActor
     func fetchList(completion: (() -> ())? = nil) {
         isLoading = true
         
-        WishApi.fetchWishList { result in
+        wishApi.fetchWishList { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {

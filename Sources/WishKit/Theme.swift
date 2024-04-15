@@ -105,12 +105,12 @@ extension Theme {
         }
 
         /// Convenience function to set ligth and dark mode colors.
-        static public func `set`(light: Color, dark: Color) -> Scheme {
+        public static func `set`(light: Color, dark: Color) -> Scheme {
             return Scheme(light: light, dark: dark)
         }
 
         /// Sets the same color for light and dark mode.
-        static public func `setBoth`(to color: Color) -> Scheme {
+        public static func `setBoth`(to color: Color) -> Scheme {
             return Scheme(light: color, dark: color)
         }
     }

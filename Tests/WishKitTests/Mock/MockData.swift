@@ -52,4 +52,44 @@ struct MockData {
             commentList: []
         )
     }
+
+    static let pendingWish = WishResponse(
+        id: UUID(),
+        userUUID: UUID(),
+        title: "📸 Transformation Challenge",
+        description: "It would be awesome to be able to take a picture after every workout and after 30 days it creates a video out of them.",
+        state: .pending,
+        votingUsers: [],
+        commentList: []
+    )
+
+    static let approvedWish = WishResponse(
+        id: UUID(),
+        userUUID: UUID(),
+        title: "🎥 Exercise Video Example.",
+        description: "When doing an exercise it would be great if I could see a video example that shows me how to do it properly",
+        state: .approved,
+        votingUsers: [],
+        commentList: []
+    )
+
+    static let implementedWish = WishResponse(
+        id: UUID(),
+        userUUID: UUID(),
+        title: "Health App Connection.",
+        description: "If this app would also let Health App know about your exercises then this would be awesome!",
+        state: .implemented,
+        votingUsers: [],
+        commentList: []
+    )
+
+    static let rejectedWish = WishResponse(
+        id: UUID(),
+        userUUID: UUID(),
+        title: "Browser exercise list",
+        description: "I would like to see exercises in a list and be able to chose from then when creating my workouts instead of coming up with them myself.",
+        state: .rejected,
+        votingUsers: [],
+        commentList: []
+    )
 }

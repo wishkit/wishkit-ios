@@ -57,7 +57,7 @@ struct WishlistView: View {
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
-                        WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                        WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() }, wishApi: WishApi())
                             .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                     }
                     .listRowSeparatorCompat(.hidden)
@@ -97,7 +97,8 @@ struct WishlistView: View {
                         .sheet(isPresented: $showingCreateSheet) {
                             CreateWishView(
                                 createActionCompletion: { wishModel.fetchList() },
-                                closeAction: { self.showingCreateSheet = false }
+                                closeAction: { self.showingCreateSheet = false },
+                                wishApi: WishApi()
                             )
                                 .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
                                 .background(backgroundColor)

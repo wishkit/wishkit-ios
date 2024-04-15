@@ -9,7 +9,9 @@
 import SwiftUI
 
 extension View {
+
     @ViewBuilder
+    /// If the toolBar is placed in a view that's inside a NavigationStack it doesn't work and this is a bug.
     func toolbarKeyboardDoneButton() -> some View {
         #if canImport(UIKit) && !os(visionOS)
         if #available(macOS 13.0, iOS 15, *) {
@@ -17,8 +19,10 @@ extension View {
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Spacer()
-                        Button(action: { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }, label: { Text("Done") })
-
+                        Button(
+                            action: { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) },
+                            label: { Text("Done") }
+                        )
                     }
                 }
             }

@@ -9,9 +9,11 @@
 import Foundation
 
 struct ProjectSettings {
-    static var apiUrl: String {
+
+    static let apiUrl = {
         let wishKitUrl = ProcessInfo.processInfo.environment["wishkit-url"]
         return wishKitUrl ?? "https://www.wishkit.io/api"
-    }
+    }()
+
     static let sdkVersion = "4.1.1"
 }

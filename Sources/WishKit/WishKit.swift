@@ -29,16 +29,32 @@ public struct WishKit {
     #if canImport(UIKit) && !os(visionOS)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
-        UIHostingController(rootView: WishlistViewIOS(wishModel: WishModel()))
+        UIHostingController(rootView: WishlistViewIOS(wishModel: WishModel(wishApi: WishApi())))
     }
     #endif
     
     /// (SwiftUI) The WishList view.
     public static var view: some View {
         #if os(macOS) || os(visionOS)
-            return WishlistContainer(wishModel: WishModel())
+            return WishlistContainer(wishModel: WishModel(wishApi: WishApi()))
         #else
-            return WishlistViewIOS(wishModel: WishModel())
+            return WishlistViewIOS(wishModel: WishModel(wishApi: WishApi()))
+        #endif
+    }
+
+    #if canImport(UIKit) && !os(visionOS)
+    /// (UIKit) The WishList viewcontroller.
+    public static var privateFeedbackViewController: UIViewController {
+        UIHostingController(rootView: PrivateFeedbackView())
+    }
+    #endif
+
+    /// (SwiftUI) The WishList view.
+    public static var privateFeedbackView: some View {
+        #if os(macOS) || os(visionOS)
+            return PrivateFeedbackView()
+        #else
+            return PrivateFeedbackView()
         #endif
     }
 
