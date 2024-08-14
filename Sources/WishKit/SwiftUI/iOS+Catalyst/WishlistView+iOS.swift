@@ -66,14 +66,14 @@ struct WishlistViewIOS: View {
         }
     }
 
-    private func getList() -> [WishResponse] {
+    private func updateList() {
         switch selectedWishState {
         case .approved:
-            return wishModel.approvedWishlist
+            self.currentWishList = wishModel.approvedWishlist
         case .implemented:
-            return wishModel.implementedWishlist
+            self.currentWishList = wishModel.implementedWishlist
         default:
-            return []
+            self.currentWishList = []
         }
     }
 
@@ -85,7 +85,7 @@ struct WishlistViewIOS: View {
                     .imageScale(.large)
             }
 
-            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
+            if wishModel.hasFetched && !wishModel.isLoading && currentWishList.isEmpty {
                 Text(WishKit.config.localization.noFeatureRequests)
             }
 
@@ -101,17 +101,15 @@ struct WishlistViewIOS: View {
 
                     Spacer(minLength: 15)
 
-                    if getList().count > 0 {
-                        ForEach(getList()) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                            }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }.transition(.opacity)
-                    }
+                    ForEach(currentWishList) { wish in
+                        NavigationLink(destination: {
+                            DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                                .padding(.all, 5)
+                                .frame(maxWidth: 700)
+                        })
+                    }.transition(.opacity)
                 }
 
                 Spacer(minLength: isInTabBar ? 100 : 25)
@@ -158,7 +156,11 @@ struct WishlistViewIOS: View {
                     }
                 }
             }
-        }.onAppear(perform: wishModel.fetchList)
+        }
+        .onAppear(perform: wishModel.fetchList)
+        .onChange(of: wishModel.baseList) { _ in
+            updateList()
+        }
     }
 
     // MARK: - View

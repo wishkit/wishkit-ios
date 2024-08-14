@@ -33,7 +33,7 @@ public struct WishKit {
     }
     #endif
     
-    /// (SwiftUI) The WishList view.
+    /// (SwiftUI) The feedback list view.
     public static var view: some View {
         #if os(macOS) || os(visionOS)
             return WishlistContainer(wishModel: WishModel())
@@ -47,6 +47,11 @@ public struct WishKit {
     }
 }
 
+
+/// Container is needed.
+/// In some cases the list won't appear when there's an `.onReceive` modifier
+/// present around where WishKit.view is used in a sheet. Wrapping ``WishKit.view``
+/// solves this for the `.sheet` case.
 struct FeedbackContainerView: View {
     var body: some View {
         WishlistViewIOS(wishModel: WishModel())

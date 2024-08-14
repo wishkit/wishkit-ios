@@ -11,7 +11,16 @@ import WishKitShared
 import Foundation
 import SwiftUI
 
+extension WishResponse: @retroactive Equatable {
+    public static func == (lhs: WishKitShared.WishResponse, rhs: WishKitShared.WishResponse) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
 final class WishModel: ObservableObject {
+    
+    @Published
+    var baseList: [WishResponse] = []
 
     @Published
     var approvedWishlist: [WishResponse] = []
@@ -37,11 +46,10 @@ final class WishModel: ObservableObject {
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
-                    withAnimation {
-                        self.updateApprovedWishlist(with: response.list)
-                        self.updateImplementedWishlist(with: response.list)
-                        self.shouldShowWatermark = response.shouldShowWatermark
-                    }
+                    self.updateApprovedWishlist(with: response.list)
+                    self.updateImplementedWishlist(with: response.list)
+                    self.shouldShowWatermark = response.shouldShowWatermark
+                    self.baseList = response.list
                 }
             case .failure(let error):
                 printError(self, error.reason.description)
