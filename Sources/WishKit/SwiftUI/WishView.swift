@@ -47,7 +47,7 @@ struct WishView: View {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
-        self._voteCount = State(wrappedValue: wishResponse.votingUsers.count)
+        self._voteCount.wrappedValue = wishResponse.votingUsers.count
     }
 
     var body: some View {
