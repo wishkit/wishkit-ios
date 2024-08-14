@@ -67,13 +67,15 @@ struct WishlistViewIOS: View {
     }
 
     private func updateList() {
-        switch selectedWishState {
-        case .approved:
-            self.currentWishList = wishModel.approvedWishlist
-        case .implemented:
-            self.currentWishList = wishModel.implementedWishlist
-        default:
-            self.currentWishList = []
+        withAnimation {
+            switch selectedWishState {
+            case .approved:
+                self.currentWishList = wishModel.approvedWishlist
+            case .implemented:
+                self.currentWishList = wishModel.implementedWishlist
+            default:
+                self.currentWishList = []
+            }
         }
     }
 
