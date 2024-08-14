@@ -13,7 +13,13 @@ import SwiftUI
 
 extension WishResponse: @retroactive Equatable {
     public static func == (lhs: WishKitShared.WishResponse, rhs: WishKitShared.WishResponse) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.votingUsers.count == rhs.votingUsers.count &&
+        lhs.title == rhs.title &&
+        lhs.description == rhs.description &&
+        lhs.commentList.count == rhs.commentList.count &&
+        lhs.state == rhs.state &&
+        lhs.userUUID == rhs.userUUID
     }
 }
 
