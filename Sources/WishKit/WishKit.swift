@@ -38,12 +38,18 @@ public struct WishKit {
         #if os(macOS) || os(visionOS)
             return WishlistContainer(wishModel: WishModel())
         #else
-            return WishlistViewIOS(wishModel: WishModel())
+            return FeedbackContainerView()
         #endif
     }
 
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
+    }
+}
+
+struct FeedbackContainerView: View {
+    var body: some View {
+        WishlistViewIOS(wishModel: WishModel())
     }
 }
 

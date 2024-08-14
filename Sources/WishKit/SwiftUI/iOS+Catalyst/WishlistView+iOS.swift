@@ -118,9 +118,6 @@ struct WishlistViewIOS: View {
             }
             .refreshableCompat(action: { await wishModel.fetchList() })
             .padding([.leading, .bottom, .trailing])
-            // Has to bee on ScrollView. If it's on the most outter view, the list won't appear
-            // when there's an `.onReceive` modifier present around where WishKit.view is used.
-            .onAppear(perform: wishModel.fetchList)
 
 
             HStack {
@@ -161,7 +158,7 @@ struct WishlistViewIOS: View {
                     }
                 }
             }
-        }
+        }.onAppear(perform: wishModel.fetchList)
     }
 
     // MARK: - View
