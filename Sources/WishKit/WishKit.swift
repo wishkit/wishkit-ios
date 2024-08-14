@@ -47,6 +47,9 @@ public struct WishKit {
     }
     
     public struct FeedbackView: View {
+        
+        public init () { }
+        
         public var body: some View {
             WishKit.view
         }
