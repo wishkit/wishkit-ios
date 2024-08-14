@@ -19,7 +19,6 @@ extension WishResponse: @retroactive Equatable {
 
 final class WishModel: ObservableObject {
     
-    @Published
     var baseList: [WishResponse] = []
 
     @Published
