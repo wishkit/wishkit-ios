@@ -45,6 +45,12 @@ public struct WishKit {
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
     }
+    
+    public struct FeedbackView: View {
+        public var body: some View {
+            WishKit.view
+        }
+    }
 }
 
 
