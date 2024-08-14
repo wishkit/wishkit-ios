@@ -24,10 +24,9 @@ struct WishView: View {
     private var alertModel = AlertModel()
 
     @State
-    private var voteCount = 0
-
-    @State
     private var hasVoted = false
+    
+    private var voteCount = 0
 
     private let wishResponse: WishResponse
 
@@ -182,7 +181,6 @@ struct WishView: View {
         WishApi.voteWish(voteRequest: request) { result in
             switch result {
             case .success:
-                voteCount += 1
                 hasVoted = true
                 DispatchQueue.main.async {
                     voteActionCompletion()
