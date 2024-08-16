@@ -101,7 +101,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        WishKit.view.withNavigation()
+        WishKit.FeedbackListView().withNavigation()
     }
 }
 ```
