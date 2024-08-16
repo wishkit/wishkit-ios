@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RequestCreatable {}
+protocol RequestCreatable { }
 
 extension RequestCreatable {
 
@@ -44,14 +44,14 @@ extension RequestCreatable {
 
     // MARK: - Authed URLRequests
 
-    static func createAuthedPOSTReuqest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
+    static func createAuthedPOSTRequest<T: Encodable>(to url: URL, with body: T) -> URLRequest {
         var request = createPOSTRequest(to: url, with: body)
         request.addAuth()
         request.addSdkInfo()
         return request
     }
 
-    static func createAuthedGETReuqest(to url: URL) -> URLRequest {
+    static func createAuthedGETRequest(to url: URL) -> URLRequest {
         var request = createGETRequest(to: url)
         request.addAuth()
         request.addSdkInfo()

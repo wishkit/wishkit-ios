@@ -54,7 +54,7 @@ struct DetailWishView: View {
 
                     Spacer(minLength: 15)
 
-                    WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                    WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion, wishApi: WishApi())
                         .frame(maxWidth: 700)
 
                     Spacer(minLength: 15)

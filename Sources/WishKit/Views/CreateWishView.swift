@@ -18,7 +18,7 @@ struct CreateWishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
+    @StateObject
     private var alertModel = AlertModel()
 
     @State
@@ -39,12 +39,17 @@ struct CreateWishView: View {
     @State
     private var isButtonLoading: Bool? = false
 
-    @State
-    private var showConfirmationAlert = false
-
     let createActionCompletion: () -> Void
 
     var closeAction: (() -> Void)? = nil
+
+    private let wishApi: WishApiProvider
+
+    init(createActionCompletion: @escaping (() -> Void), closeAction: (() -> Void)? = nil, wishApi: WishApiProvider) {
+        self.createActionCompletion = createActionCompletion
+        self.closeAction = closeAction
+        self.wishApi = wishApi
+    }
 
     var saveButtonSize: CGSize {
         #if os(macOS) || os(visionOS)
@@ -59,7 +64,7 @@ struct CreateWishView: View {
             if showCloseButton() {
                 HStack {
                     Spacer()
-                    CloseButton(closeAction: dismissViewAction)
+                    CloseButton(closeAction: crossPlatformDismiss)
                 }
             }
 
@@ -143,64 +148,7 @@ struct CreateWishView: View {
                         size: saveButtonSize
                     )
                     .disabled(isButtonDisabled)
-                    .alert(isPresented: $alertModel.showAlert) {
-
-                        switch alertModel.alertReason {
-                        case .successfullyCreated:
-                            let button = Alert.Button.default(
-                                Text(WishKit.config.localization.ok),
-                                action: {
-                                    createActionCompletion()
-                                    dismissAction()
-                                }
-                            )
-
-                            return Alert(
-                                title: Text(WishKit.config.localization.info),
-                                message: Text(WishKit.config.localization.successfullyCreated),
-                                dismissButton: button
-                            )
-                        case .createReturnedError(let errorText):
-                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                            return Alert(
-                                title: Text(WishKit.config.localization.info),
-                                message: Text(errorText),
-                                dismissButton: button
-                            )
-                        case .emailRequired:
-                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                            return Alert(
-                                title: Text(WishKit.config.localization.info),
-                                message: Text(WishKit.config.localization.emailRequiredText),
-                                dismissButton: button
-                            )
-                        case .emailFormatWrong:
-                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-
-                            return Alert(
-                                title: Text(WishKit.config.localization.info),
-                                message: Text(WishKit.config.localization.emailFormatWrongText),
-                                dismissButton: button
-                            )
-                        case .none:
-                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-                            return Alert(title: Text(""), dismissButton: button)
-                        default:
-                            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
-                            return Alert(title: Text(""), dismissButton: button)
-                        }
-
-                    }
-                }
-                .alert(isPresented: $showConfirmationAlert) {
-                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
-                    return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text(WishKit.config.localization.discardEnteredInformation),
-                        dismissButton: button
-                    )
+                    .alert(isPresented: $alertModel.showAlert, content: getAlertContent)
                 }
                 .frame(maxWidth: 700)
                 .padding()
@@ -215,6 +163,59 @@ struct CreateWishView: View {
         .ignoresSafeArea(edges: [.leading, .trailing])
         .toolbarKeyboardDoneButton()
     }
+
+    // MARK: - Views
+
+    private func getAlertContent() -> Alert {
+        switch alertModel.alertReason {
+        case .successfullyCreated:
+            let button = Alert.Button.default(
+                Text(WishKit.config.localization.ok),
+                action: {
+                    createActionCompletion()
+                    crossPlatformDismiss()
+                }
+            )
+
+            return Alert(
+                title: Text(WishKit.config.localization.info),
+                message: Text(WishKit.config.localization.successfullyCreated),
+                dismissButton: button
+            )
+        case .createReturnedError(let errorText):
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+            return Alert(
+                title: Text(WishKit.config.localization.info),
+                message: Text(errorText),
+                dismissButton: button
+            )
+        case .emailRequired:
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+            return Alert(
+                title: Text(WishKit.config.localization.info),
+                message: Text(WishKit.config.localization.emailRequiredText),
+                dismissButton: button
+            )
+        case .emailFormatWrong:
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+
+            return Alert(
+                title: Text(WishKit.config.localization.info),
+                message: Text(WishKit.config.localization.emailFormatWrongText),
+                dismissButton: button
+            )
+        case .none:
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+            return Alert(title: Text(""), dismissButton: button)
+        default:
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok))
+            return Alert(title: Text(""), dismissButton: button)
+        }
+    }
+
+    // MARK: - Logic
 
     private func showCloseButton() -> Bool {
         #if os(macOS) || os(visionOS)
@@ -260,7 +261,7 @@ struct CreateWishView: View {
         isButtonLoading = true
 
         let createRequest = CreateWishRequest(title: titleText, description: descriptionText, email: emailText)
-        WishApi.createWish(createRequest: createRequest) { result in
+        wishApi.createWish(createRequest: createRequest) { result in
             isButtonLoading = false
             DispatchQueue.main.async {
                 switch result {
@@ -275,19 +276,11 @@ struct CreateWishView: View {
         }
     }
 
-    private func dismissViewAction() {
-        if !titleText.isEmpty || !descriptionText.isEmpty || !emailText.isEmpty {
-            showConfirmationAlert = true
-        } else {
-            crossPlatformDismiss()
-        }
-    }
-
     private func crossPlatformDismiss() {
         #if os(macOS) || os(visionOS)
         closeAction?()
         #else
-        dismissViewAction()
+        dismissAction()
         #endif
     }
 

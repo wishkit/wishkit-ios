@@ -31,9 +31,11 @@ struct WishView: View {
 
     private let wishResponse: WishResponse
 
+    private let viewKind: ViewKind
+
     private let voteActionCompletion: () -> Void
 
-    private let viewKind: ViewKind
+    private let wishApi: WishApiProvider
 
     private var descriptionLineLimit: Int? {
         if viewKind == .detail {
@@ -43,10 +45,11 @@ struct WishView: View {
         return WishKit.config.expandDescriptionInList ? nil : 1
     }
 
-    init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
+    init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void), wishApi: WishApiProvider) {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
+        self.wishApi = wishApi
         self._voteCount = State(wrappedValue: wishResponse.votingUsers.count)
     }
 
@@ -179,7 +182,7 @@ struct WishView: View {
         }
 
         let request = VoteWishRequest(wishId: wishResponse.id)
-        WishApi.voteWish(voteRequest: request) { result in
+        wishApi.voteWish(voteRequest: request) { result in
             switch result {
             case .success:
                 voteCount += 1

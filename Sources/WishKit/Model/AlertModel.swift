@@ -10,10 +10,17 @@ import SwiftUI
 
 final class AlertModel: ObservableObject {
 
+    @Published
+    var showAlert = false
+
+    @Published
+    var alertReason: AlertReason = .none
+
     enum AlertReason {
         case alreadyVoted
         case alreadyImplemented
         case voteReturnedError(String)
+        case descriptionRequired
 
         case successfullyCreated
         case createReturnedError(String)
@@ -22,10 +29,4 @@ final class AlertModel: ObservableObject {
         
         case none
     }
-
-    @Published
-    var showAlert = false
-
-    @Published
-    var alertReason: AlertReason = .none
 }

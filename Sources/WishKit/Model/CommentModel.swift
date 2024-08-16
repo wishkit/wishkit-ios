@@ -9,6 +9,7 @@
 import SwiftUI
 
 final class CommentModel: ObservableObject {
+    
     @Published
     var newCommentValue = ""
 

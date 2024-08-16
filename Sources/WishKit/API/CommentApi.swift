@@ -11,19 +11,19 @@ import WishKitShared
 
 struct CommentApi: RequestCreatable {
 
-    private static let baseUrl = "\(ProjectSettings.apiUrl)"
+    private static let baseUrl = ProjectSettings.apiUrl
 
-    private static var endpoint = URL(string: "\(baseUrl)/comment")
+    private static let endpoint = URL(string: "\(baseUrl)/comment")
 
     // MARK: - URLRequests
 
     private static func createComment(_ request: CreateCommentRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
-        return createAuthedPOSTReuqest(to: url, with: request)
+        return createAuthedPOSTRequest(to: url, with: request)
     }
 
-    static func createComment(request: CreateCommentRequest) async -> ApiResult<CommentResponse, ApiError> {
+    static func createComment(request: CreateCommentRequest) async -> Result<CommentResponse, ApiError> {
 
         guard let request = createComment(request) else {
             return .failure(ApiError(reason: .couldNotCreateRequest))
