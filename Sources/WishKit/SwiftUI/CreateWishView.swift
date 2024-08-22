@@ -194,14 +194,6 @@ struct CreateWishView: View {
 
                     }
                 }
-                .alert(isPresented: $showConfirmationAlert) {
-                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
-                    return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text(WishKit.config.localization.discardEnteredInformation),
-                        dismissButton: button
-                    )
-                }
                 .frame(maxWidth: 700)
                 .padding()
 
