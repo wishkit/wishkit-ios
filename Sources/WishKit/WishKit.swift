@@ -16,16 +16,34 @@ import Combine
 
 public struct WishKit {
     
+    private static let threadLock = NSLock()
+    
     private static var subscribers: Set<AnyCancellable> = []
 
     static var apiKey = "my-fancy-api-key"
 
     static var user = User()
 
-    public static var theme = Theme()
+    static var _theme = Theme()
+    
+    static var _config = Configuration()
+    
+    public static var theme: Theme {
+        get {
+            return threadLock.withLock { _theme }
+        } set {
+            threadLock.withLock { _theme = newValue }
+        }
+    }
 
-    public static var config = Configuration()
-
+    public static var config: Configuration {
+        get {
+            return threadLock.withLock { _config }
+        } set {
+            threadLock.withLock { _config = newValue }
+        }
+    }
+    
     #if canImport(UIKit) && !os(visionOS)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
