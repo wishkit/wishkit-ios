@@ -62,10 +62,12 @@ struct CreateWishView: View {
                     CloseButton(closeAction: dismissViewAction)
                         .alert(isPresented: $showConfirmationAlert) {
                             let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
+                            
                             return Alert(
                                 title: Text(WishKit.config.localization.info),
                                 message: Text(WishKit.config.localization.discardEnteredInformation),
-                                dismissButton: button
+                                primaryButton: button,
+                                secondaryButton: .cancel()
                             )
                         }
                 }
@@ -287,7 +289,7 @@ struct CreateWishView: View {
         #if os(macOS) || os(visionOS)
         closeAction?()
         #else
-        dismissViewAction()
+        dismissAction()
         #endif
     }
 

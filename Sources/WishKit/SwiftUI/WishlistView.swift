@@ -99,8 +99,8 @@ struct WishlistView: View {
                                 createActionCompletion: { wishModel.fetchList() },
                                 closeAction: { self.showingCreateSheet = false }
                             )
-                                .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                                .background(backgroundColor)
+                            .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
+                            .background(backgroundColor)
                         }
                 }
             }
