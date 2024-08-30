@@ -60,6 +60,14 @@ struct CreateWishView: View {
                 HStack {
                     Spacer()
                     CloseButton(closeAction: dismissViewAction)
+                        .alert(isPresented: $showConfirmationAlert) {
+                            let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: crossPlatformDismiss)
+                            return Alert(
+                                title: Text(WishKit.config.localization.info),
+                                message: Text(WishKit.config.localization.discardEnteredInformation),
+                                dismissButton: button
+                            )
+                        }
                 }
             }
 
