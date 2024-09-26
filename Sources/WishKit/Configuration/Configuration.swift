@@ -28,6 +28,8 @@ public struct Configuration {
     public var emailField: EmailField = .optional
 
     public var commentSection: Display = .show
+    
+    public var allowUndoVote: Bool = false
 
     init(
         statusBadgeDisplay: Display = .hide,

@@ -26,9 +26,6 @@ struct WishView: View {
     @Binding
     private var voteCount: Int
 
-    @State
-    private var hasVoted = false
-
     private let wishResponse: WishResponse
 
     private let voteActionCompletion: () -> Void
@@ -164,9 +161,18 @@ struct WishView: View {
     }
 
     private func voteAction() {
-
         if wishResponse.state == .implemented {
             alertModel.alertReason = .alreadyImplemented
+            alertModel.showAlert = true
+            return
+        }
+        
+        let userUUID = UUIDManager.getUUID()
+        
+        let hasVoted = wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
+        
+        if (hasVoted) && WishKit.config.allowUndoVote == false {
+            alertModel.alertReason = .alreadyVoted
             alertModel.showAlert = true
             return
         }
@@ -192,7 +198,7 @@ struct WishView: View {
 extension WishView {
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
-        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) || hasVoted {
+        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
             return WishKit.theme.primaryColor
         }
 
