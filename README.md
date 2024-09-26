@@ -113,23 +113,26 @@ struct ContentView: View {
 #### You can configure a lof of WishKit's UI elements.
 
 ```swift
-// Show the status badge of a feature request (e.g. pending, approved, etc.).
-WishKit.config.statusBadge = .show
+// Allow user to undo their vote
+WishKit.config.allowUndoVote = true
 
 // Shows full description of a feature request in the list.
 WishKit.config.expandDescriptionInList = true
-
-// Hide the segmented control.
-WishKit.config.buttons.segmentedControl.display = .hide
-
-// Remove drop shadow.
-WishKit.config.dropShadow = .hide
 
 // Hide comment section
 WishKit.config.commentSection = .hide
 
 // Position the Add-Button.
 WishKit.config.buttons.addButton.bottomPadding = .large
+
+// Show the status badge of a feature request (e.g. pending, approved, etc.).
+WishKit.config.statusBadge = .show
+
+// Hide the segmented control.
+WishKit.config.buttons.segmentedControl.display = .hide
+
+// Remove drop shadow.
+WishKit.config.dropShadow = .hide
 
 ```
 
