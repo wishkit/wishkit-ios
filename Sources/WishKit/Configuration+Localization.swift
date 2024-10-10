@@ -85,6 +85,8 @@ extension Configuration {
         public var emailRequired: String
 
         public var discardEnteredInformation: String
+        
+        public var addButtonInNavigationBar: String
 
         public init(
             requested: String = Localization.default().requested,
@@ -124,7 +126,8 @@ extension Configuration {
             noFeatureRequests: String = Localization.default().noFeatureRequests,
             emailOptional: String = Localization.default().emailOptional,
             emailRequired: String = Localization.default().emailRequired,
-            discardEnteredInformation: String = Localization.default().discardEnteredInformation
+            discardEnteredInformation: String = Localization.default().discardEnteredInformation,
+            addButtonInNavigationBar: String = Localization.default().addButtonInNavigationBar
         ) {
             self.requested = requested
             self.pending = pending
@@ -164,6 +167,7 @@ extension Configuration {
             self.emailOptional = emailOptional
             self.emailRequired = emailRequired
             self.discardEnteredInformation = discardEnteredInformation
+            self.addButtonInNavigationBar = addButtonInNavigationBar
         }
 
         public static func `default`() -> Localization {
@@ -205,7 +209,8 @@ extension Configuration {
                 noFeatureRequests: "No feature requests, yet ✨",
                 emailOptional: "Email (optional)",
                 emailRequired: "Email (required)",
-                discardEnteredInformation: "Discard entered information?"
+                discardEnteredInformation: "Discard entered information?",
+                addButtonInNavigationBar: "Create"
             )
         }
     }

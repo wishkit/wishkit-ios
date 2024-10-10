@@ -9,12 +9,16 @@
 import SwiftUI
 
 extension Configuration {
+    
     public struct AddButton {
+        
         public var display: Display = .show
 
         public var textColor = Theme.Scheme(light: .black, dark: .white)
 
         public var bottomPadding: Padding
+        
+        public var location: Location = .floating
 
         init(bottomPadding: Padding = .small) {
             self.bottomPadding = bottomPadding
@@ -27,5 +31,10 @@ extension Configuration.AddButton {
         case small
         case medium
         case large
+    }
+    
+    public enum Location {
+        case floating
+        case navigationBar
     }
 }

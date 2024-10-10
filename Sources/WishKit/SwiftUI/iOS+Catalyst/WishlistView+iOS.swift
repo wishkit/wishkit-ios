@@ -120,25 +120,27 @@ struct WishlistViewIOS: View {
             .padding([.leading, .bottom, .trailing])
 
 
-            HStack {
-                Spacer()
-
-                VStack(alignment: .trailing) {
-                    VStack {
-                        Spacer()
-
-                        if WishKit.config.buttons.addButton.display == .show {
-                            NavigationLink(
-                                destination: {
-                                    CreateWishView(createActionCompletion: { wishModel.fetchList() })
-                                }, label: {
-                                    AddButton(size: CGSize(width: 60, height: 60))
-                                }
-                            )
-                        }
-                    }.padding(.bottom, addButtonBottomPadding)
-                }.padding(.trailing, 20)
-            }.frame(maxWidth: 700)
+            if WishKit.config.buttons.addButton.location == .floating {
+                HStack {
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        VStack {
+                            Spacer()
+                            
+                            if WishKit.config.buttons.addButton.display == .show {
+                                NavigationLink(
+                                    destination: {
+                                        CreateWishView(createActionCompletion: { wishModel.fetchList() })
+                                    }, label: {
+                                        AddButton(size: CGSize(width: 60, height: 60))
+                                    }
+                                )
+                            }
+                        }.padding(.bottom, addButtonBottomPadding)
+                    }.padding(.trailing, 20)
+                }.frame(maxWidth: 700)
+            }
         }
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
@@ -156,6 +158,16 @@ struct WishlistViewIOS: View {
                     Button(WishKit.config.localization.done) {
                         UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController?.dismiss(animated: true)
                     }
+                }
+                
+                if WishKit.config.buttons.addButton.location == .navigationBar {
+                    NavigationLink(
+                        destination: {
+                            CreateWishView(createActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            Text(WishKit.config.localization.addButtonInNavigationBar)
+                        }
+                    )
                 }
             }
         }.onAppear(perform: wishModel.fetchList)
