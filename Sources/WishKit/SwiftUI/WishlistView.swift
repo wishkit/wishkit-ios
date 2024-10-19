@@ -92,16 +92,18 @@ struct WishlistView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    AddButton(buttonAction: createWishAction)
-                        .padding([.bottom, .trailing], 20)
-                        .sheet(isPresented: $showingCreateSheet) {
-                            CreateWishView(
-                                createActionCompletion: { wishModel.fetchList() },
-                                closeAction: { self.showingCreateSheet = false }
-                            )
-                            .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                            .background(backgroundColor)
-                        }
+                    if WishKit.config.buttons.addButton.location == .floating {
+                        AddButton(buttonAction: createWishAction)
+                            .padding([.bottom, .trailing], 20)
+                            .sheet(isPresented: $showingCreateSheet) {
+                                CreateWishView(
+                                    createActionCompletion: { wishModel.fetchList() },
+                                    closeAction: { self.showingCreateSheet = false }
+                                )
+                                .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
+                                .background(backgroundColor)
+                            }
+                    }
                 }
             }
         }

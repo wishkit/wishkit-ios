@@ -88,6 +88,10 @@ extension Configuration {
         
         public var addButtonInNavigationBar: String
 
+        public var refresh: String
+
+        public var refreshing: String
+
         public init(
             requested: String = Localization.default().requested,
             pending: String = Localization.default().pending,
@@ -127,7 +131,9 @@ extension Configuration {
             emailOptional: String = Localization.default().emailOptional,
             emailRequired: String = Localization.default().emailRequired,
             discardEnteredInformation: String = Localization.default().discardEnteredInformation,
-            addButtonInNavigationBar: String = Localization.default().addButtonInNavigationBar
+            addButtonInNavigationBar: String = Localization.default().addButtonInNavigationBar,
+            refresh: String = Localization.default().refresh,
+            refreshing: String = Localization.default().refreshing
         ) {
             self.requested = requested
             self.pending = pending
@@ -168,6 +174,8 @@ extension Configuration {
             self.emailRequired = emailRequired
             self.discardEnteredInformation = discardEnteredInformation
             self.addButtonInNavigationBar = addButtonInNavigationBar
+            self.refresh = refresh
+            self.refreshing = refreshing
         }
 
         public static func `default`() -> Localization {
@@ -210,7 +218,9 @@ extension Configuration {
                 emailOptional: "Email (optional)",
                 emailRequired: "Email (required)",
                 discardEnteredInformation: "Discard entered information?",
-                addButtonInNavigationBar: "Create"
+                addButtonInNavigationBar: "Create",
+                refresh: "Refresh",
+                refreshing: "Refreshing.."
             )
         }
     }

@@ -20,6 +20,9 @@ struct WishlistContainer: View {
 
     @State
     private var isRefreshing = false
+    
+    @State
+    private var showingCreateSheet = false
 
     @ObservedObject
     private var wishModel: WishModel
@@ -54,41 +57,63 @@ struct WishlistContainer: View {
     }
 
     var segmentedControlView: some View {
-        ZStack {
+        HStack {
             SegmentedView(selectedWishState: $listType)
-                .padding()
+                .padding(.leading, 5)
                 .frame(maxWidth: 300)
 
-            HStack {
-                Button(action: refreshList) {
-                    if isRefreshing {
-                        ProgressView()
-                            .scaleEffect(0.4)
-                            .progressViewStyle(CircularProgressViewStyle())
-                    } else {
-                        Image(systemName: "arrow.clockwise")
-                    }
+            Spacer()
+            
+            Button(action: refreshList) {
+                if isRefreshing {
+                    Text(WishKit.config.localization.refreshing)
+                } else {
+                    Text(WishKit.config.localization.refresh)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 20, height: 20)
-                .padding(EdgeInsets(top: 0, leading: 315, bottom: 0, trailing: 0))
             }
-        }
+
+            if WishKit.config.buttons.addButton.location == .navigationBar {
+                Button(action: { self.showingCreateSheet.toggle() }) {
+                    Text(WishKit.config.localization.addButtonInNavigationBar)
+                }
+                .padding(.leading, 15)
+                .sheet(isPresented: $showingCreateSheet) {
+                    CreateWishView(
+                        createActionCompletion: { wishModel.fetchList() },
+                        closeAction: { self.showingCreateSheet = false }
+                    )
+                    .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
+                    .background(systemBackgroundColor)
+                }
+            }
+        }.padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 15))
     }
 
     var noSegmentedControlView: some View {
-        Button(action: refreshList) {
-            if isRefreshing {
-                ProgressView()
-                    .scaleEffect(0.4)
-                    .progressViewStyle(CircularProgressViewStyle())
-            } else {
-                Image(systemName: "arrow.clockwise")
+        HStack {
+            Button(action: refreshList) {
+                if isRefreshing {
+                    Text(WishKit.config.localization.refreshing)
+                } else {
+                    Text(WishKit.config.localization.refresh)
+                }
+            }.padding(.trailing, WishKit.config.buttons.addButton.location == .floating ? 15 : 0)
+
+            if WishKit.config.buttons.addButton.location == .navigationBar {
+                Button(action: { self.showingCreateSheet.toggle() }) {
+                    Text(WishKit.config.localization.addButtonInNavigationBar)
+                }
+                .padding(.leading, 15)
+                .sheet(isPresented: $showingCreateSheet) {
+                    CreateWishView(
+                        createActionCompletion: { wishModel.fetchList() },
+                        closeAction: { self.showingCreateSheet = false }
+                    )
+                    .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
+                    .background(systemBackgroundColor)
+                }
             }
-        }
-        .buttonStyle(PlainButtonStyle())
-        .frame(width: 20, height: 20)
-        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
+        }.padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 15))
     }
 
     var systemBackgroundColor: Color {
@@ -105,6 +130,12 @@ struct WishlistContainer: View {
             }
 
             return PrivateTheme.systemBackgroundColor.dark
+        @unknown default:
+            if let color = WishKit.theme.tertiaryColor {
+                return color.light
+            }
+
+            return PrivateTheme.systemBackgroundColor.light
         }
     }
 }
