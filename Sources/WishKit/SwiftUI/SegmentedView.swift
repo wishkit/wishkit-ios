@@ -31,13 +31,21 @@ extension WishState: Identifiable {
     public var description: String {
         switch self {
         case .approved:
-            return WishKit.config.localization.approved
+            WishKit.config.localization.approved
         case .implemented:
-            return WishKit.config.localization.implemented
+            WishKit.config.localization.implemented
         case .pending:
-            return WishKit.config.localization.pending
+            WishKit.config.localization.pending
+        case .inReview:
+            WishKit.config.localization.inReview
+        case .planned:
+            WishKit.config.localization.planned
+        case .inProgress:
+            WishKit.config.localization.inProgress
+        case .completed:
+            WishKit.config.localization.completed
         default:
-            return ""
+            "Not Supported"
         }
     }
 }

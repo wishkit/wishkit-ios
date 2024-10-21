@@ -130,7 +130,7 @@ struct WishView: View {
             @unknown default:
                 return WishKit.theme.badgeColor.pending.light
             }
-        case .approved:
+        case .inReview, .approved:
             switch colorScheme {
             case .light:
                 return WishKit.theme.badgeColor.approved.light
@@ -139,7 +139,7 @@ struct WishView: View {
             @unknown default:
                 return WishKit.theme.badgeColor.approved.light
             }
-        case .implemented:
+        case .completed, .implemented:
             switch colorScheme {
             case .light:
                 return WishKit.theme.badgeColor.implemented.light
@@ -157,6 +157,8 @@ struct WishView: View {
             @unknown default:
                 return WishKit.theme.badgeColor.rejected.light
             }
+        default:
+            return WishKit.theme.badgeColor.rejected.light
         }
     }
 

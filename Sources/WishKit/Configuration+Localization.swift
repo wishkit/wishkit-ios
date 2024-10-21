@@ -18,6 +18,14 @@ extension Configuration {
 
         public var implemented: String
 
+        public var inReview: String
+
+        public var planned: String
+
+        public var inProgress: String
+
+        public var completed: String
+
         public var wishlist: String
 
         public var save: String
@@ -97,6 +105,10 @@ extension Configuration {
             pending: String = Localization.default().pending,
             approved: String = Localization.default().approved,
             implemented: String = Localization.default().implemented,
+            inReview: String = Localization.default().inReview,
+            planned: String = Localization.default().planned,
+            inProgress: String = Localization.default().inProgress,
+            completed: String = Localization.default().completed,
             wishlist: String = Localization.default().wishlist,
             save: String = Localization.default().save,
             title: String = Localization.default().title,
@@ -139,6 +151,10 @@ extension Configuration {
             self.pending = pending
             self.approved = approved
             self.implemented = implemented
+            self.inReview = inReview
+            self.planned = planned
+            self.inProgress = inProgress
+            self.completed = completed
             self.wishlist = wishlist
             self.save = save
             self.title = title
@@ -182,8 +198,12 @@ extension Configuration {
             Localization(
                 requested: "Requested",
                 pending: "Pending",
-                approved: "Approved",
-                implemented: "Implemented",
+                approved: "In Review",
+                implemented: "Completed",
+                inReview: "In Review",
+                planned: "Planned",
+                inProgress: "In Progress",
+                completed: "Completed",
                 wishlist: "Feature Requests",
                 save: "Save",
                 title: "Title",
