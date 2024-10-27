@@ -14,10 +14,30 @@ import SwiftUI
 final class WishModel: ObservableObject {
 
     @Published
+    @available(*, deprecated, message: "Use `inReviewList` instead.")
     var approvedWishlist: [WishResponse] = []
 
     @Published
+    @available(*, deprecated, message: "Use `completedList` instead.")
     var implementedWishlist: [WishResponse] = []
+
+    @Published
+    var pendingList: [WishResponse] = []
+
+    @Published
+    var inReviewList: [WishResponse] = []
+
+    @Published
+    var plannedList: [WishResponse] = []
+
+    @Published
+    var inProgressList: [WishResponse] = []
+
+    @Published
+    var completedList: [WishResponse] = []
+
+    @Published
+    var fullList: [WishResponse] = []
 
     @Published
     var shouldShowWatermark: Bool = false
@@ -38,9 +58,9 @@ final class WishModel: ObservableObject {
             case .success(let response):
                 DispatchQueue.main.async {
                     withAnimation {
-                        self.updateApprovedWishlist(with: response.list)
-                        self.updateImplementedWishlist(with: response.list)
+                        self.updateAllLists(with: response.list)
                         self.shouldShowWatermark = response.shouldShowWatermark
+                        self.fullList = response.list
                     }
                 }
             case .failure(let error):
@@ -61,24 +81,15 @@ final class WishModel: ObservableObject {
         fetchList(completion: nil)
     }
 
-    private func updateApprovedWishlist(with list: [WishResponse]) {
-        let userUUID = UUIDManager.getUUID()
+    private func updateAllLists(with list: [WishResponse]) {
+        let sortedList = list.sorted { $0.votingUsers.count > $1.votingUsers.count }
 
-        var filteredList = list.filter { wish in
-            let ownPendingWish = (wish.state == .pending && wish.userUUID == userUUID)
-            let approvedWish = wish.state == .approved
+        self.pendingList = sortedList.filter { wish in wish.state == .pending && wish.userUUID == UUIDManager.getUUID() }
+        self.inReviewList = sortedList.filter { wish in wish.state == .inReview || wish.state == .approved }
+        self.plannedList = sortedList.filter { wish in wish.state == .planned }
+        self.inProgressList = sortedList.filter { wish in wish.state == .inProgress }
+        self.completedList = sortedList.filter { wish in wish.state == .completed  || wish.state == .implemented}
 
-            return ownPendingWish || approvedWish
-        }
-
-        filteredList.sort { $0.votingUsers.count > $1.votingUsers.count }
-
-        self.approvedWishlist = filteredList
-    }
-
-    private func updateImplementedWishlist(with list: [WishResponse]) {
-        var filteredList = list.filter { wish in wish.state == .implemented }
-        filteredList.sort { $0.votingUsers.count > $1.votingUsers.count }
-        self.implementedWishlist = filteredList
+        self.implementedWishlist = sortedList
     }
 }

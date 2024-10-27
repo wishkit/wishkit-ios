@@ -28,7 +28,7 @@ struct WishlistViewIOS: View {
     private var colorScheme
 
     @State
-    private var selectedWishState: WishState = .approved
+    private var selectedWishState: WishState = .inReview
 
     @ObservedObject
     var wishModel: WishModel
@@ -66,14 +66,41 @@ struct WishlistViewIOS: View {
         }
     }
 
+    private var feedbackStateSelection: [WishState] {
+        return [.pending, .inReview, .planned, .inProgress, .completed]
+    }
+
     private func getList() -> [WishResponse] {
         switch selectedWishState {
-        case .approved:
-            return wishModel.approvedWishlist
-        case .implemented:
-            return wishModel.implementedWishlist
-        default:
+        case .pending:
+            return wishModel.pendingList
+        case .inReview, .approved:
+            return wishModel.inReviewList
+        case .planned:
+            return wishModel.plannedList
+        case .inProgress:
+            return wishModel.inProgressList
+        case .completed, .implemented:
+            return wishModel.completedList
+        case .rejected:
             return []
+        }
+    }
+
+    private func getCountFor(state: WishState) -> Int {
+        switch state {
+        case .pending:
+            return wishModel.pendingList.count
+        case .inReview, .approved:
+            return wishModel.inReviewList.count
+        case .planned:
+            return wishModel.plannedList.count
+        case .inProgress:
+            return wishModel.inProgressList.count
+        case .completed, .implemented:
+            return wishModel.completedList.count
+        case .rejected:
+            return 0
         }
     }
 
@@ -86,7 +113,7 @@ struct WishlistViewIOS: View {
             }
 
             if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                Text(WishKit.config.localization.noFeatureRequests)
+                Text("\(selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
             }
 
             ScrollView {
@@ -95,8 +122,11 @@ struct WishlistViewIOS: View {
                     if WishKit.config.buttons.segmentedControl.display == .show {
                         Spacer(minLength: 15)
 
-                        SegmentedView(selectedWishState: $selectedWishState)
-                            .frame(maxWidth: 200)
+                        Picker("", selection: $selectedWishState) {
+                            ForEach(feedbackStateSelection) { state in
+                                Text("\(state.description) (\(getCountFor(state: state)))")
+                            }
+                        }
                     }
 
                     Spacer(minLength: 15)

@@ -16,7 +16,7 @@ struct WishlistContainer: View {
     private var colorScheme
 
     @State
-    private var listType: WishState = .approved
+    private var listType: WishState = .inReview
 
     @State
     private var isRefreshing = false
@@ -56,14 +56,40 @@ struct WishlistContainer: View {
         }.background(systemBackgroundColor)
     }
 
+    private var feedbackStateSelection: [WishState] {
+        return [.pending, .inReview, .planned, .inProgress, .completed]
+    }
+
+    private func getCountFor(state: WishState) -> Int {
+        switch state {
+        case .pending:
+            return wishModel.pendingList.count
+        case .inReview, .approved:
+            return wishModel.inReviewList.count
+        case .planned:
+            return wishModel.plannedList.count
+        case .inProgress:
+            return wishModel.inProgressList.count
+        case .completed, .implemented:
+            return wishModel.completedList.count
+        case .rejected:
+            return 0
+        }
+    }
+
     var segmentedControlView: some View {
         HStack {
-            SegmentedView(selectedWishState: $listType)
-                .padding(.leading, 5)
-                .frame(maxWidth: 300)
+
+            if WishKit.config.buttons.segmentedControl.display == .show {
+                Picker("", selection: $listType) {
+                    ForEach(feedbackStateSelection) { state in
+                        Text("\(state.description) (\(getCountFor(state: state)))")
+                    }
+                }.frame(maxWidth: 150)
+            }
 
             Spacer()
-            
+
             Button(action: refreshList) {
                 if isRefreshing {
                     Text(WishKit.config.localization.refreshing)
@@ -86,7 +112,7 @@ struct WishlistContainer: View {
                     .background(systemBackgroundColor)
                 }
             }
-        }.padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 15))
+        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
     }
 
     var noSegmentedControlView: some View {
