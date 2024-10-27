@@ -68,26 +68,55 @@ struct PrivateTheme {
 extension Theme {
     public struct BadgeTheme {
 
-        public var pending: Scheme
-
+        @available(*, deprecated, renamed: "inReview")
         public var approved: Scheme
 
+        @available(*, deprecated, renamed: "completed")
         public var implemented: Scheme
+
+        public var pending: Scheme
+
+        public var inReview: Scheme
+
+        public var planned: Scheme
+
+        public var inProgress: Scheme
+
+        public var completed: Scheme
 
         public var rejected: Scheme
 
-        init(pending: Scheme, approved: Scheme, implemented: Scheme, rejected: Scheme) {
-            self.pending = pending
+        init(
+            approved: Scheme,
+            implemented: Scheme,
+            pending: Scheme,
+            inReview: Scheme,
+            planned: Scheme,
+            inProgress: Scheme,
+            completed: Scheme,
+            rejected: Scheme
+        ) {
             self.approved = approved
             self.implemented = implemented
+
+            self.pending = pending
+            self.inReview = inReview
+            self.planned = planned
+            self.inProgress = inProgress
+            self.completed = completed
             self.rejected = rejected
         }
 
         static func `default`() -> BadgeTheme {
             return BadgeTheme(
-                pending: .setBoth(to: .yellow),
                 approved: .setBoth(to: .blue),
                 implemented: .setBoth(to: .green),
+
+                pending: .setBoth(to: .yellow),
+                inReview: .setBoth(to: Color(red: 0, green: 251, blue: 255)),
+                planned: .setBoth(to: .purple),
+                inProgress: .setBoth(to: .blue),
+                completed: .setBoth(to: .green),
                 rejected: .setBoth(to: .red)
             )
         }

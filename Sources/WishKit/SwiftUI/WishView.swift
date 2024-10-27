@@ -121,6 +121,25 @@ struct WishView: View {
 
     func badgeColor(for wishState: WishState) -> Color {
         switch wishState {
+        case .approved:
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.approved.light
+            case .dark:
+                return WishKit.theme.badgeColor.approved.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.approved.light
+            }
+        case .implemented:
+        switch colorScheme {
+        case .light:
+            return WishKit.theme.badgeColor.implemented.light
+        case .dark:
+            return WishKit.theme.badgeColor.implemented.dark
+        @unknown default:
+            return WishKit.theme.badgeColor.implemented.light
+        }
+
         case .pending:
             switch colorScheme {
             case .light:
@@ -130,23 +149,42 @@ struct WishView: View {
             @unknown default:
                 return WishKit.theme.badgeColor.pending.light
             }
-        case .inReview, .approved:
+        case .inReview:
             switch colorScheme {
             case .light:
-                return WishKit.theme.badgeColor.approved.light
+                return WishKit.theme.badgeColor.inReview.light
             case .dark:
-                return WishKit.theme.badgeColor.approved.dark
+                return WishKit.theme.badgeColor.inReview.dark
             @unknown default:
-                return WishKit.theme.badgeColor.approved.light
+                return WishKit.theme.badgeColor.inReview.light
             }
-        case .completed, .implemented:
+        case .planned:
             switch colorScheme {
             case .light:
-                return WishKit.theme.badgeColor.implemented.light
+                return WishKit.theme.badgeColor.planned.light
             case .dark:
-                return WishKit.theme.badgeColor.implemented.dark
+                return WishKit.theme.badgeColor.planned.dark
             @unknown default:
-                return WishKit.theme.badgeColor.implemented.light
+                return WishKit.theme.badgeColor.planned.light
+            }
+        case .inProgress:
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.inProgress.light
+            case .dark:
+                return WishKit.theme.badgeColor.inProgress.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.inProgress.light
+            }
+
+        case .completed:
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.completed.light
+            case .dark:
+                return WishKit.theme.badgeColor.completed.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.completed.light
             }
         case .rejected:
             switch colorScheme {
@@ -158,7 +196,7 @@ struct WishView: View {
                 return WishKit.theme.badgeColor.rejected.light
             }
         default:
-            return WishKit.theme.badgeColor.rejected.light
+            return .black
         }
     }
 
