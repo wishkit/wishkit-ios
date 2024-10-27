@@ -20,7 +20,7 @@ struct WishlistView: View {
 
     @State
     var showingCreateSheet = false
-
+    
     @State
     var selectedWish: WishResponse? = nil
 
@@ -30,11 +30,21 @@ struct WishlistView: View {
     func getList() -> [WishResponse] {
         switch listType {
         case .approved:
-            return wishModel.approvedWishlist
+            wishModel.approvedWishlist
         case .implemented:
-            return wishModel.implementedWishlist
-        default:
-            return []
+            wishModel.implementedWishlist
+        case .pending:
+            wishModel.pendingList
+        case .inReview:
+            wishModel.inReviewList
+        case .planned:
+            wishModel.plannedList
+        case .inProgress:
+            wishModel.inProgressList
+        case .completed:
+            wishModel.completedList
+        case .rejected:
+            []
         }
     }
 

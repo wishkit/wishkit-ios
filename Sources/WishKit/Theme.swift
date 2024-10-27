@@ -113,7 +113,7 @@ extension Theme {
                 implemented: .setBoth(to: .green),
 
                 pending: .setBoth(to: .yellow),
-                inReview: .setBoth(to: Color(red: 0, green: 251, blue: 255)),
+                inReview: .setBoth(to: Color(red: 1/255, green: 255/255, blue: 255/255)),
                 planned: .setBoth(to: .purple),
                 inProgress: .setBoth(to: .blue),
                 completed: .setBoth(to: .green),

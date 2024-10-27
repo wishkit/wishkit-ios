@@ -9,22 +9,6 @@
 import SwiftUI
 import WishKitShared
 
-struct SegmentedView: View {
-
-    @Binding
-    var selectedWishState: WishState
-    
-    var body: some View {
-        if WishKit.config.buttons.segmentedControl.display == .show {
-            Picker("", selection: $selectedWishState) {
-                ForEach([WishState.approved, WishState.implemented]) { state in
-                    Text(state.description)
-                }
-            }.pickerStyle(.segmented)
-        }
-    }
-}
-
 extension WishState: Identifiable {
     public var id: Self { self }
 
