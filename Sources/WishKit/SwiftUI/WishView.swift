@@ -131,14 +131,14 @@ struct WishView: View {
                 return WishKit.theme.badgeColor.approved.light
             }
         case .implemented:
-        switch colorScheme {
-        case .light:
-            return WishKit.theme.badgeColor.implemented.light
-        case .dark:
-            return WishKit.theme.badgeColor.implemented.dark
-        @unknown default:
-            return WishKit.theme.badgeColor.implemented.light
-        }
+            switch colorScheme {
+            case .light:
+                return WishKit.theme.badgeColor.implemented.light
+            case .dark:
+                return WishKit.theme.badgeColor.implemented.dark
+            @unknown default:
+                return WishKit.theme.badgeColor.implemented.light
+            }
 
         case .pending:
             switch colorScheme {

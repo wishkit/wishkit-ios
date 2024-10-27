@@ -20,7 +20,7 @@ struct WishlistView: View {
 
     @State
     var showingCreateSheet = false
-    
+
     @State
     var selectedWish: WishResponse? = nil
 
