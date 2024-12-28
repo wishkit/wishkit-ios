@@ -78,12 +78,12 @@ struct WishlistContainer: View {
 
     private var feedbackStateSelection: [LocalWishState] {
         return [
-            LocalWishState.all,
-            LocalWishState.library(.pending),
-            LocalWishState.library(.inReview),
-            LocalWishState.library(.planned),
-            LocalWishState.library(.inProgress),
-            LocalWishState.library(.completed),
+            .all,
+            .library(.pending),
+            .library(.inReview),
+            .library(.planned),
+            .library(.inProgress),
+            .library(.completed),
         ]
     }
 
@@ -115,7 +115,8 @@ struct WishlistContainer: View {
             if WishKit.config.buttons.segmentedControl.display == .show {
                 Picker("", selection: $selectedWishState) {
                     ForEach(feedbackStateSelection, id: \.self) { state in
-                        Text("\(state.description) (\(getCountFor(state: state)))").tag(state)
+                        Text("\(state.description) (\(getCountFor(state: state)))")
+                            .tag(state)
                     }
                 }.frame(maxWidth: 150)
             }
