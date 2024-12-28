@@ -10,13 +10,33 @@
 import SwiftUI
 import WishKitShared
 
+enum LocalWishState: Hashable, Identifiable {
+    case all
+    case library(WishState)
+
+    var id: String { description }
+
+    var description: String {
+        switch self {
+        case .all:
+            return "All"
+        case .library(let wishState):
+            return wishState.description
+        }
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(description)
+    }
+}
+
 struct WishlistContainer: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
     @State
-    private var listType: WishState = .inReview
+    private var selectedWishState: LocalWishState = .all
 
     @State
     private var isRefreshing = false
@@ -50,30 +70,42 @@ struct WishlistContainer: View {
                 noSegmentedControlView
             }
 
-            WishlistView(wishModel: wishModel, listType: $listType)
+            WishlistView(wishModel: wishModel, selectedWishState: $selectedWishState)
                 .background(systemBackgroundColor)
             
         }.background(systemBackgroundColor)
     }
 
-    private var feedbackStateSelection: [WishState] {
-        return [.pending, .inReview, .planned, .inProgress, .completed]
+    private var feedbackStateSelection: [LocalWishState] {
+        return [
+            LocalWishState.all,
+            LocalWishState.library(.pending),
+            LocalWishState.library(.inReview),
+            LocalWishState.library(.planned),
+            LocalWishState.library(.inProgress),
+            LocalWishState.library(.completed),
+        ]
     }
 
-    private func getCountFor(state: WishState) -> Int {
+    private func getCountFor(state: LocalWishState) -> Int {
         switch state {
-        case .pending:
-            return wishModel.pendingList.count
-        case .inReview, .approved:
-            return wishModel.inReviewList.count
-        case .planned:
-            return wishModel.plannedList.count
-        case .inProgress:
-            return wishModel.inProgressList.count
-        case .completed, .implemented:
-            return wishModel.completedList.count
-        case .rejected:
-            return 0
+        case .all:
+            return wishModel.all.count
+        case .library(let wishState):
+            switch wishState {
+            case .pending:
+                return wishModel.pendingList.count
+            case .inReview, .approved:
+                return wishModel.inReviewList.count
+            case .planned:
+                return wishModel.plannedList.count
+            case .inProgress:
+                return wishModel.inProgressList.count
+            case .completed, .implemented:
+                return wishModel.completedList.count
+            case .rejected:
+                return 0
+            }
         }
     }
 
@@ -81,9 +113,9 @@ struct WishlistContainer: View {
         HStack {
 
             if WishKit.config.buttons.segmentedControl.display == .show {
-                Picker("", selection: $listType) {
-                    ForEach(feedbackStateSelection) { state in
-                        Text("\(state.description) (\(getCountFor(state: state)))")
+                Picker("", selection: $selectedWishState) {
+                    ForEach(feedbackStateSelection, id: \.self) { state in
+                        Text("\(state.description) (\(getCountFor(state: state)))").tag(state)
                     }
                 }.frame(maxWidth: 150)
             }

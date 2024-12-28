@@ -22,6 +22,9 @@ final class WishModel: ObservableObject {
     var implementedWishlist: [WishResponse] = []
 
     @Published
+    var all: [WishResponse] = []
+
+    @Published
     var pendingList: [WishResponse] = []
 
     @Published
@@ -36,6 +39,7 @@ final class WishModel: ObservableObject {
     @Published
     var completedList: [WishResponse] = []
 
+    /// This list includes pending feedback from all users.
     @Published
     var fullList: [WishResponse] = []
 
@@ -57,11 +61,9 @@ final class WishModel: ObservableObject {
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
-                    withAnimation {
-                        self.updateAllLists(with: response.list)
-                        self.shouldShowWatermark = response.shouldShowWatermark
-                        self.fullList = response.list
-                    }
+                    self.updateAllLists(with: response.list)
+                    self.shouldShowWatermark = response.shouldShowWatermark
+                    self.fullList = response.list
                 }
             case .failure(let error):
                 printError(self, error.reason.description)
@@ -89,6 +91,8 @@ final class WishModel: ObservableObject {
         self.plannedList = sortedList.filter { wish in wish.state == .planned }
         self.inProgressList = sortedList.filter { wish in wish.state == .inProgress }
         self.completedList = sortedList.filter { wish in wish.state == .completed  || wish.state == .implemented}
+
+        self.all = (self.pendingList + self.inReviewList + self.plannedList + self.inProgressList + self.completedList).sorted { $0.votingUsers.count > $1.votingUsers.count }
 
         self.implementedWishlist = sortedList
     }

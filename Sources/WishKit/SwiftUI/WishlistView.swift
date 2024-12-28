@@ -25,26 +25,27 @@ struct WishlistView: View {
     var selectedWish: WishResponse? = nil
 
     @Binding
-    var listType: WishState
+    var selectedWishState: LocalWishState
 
     func getList() -> [WishResponse] {
-        switch listType {
-        case .approved:
-            wishModel.approvedWishlist
-        case .implemented:
-            wishModel.implementedWishlist
-        case .pending:
-            wishModel.pendingList
-        case .inReview:
-            wishModel.inReviewList
-        case .planned:
-            wishModel.plannedList
-        case .inProgress:
-            wishModel.inProgressList
-        case .completed:
-            wishModel.completedList
-        case .rejected:
-            []
+        switch selectedWishState {
+        case .all:
+            return wishModel.all
+        case .library(let state):
+            switch state {
+            case .pending:
+                return wishModel.pendingList
+            case .inReview, .approved:
+                return wishModel.inReviewList
+            case .planned:
+                return wishModel.plannedList
+            case .inProgress:
+                return wishModel.inProgressList
+            case .completed, .implemented:
+                return wishModel.completedList
+            case .rejected:
+                return []
+            }
         }
     }
 
