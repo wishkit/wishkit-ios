@@ -27,7 +27,7 @@ WishKit allows your users to request and vote on features in your app that <b>ju
 
 # UIKit
 
-## 1. Add WishKit (v4.2.0) as a dependency in Xcode.
+## 1. Add WishKit (v4.7.0) as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
@@ -68,7 +68,7 @@ class HomeViewController: UIViewController {
 
 # SwiftUI
 
-## 1. Add WishKit (v4.2.0) as a dependency in Xcode.
+## 1. Add WishKit (v4.7.0) as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
