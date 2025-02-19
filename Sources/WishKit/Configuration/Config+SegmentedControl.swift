@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Configuration {
+extension WishKit.Configuration {
     public struct SegmentedControl {
 
         /// Hides/Shows the segmented control to switch between 'Requested' and 'Implemented'.

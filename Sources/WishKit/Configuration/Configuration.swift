@@ -8,41 +8,45 @@
 
 import Foundation
 
-public struct Configuration {
+public extension WishKit {
 
-    /// Hides/Shows the status badge of a wish e.g. "Approved" or "Implemented".
-    public var statusBadge: Display
-
-    public var localization: Localization
-
-    public var buttons = Configuration.Buttons()
-
-    public var tabBar = TabBar()
-
-    public var expandDescriptionInList: Bool = false
-
-    public var dropShadow: Display = .show
-
-    public var cornerRadius: CGFloat = 16
-
-    public var emailField: EmailField = .optional
-
-    public var commentSection: Display = .show
-    
-    public var allowUndoVote: Bool = false
-
-    init(
-        statusBadgeDisplay: Display = .hide,
-        localization: Localization = .default()
-    ) {
-        self.statusBadge = statusBadgeDisplay
-        self.localization = localization
+    public struct Configuration {
+        
+        /// Hides/Shows the status badge of a wish e.g. "Approved" or "Implemented".
+        public var statusBadge: Display
+        
+        public var localization: Localization
+        
+        public var buttons = Configuration.Buttons()
+        
+        public var tabBar = TabBar()
+        
+        public var expandDescriptionInList: Bool = false
+        
+        public var dropShadow: Display = .show
+        
+        public var cornerRadius: CGFloat = 16
+        
+        public var emailField: EmailField = .optional
+        
+        public var commentSection: Display = .show
+        
+        public var allowUndoVote: Bool = false
+        
+        init(
+            statusBadgeDisplay: Display = .hide,
+            localization: Localization = .default()
+        ) {
+            self.statusBadge = statusBadgeDisplay
+            self.localization = localization
+        }
     }
 }
 
 // MARK: - Display
 
-extension Configuration {
+
+extension WishKit.Configuration {
     public enum Display {
         case show
         case hide
@@ -51,10 +55,11 @@ extension Configuration {
 
 // MARK: - Email Field
 
-extension Configuration {
+extension WishKit.Configuration {
     public enum EmailField {
         case none
         case optional
         case required
     }
 }
+

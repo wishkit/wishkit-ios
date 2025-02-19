@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Configuration {
+extension WishKit.Configuration {
     public struct SaveButton {
         
         public var textColor = Theme.Scheme(light: .black, dark: .white)

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Configuration {
+extension WishKit.Configuration {
     
     public struct AddButton {
         
@@ -26,7 +26,7 @@ extension Configuration {
     }
 }
 
-extension Configuration.AddButton {
+extension WishKit.Configuration.AddButton {
     public enum Padding {
         case small
         case medium

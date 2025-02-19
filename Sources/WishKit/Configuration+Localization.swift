@@ -6,7 +6,7 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
-extension Configuration {
+extension WishKit.Configuration {
 
     public struct Localization {
 
