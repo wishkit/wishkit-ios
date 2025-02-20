@@ -34,6 +34,8 @@ struct WishView: View {
     private let voteActionCompletion: () -> Void
 
     private let viewKind: ViewKind
+    
+    private let userUUID = UUIDManager.getUUID()
 
     private var descriptionLineLimit: Int? {
         if viewKind == .detail {
@@ -41,6 +43,22 @@ struct WishView: View {
         }
         
         return WishKit.config.expandDescriptionInList ? nil : 3
+    }
+
+    private var commentCount: Int? {
+        if WishKit.config.commentSection == .show && wishResponse.commentList.count > 0 {
+            return wishResponse.commentList.count
+        }
+
+        return nil
+    }
+    
+    private var hasVoted: Bool {
+        return wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
+    }
+    
+    private var hasCommented: Bool {
+        return wishResponse.commentList.contains(where: { comment in comment.userId == userUUID })
     }
 
     init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
@@ -114,6 +132,24 @@ struct WishView: View {
                 }
                 
                 Spacer()
+
+                if let commentCount = commentCount {
+                    HStack {
+                        Image(systemName: "ellipsis.bubble")
+                            .imageScale(.medium)
+                            .foregroundColor(textColor.opacity(0.6))
+
+                        Text(String(describing: commentCount))
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(textColor.opacity(0.6))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color.primary.opacity(0.05))
+                    )
+                }
             }
         }
         .padding(16)
@@ -142,11 +178,6 @@ struct WishView: View {
             }
             return Alert(title: title)
         }
-    }
-    
-    private var hasVoted: Bool {
-        let userUUID = UUIDManager.getUUID()
-        return wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
     }
     
     private func voteAction() {
