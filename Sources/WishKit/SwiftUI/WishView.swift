@@ -40,7 +40,7 @@ struct WishView: View {
             return nil
         }
         
-        return WishKit.config.expandDescriptionInList ? nil : 1
+        return WishKit.config.expandDescriptionInList ? nil : 3
     }
 
     init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
@@ -51,94 +51,114 @@ struct WishView: View {
     }
     
     var body: some View {
-        HStack(spacing: 0) {
-            Button(action: voteAction) {
-                VStack(spacing: 5) {
-                    if isLoading {
-                        ProgressView()
-                            .frame(width: 35, height: 20)
-                    } else {
-                        Image(systemName: "arrowtriangle.up.fill")
-                            .imageScale(.medium)
-                            .foregroundColor(arrowColor)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .top, spacing: 12) {
+                Text(wishResponse.title)
+                    .foregroundColor(textColor)
+                    .font(.system(size: 18, weight: .semibold))
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(viewKind == .list ? 2 : nil)
+                
+                Spacer()
+                
+                if viewKind == .list && WishKit.config.statusBadge == .show {
+                    Text(wishResponse.state.description.uppercased())
+                        .font(.system(size: 11, weight: .semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .foregroundColor(wishResponse.state.badgeColor(for: colorScheme))
+                        .background(
+                            Capsule()
+                                .fill(wishResponse.state.badgeColor(for: colorScheme).opacity(0.15))
+                        )
+                }
+            }
+            
+            Text(wishResponse.description)
+                .foregroundColor(textColor.opacity(0.8))
+                .font(.system(size: 14))
+                .multilineTextAlignment(.leading)
+                .lineLimit(viewKind == .list ? descriptionLineLimit : nil)
+            
+            HStack(spacing: 16) {
+                Button(action: voteAction) {
+                    HStack(spacing: 8) {
+                        if #available(iOS 17.0, *) {
+                            Image(systemName: hasVoted ? "arrow.up.circle.fill" : "arrow.up.circle")
+                                .imageScale(.medium)
+                                .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
+                                .symbolEffect(.bounce, value: voteCount)
+                        } else {
+                            Image(systemName: hasVoted ? "arrow.up.circle.fill" : "arrow.up.circle")
+                                .imageScale(.medium)
+                                .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
+                        }
+                        
                         Text(String(describing: voteCount))
-                            .font(.system(size: 17))
-                            .foregroundColor(textColor)
-                            .frame(width: 35)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(hasVoted ? arrowColor.opacity(0.15) : Color.primary.opacity(0.05))
+                    )
                 }
-                .padding([.leading, .trailing], 12)
-                .cornerRadius(12)
-            }
-            .buttonStyle(.plain) // makes sure it looks good on macOS.
-            .alert(isPresented: $alertModel.showAlert) {
-                var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
-                switch alertModel.alertReason {
-                case .alreadyVoted:
-                    title = Text(WishKit.config.localization.youCanOnlyVoteOnce)
-                case .alreadyImplemented:
-                    title = Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
-                case .voteReturnedError(let error):
-                    title = Text("Something went wrong during your vote. Try again later.\n\n\(error)")
-                case .none:
-                    title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
-                default:
-                    title = Text("Something went wrong during your vote. Try again later.")
+                .buttonStyle(ScaleButtonStyle())
+                .disabled(isLoading)
+                
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
                 }
-
-                return Alert(title: title)
-            }
-
-            VStack(spacing: 5) {
-                HStack {
-                    Text(wishResponse.title)
-                        .foregroundColor(textColor)
-                        .font(.system(size: 17))
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(viewKind == .list ? 1 : nil)
-
-                    Spacer()
-
-                    if viewKind == .list && WishKit.config.statusBadge == .show {
-                        Text(wishResponse.state.description.uppercased())
-                            .opacity(0.8)
-                            .font(.system(size: 10, weight: .medium))
-                            .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
-                            .foregroundColor(.primary)
-                            .background(wishResponse.state.badgeColor(for: colorScheme).opacity(1/3))
-                            .cornerRadius(6)
-                    }
-                }
-
-                HStack {
-                    Text(wishResponse.description)
-                        .foregroundColor(textColor)
-                        .font(.system(size: 13))
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(descriptionLineLimit)
-                    Spacer()
-                }
+                
+                Spacer()
             }
         }
-        .padding([.top, .bottom, .trailing], 10)
-        .background(backgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-        .wkShadow()
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(backgroundColor)
+                .shadow(color: Color.primary.opacity(0.1), radius: 5, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+        )
+        .alert(isPresented: $alertModel.showAlert) {
+            var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+            switch alertModel.alertReason {
+            case .alreadyVoted:
+                title = Text(WishKit.config.localization.youCanOnlyVoteOnce)
+            case .alreadyImplemented:
+                title = Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
+            case .voteReturnedError(let error):
+                title = Text("Something went wrong during your vote. Try again later.\n\n\(error)")
+            case .none:
+                title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+            default:
+                title = Text("Something went wrong during your vote. Try again later.")
+            }
+            return Alert(title: title)
+        }
     }
-
+    
+    private var hasVoted: Bool {
+        let userUUID = UUIDManager.getUUID()
+        return wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
+    }
+    
     private func voteAction() {
-        isLoading = true
+        withAnimation(.spring(response: 0.3)) {
+            isLoading = true
+        }
         
         if wishResponse.state == .implemented {
             alertModel.alertReason = .alreadyImplemented
             alertModel.showAlert = true
             return
         }
-        
-        let userUUID = UUIDManager.getUUID()
-        
-        let hasVoted = wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
         
         if (hasVoted) && WishKit.config.allowUndoVote == false {
             alertModel.alertReason = .alreadyVoted
@@ -317,5 +337,13 @@ extension WishState {
         default:
             return .black
         }
+    }
+}
+
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+            .animation(.spring(response: 0.2), value: configuration.isPressed)
     }
 }
