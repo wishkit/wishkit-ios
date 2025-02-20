@@ -40,6 +40,15 @@ enum LocalWishState: Hashable, Identifiable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(description)
     }
+    
+    func badgeColor(for colorScheme: ColorScheme) -> Color {
+        switch self {
+        case .all:
+            return Color.primary
+        case .library(let state):
+            return state.badgeColor(for: colorScheme)
+        }
+    }
 }
 
 struct WishlistViewIOS: View {
@@ -140,6 +149,70 @@ struct WishlistViewIOS: View {
             }
         }
     }
+    
+    var segmentedControl: some View {
+        Group {
+            if #available(iOS 17.0, *) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 8) {
+                        ForEach(feedbackStateSelection) { state in
+                            Button {
+                                selectedWishState = state
+                            } label: {
+                                HStack(spacing: 7) {
+                                    Text("\(getCountFor(state: state))")
+                                        .font(.system(size: 14, weight: .bold))
+                                        .frame(minWidth: 28)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(
+                                            Capsule()
+                                                .fill(state == selectedWishState 
+                                                    ? state.badgeColor(for: colorScheme).opacity(0.3)
+                                                    : state.badgeColor(for: colorScheme).opacity(0.1))
+                                        )
+                                    
+                                    Text(state.description)
+                                        .font(.system(size: 15, weight: state == selectedWishState ? .bold : .medium))
+                                        .lineLimit(1)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 6)
+                                .foregroundColor(state == selectedWishState
+                                    ? state.badgeColor(for: colorScheme)
+                                    : state.badgeColor(for: colorScheme).opacity(0.7))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(state == selectedWishState
+                                            ? state.badgeColor(for: colorScheme).opacity(0.15)
+                                            : Color.clear)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(state == selectedWishState
+                                            ? state.badgeColor(for: colorScheme).opacity(0.3)
+                                            : Color.clear, lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(ScaleButtonStyle())
+                        }
+                    }
+                    .padding(.vertical, 5)
+                    .scrollTargetLayout()
+                }
+                .scrollTargetBehavior(.viewAligned)
+                .contentMargins(6, for: .scrollContent)
+            } else {
+                // Fallback on earlier versions
+                Picker("", selection: $selectedWishState) {
+                    ForEach(feedbackStateSelection, id: \.self) { state in
+                        Text("\(state.description) (\(getCountFor(state: state)))")
+                            .tag(state)
+                    }
+                }
+            }
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -154,11 +227,12 @@ struct WishlistViewIOS: View {
             }
 
             ScrollView {
+                
                 VStack {
 
                     if WishKit.config.buttons.segmentedControl.display == .show {
-                        Spacer(minLength: 15)
-
+                        // Please check this if you think it's a good UI, or just remove it..
+                        // segmentedControl
                         Picker("", selection: $selectedWishState) {
                             ForEach(feedbackStateSelection, id: \.self) { state in
                                 Text("\(state.description) (\(getCountFor(state: state)))")
@@ -169,7 +243,7 @@ struct WishlistViewIOS: View {
 
                     Spacer(minLength: 15)
 
-                    if getList().count > 0 {
+                    if !getList().isEmpty {
                         ForEach(getList()) { wish in
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
