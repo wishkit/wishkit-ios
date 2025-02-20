@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Configuration {
+extension WishKit.Configuration {
     public struct TabBar {
 
         public var image = Image(systemName: "lightbulb")

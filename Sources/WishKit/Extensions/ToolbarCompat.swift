@@ -17,8 +17,15 @@ extension View {
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Spacer()
-                        Button(action: { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }, label: { Text("Done") })
-
+                        Button {
+                            UIApplication.shared.sendAction(
+                                #selector(UIResponder.resignFirstResponder),
+                                to: nil, 
+                                from: nil, 
+                                for: nil)
+                        } label: {
+                            Text("Done".localized())
+                        }
                     }
                 }
             }

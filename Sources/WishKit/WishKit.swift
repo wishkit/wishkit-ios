@@ -26,7 +26,7 @@ public struct WishKit {
 
     static var _theme = Theme()
     
-    static var _config = Configuration()
+    static var _config = WishKit.Configuration()
     
     public static var theme: Theme {
         get {
@@ -36,7 +36,7 @@ public struct WishKit {
         }
     }
 
-    public static var config: Configuration {
+    public static var config: WishKit.Configuration {
         get {
             return threadLock.withLock { _config }
         } set {
