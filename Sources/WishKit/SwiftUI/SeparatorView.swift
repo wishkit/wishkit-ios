@@ -12,7 +12,7 @@ struct SeparatorView: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack { Divider() }
-            Text(WishKit.config.localization.comments.uppercased()).font(.caption2)
+            Text(WishKit.config.localization.comments.uppercased()).font(.caption2).foregroundColor(textColor)
             VStack { Divider() }
         }
     }
