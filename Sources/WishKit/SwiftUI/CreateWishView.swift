@@ -78,8 +78,10 @@ struct CreateWishView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Text(WishKit.config.localization.title)
+                                .foregroundColor(textColor)
                             Spacer()
                             Text("\(titleText.count)/50")
+                                .foregroundColor(textColor)
                         }
                         .font(.caption2)
                         .padding([.leading, .trailing, .bottom], 5)
@@ -96,8 +98,10 @@ struct CreateWishView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Text(WishKit.config.localization.description)
+                                .foregroundColor(textColor)
                             Spacer()
                             Text("\(descriptionText.count)/500")
+                                .foregroundColor(textColor)
                         }
                         .font(.caption2)
                         .padding([.leading, .trailing, .bottom], 5)
@@ -120,12 +124,14 @@ struct CreateWishView: View {
                                 if WishKit.config.emailField == .optional {
                                     Text(WishKit.config.localization.emailOptional)
                                         .font(.caption2)
+                                        .foregroundColor(textColor)
                                         .padding([.leading, .trailing, .bottom], 5)
                                 }
 
                                 if WishKit.config.emailField == .required {
                                     Text(WishKit.config.localization.emailRequired)
                                         .font(.caption2)
+                                        .foregroundColor(textColor)
                                         .padding([.leading, .trailing, .bottom], 5)
                                 }
 
