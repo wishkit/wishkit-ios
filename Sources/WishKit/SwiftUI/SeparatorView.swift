@@ -9,6 +9,29 @@
 import SwiftUI
 
 struct SeparatorView: View {
+    var textColor: Color {
+        switch colorScheme {
+        case .light:
+
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        case .dark:
+            if let color = WishKit.theme.textColor {
+                return color.dark
+            }
+
+            return .white
+        @unknown default:
+            if let color = WishKit.theme.textColor {
+                return color.light
+            }
+
+            return .black
+        }
+    }
     var body: some View {
         HStack(alignment: .center) {
             VStack { Divider() }
