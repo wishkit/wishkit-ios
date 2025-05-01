@@ -110,7 +110,7 @@ struct ContentView: View {
 ---
 
 # Configuration
-#### You can configure a lof of WishKit's UI elements.
+#### You can configure a lot of WishKit's UI elements.
 
 ```swift
 // Allow user to undo their vote
@@ -207,4 +207,4 @@ WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment
 ---
 
 ### **Example Project**
-Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up a wishlist!
+Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up a WishKit!
