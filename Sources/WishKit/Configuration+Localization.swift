@@ -9,6 +9,7 @@
 extension Configuration {
 
     public struct Localization {
+        public var all: String
 
         public var requested: String
 
@@ -101,6 +102,7 @@ extension Configuration {
         public var refreshing: String
 
         public init(
+            all: String = Localization.default().all,
             requested: String = Localization.default().requested,
             pending: String = Localization.default().pending,
             approved: String = Localization.default().approved,
@@ -147,6 +149,7 @@ extension Configuration {
             refresh: String = Localization.default().refresh,
             refreshing: String = Localization.default().refreshing
         ) {
+            self.all = all
             self.requested = requested
             self.pending = pending
             self.approved = approved
@@ -196,6 +199,7 @@ extension Configuration {
 
         public static func `default`() -> Localization {
             Localization(
+                all: "All",
                 requested: "Requested",
                 pending: "Pending",
                 approved: "In Review",

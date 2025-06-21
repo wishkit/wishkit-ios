@@ -31,6 +31,8 @@ public struct Configuration {
     
     public var allowUndoVote: Bool = false
 
+    public var defaultStatusFilter: StatusFilter = .all
+
     init(
         statusBadgeDisplay: Display = .hide,
         localization: Localization = .default()
@@ -46,6 +48,19 @@ extension Configuration {
     public enum Display {
         case show
         case hide
+    }
+}
+
+// MARK: - Status Filter
+
+extension Configuration {
+    public enum StatusFilter {
+        case all
+        case pending
+        case inReview
+        case planned
+        case inProgress
+        case completed
     }
 }
 

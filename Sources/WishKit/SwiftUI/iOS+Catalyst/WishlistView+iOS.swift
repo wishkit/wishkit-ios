@@ -42,13 +42,32 @@ enum LocalWishState: Hashable, Identifiable {
     }
 }
 
+extension Configuration.StatusFilter {
+    func toLocalWishState() -> LocalWishState {
+        switch self {
+        case .all:
+            return .all
+        case .pending:
+            return .library(.pending)
+        case .inReview:
+            return .library(.inReview)
+        case .planned:
+            return .library(.planned)
+        case .inProgress:
+            return .library(.inProgress)
+        case .completed:
+            return .library(.completed)
+        }
+    }
+}
+
 struct WishlistViewIOS: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
     @State
-    private var selectedWishState: LocalWishState = .all
+    private var selectedWishState: LocalWishState = WishKit.config.defaultStatusFilter.toLocalWishState()
 
     @ObservedObject
     var wishModel: WishModel
