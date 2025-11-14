@@ -207,4 +207,4 @@ WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment
 ---
 
 ### **Example Project**
-Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up a WishKit!
+Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up WishKit!
