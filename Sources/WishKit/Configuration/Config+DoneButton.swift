@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Configuration {
+extension WishKit.Configuration {
     public struct DoneButton {
 
         /// Hides/Shows the done button that would dismiss the presented wish list.

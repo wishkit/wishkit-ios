@@ -19,7 +19,7 @@ enum LocalWishState: Hashable, Identifiable {
     var description: String {
         switch self {
         case .all:
-            return "All"
+            return "All".localized()
         case .library(let wishState):
             return wishState.description
         }
