@@ -42,7 +42,7 @@ import WishKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-	WishKit.configure(with: "your_api_key")
+	    WishKit.configure(with: "your_api_key")
         return true
     }
     
