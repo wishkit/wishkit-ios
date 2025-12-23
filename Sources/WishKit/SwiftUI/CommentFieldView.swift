@@ -68,36 +68,22 @@ extension CommentFieldView {
     var textColor: Color {
         switch colorScheme {
         case .light:
-
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
+            WishKit.theme.textColor?.light ?? .black
         case .dark:
-            if let color = WishKit.theme.textColor {
-                return color.dark
-            }
-
-            return .white
+            WishKit.theme.textColor?.dark ?? .white
+        @unknown default:
+            .black
         }
     }
 
     var backgroundColor: Color {
         switch colorScheme {
         case .light:
-
-            if let color = WishKit.theme.secondaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.elementBackgroundColor.light
+            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
         case .dark:
-            if let color = WishKit.theme.secondaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.elementBackgroundColor.dark
+            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
+        @unknown default:
+            PrivateTheme.elementBackgroundColor.dark
         }
     }
 }

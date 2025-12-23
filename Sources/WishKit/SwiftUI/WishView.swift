@@ -195,8 +195,6 @@ struct WishView: View {
             @unknown default:
                 return WishKit.theme.badgeColor.rejected.light
             }
-        default:
-            return .black
         }
     }
 
@@ -220,14 +218,14 @@ struct WishView: View {
         let request = VoteWishRequest(wishId: wishResponse.id)
         
         WishApi.voteWish(voteRequest: request) { result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
+            Task { @MainActor in
+                switch result {
+                case .success:
                     voteActionCompletion()
+                case .failure(let error):
+                    alertModel.alertReason = .voteReturnedError(error.localizedDescription)
+                    alertModel.showAlert = true
                 }
-            case .failure(let error):
-                alertModel.alertReason = .voteReturnedError(error.localizedDescription)
-                alertModel.showAlert = true
             }
         }
     }
@@ -255,48 +253,22 @@ extension WishView {
     var textColor: Color {
         switch colorScheme {
         case .light:
-
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
+            WishKit.theme.textColor?.light ?? .black
         case .dark:
-            if let color = WishKit.theme.textColor {
-                return color.dark
-            }
-
-            return .white
+            WishKit.theme.textColor?.dark ?? .white
         @unknown default:
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
+            WishKit.theme.textColor?.light ?? .black
         }
     }
 
     var backgroundColor: Color {
         switch colorScheme {
         case .light:
-
-            if let color = WishKit.theme.secondaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.elementBackgroundColor.light
+            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
         case .dark:
-            if let color = WishKit.theme.secondaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.elementBackgroundColor.dark
+            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
         @unknown default:
-            if let color = WishKit.theme.secondaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.elementBackgroundColor.light
+            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
         }
     }
 }

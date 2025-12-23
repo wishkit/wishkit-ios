@@ -127,23 +127,11 @@ struct WishlistView: View {
     var backgroundColor: Color {
         switch colorScheme {
         case .light:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
+            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         case .dark:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.systemBackgroundColor.dark
+            WishKit.theme.tertiaryColor?.dark ?? PrivateTheme.systemBackgroundColor.dark
         @unknown default:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
+            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         }
     }
 }

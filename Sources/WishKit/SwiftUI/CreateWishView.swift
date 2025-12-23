@@ -263,8 +263,8 @@ struct CreateWishView: View {
 
         let createRequest = CreateWishRequest(title: titleText, description: descriptionText, email: emailText)
         WishApi.createWish(createRequest: createRequest) { result in
-            isButtonLoading = false
-            DispatchQueue.main.async {
+            Task { @MainActor in
+                isButtonLoading = false
                 switch result {
                 case .success:
                     alertModel.alertReason = .successfullyCreated
@@ -305,70 +305,33 @@ extension CreateWishView {
     var textColor: Color {
         switch colorScheme {
         case .light:
-
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
+            WishKit.theme.textColor?.light ?? .black
         case .dark:
-            if let color = WishKit.theme.textColor {
-                return color.dark
-            }
-
-            return .white
+            WishKit.theme.textColor?.dark ?? .white
         @unknown default:
-            if let color = WishKit.theme.textColor {
-                return color.light
-            }
-
-            return .black
+            WishKit.theme.textColor?.light ?? .black
         }
     }
 
     var backgroundColor: Color {
         switch colorScheme {
         case .light:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
+            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         case .dark:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.systemBackgroundColor.dark
+            WishKit.theme.tertiaryColor?.dark ?? PrivateTheme.systemBackgroundColor.dark
         @unknown default:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
+            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         }
     }
 
     var fieldBackgroundColor: Color {
         switch colorScheme {
         case .light:
-            if let color = WishKit.theme.secondaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.elementBackgroundColor.light
+            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
         case .dark:
-            if let color = WishKit.theme.secondaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.elementBackgroundColor.dark
+            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
         @unknown default:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
+            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         }
     }
 }
