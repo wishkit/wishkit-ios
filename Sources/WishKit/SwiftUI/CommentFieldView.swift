@@ -34,14 +34,24 @@ struct CommentFieldView: View {
 
     var body: some View {
         ZStack {
-            TextField(WishKit.config.localization.writeAComment, text: $textFieldValue)
-                .textFieldStyle(.plain)
-                .font(.footnote)
-                .padding([.top, .leading, .bottom], 15)
-                .padding([.trailing], 40)
-                .foregroundColor(textColor)
-                .background(backgroundColor)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            ZStack(alignment: .leading) {
+                if textFieldValue.isEmpty {
+                    Text(WishKit.config.localization.writeAComment)
+                        .foregroundColor(.gray)
+                        .font(.footnote)
+                        .padding(.leading, 15)
+                        .padding(.top, 15)
+                }
+            
+                TextField("", text: $textFieldValue)
+                    .textFieldStyle(.plain)
+                    .font(.footnote)
+                    .padding([.top, .leading, .bottom], 15)
+                    .padding(.trailing, 40)
+                    .foregroundColor(textColor)
+                    .background(backgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
 
             HStack {
                 Spacer()
