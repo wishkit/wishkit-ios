@@ -16,6 +16,10 @@ import Combine
 
 public struct WishKit {
     
+    @ObservedObject
+    var poll: PollModel = .init()
+    
+    
     private static let threadLock = NSLock()
     
     private static var subscribers: Set<AnyCancellable> = []
@@ -76,6 +80,22 @@ public struct WishKit {
         #else
             WishlistViewIOS(wishModel: WishModel())
         #endif
+        }
+    }
+    
+    /// PollListView that renders the list of polls.
+    public struct PollView: View {
+        
+        @ObservedObject
+        private var pollModel: PollModel
+        
+        public init (pollModel: PollModel) {
+            self.pollModel = pollModel
+        }
+        
+        public var body: some View {
+            InternalPollView()
+                .environmentObject(pollModel)
         }
     }
 }
