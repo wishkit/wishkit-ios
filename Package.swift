@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.10
 import PackageDescription
 
 let package = Package(
@@ -6,7 +6,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .macOS(.v12),
-        .iOS(.v14)
+        .iOS(.v17)
     ],
     products: [
         .library(name: "WishKit", targets: ["WishKit"])

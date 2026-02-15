@@ -142,5 +142,10 @@ extension Theme {
         static public func `setBoth`(to color: Color) -> Scheme {
             return Scheme(light: color, dark: color)
         }
+
+        /// Resolves the appropriate color for the given color scheme.
+        func resolved(for colorScheme: ColorScheme) -> Color {
+            colorScheme == .dark ? dark : light
+        }
     }
 }

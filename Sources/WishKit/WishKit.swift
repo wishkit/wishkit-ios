@@ -14,6 +14,8 @@ import SwiftUI
 import WishKitShared
 import Combine
 
+@available(iOS 16.0, *)
+@available(iOS 16.0, *)
 public struct WishKit {
     
     private static let threadLock = NSLock()
@@ -66,6 +68,7 @@ public struct WishKit {
     }
     
     /// FeedbackView that renders the list of feedback.
+    @available(iOS 16.0, *)
     public struct FeedbackListView: View {
         
         public init () { }
@@ -128,6 +131,7 @@ public struct Payment {
 
 // MARK: - Update User Logic
 
+@available(iOS 16.0, *)
 extension WishKit {
     public static func updateUser(customID: String) {
         self.user.customID = customID

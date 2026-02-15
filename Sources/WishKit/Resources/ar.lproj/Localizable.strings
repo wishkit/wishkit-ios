@@ -19,7 +19,7 @@
 "successfullyCreated" = "تم الإنشاء بنجاح";
 "done" = "تم";
 "detail" = "التفاصيل";
-"featureWishlist" = "قائمة الأمنيات للميزات";
+"featureWishlist" = "خارطة رحّال";
 "confirm" = "تأكيد";
 "cancel" = "إلغاء";
 "ok" = "موافق";
@@ -49,3 +49,8 @@
 
 // Wishlist
 "All" = "الكل";
+
+// Onboarding
+"roadmapOnboardingTitle" = "صوتك يرسم ملامح رحّال";
+"roadmapOnboardingBody" = "هذه خارطة الطريق العامّة — مبنيّة حول ملاحظاتك. صوّت على الميزات التي تهمّك أكثر، وسنعمل على تنفيذ ما يهمّك أولاً.";
+"roadmapOnboardingButton" = "متابعة";

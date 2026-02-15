@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  WishlistView+iOS.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 9/15/23.
@@ -11,9 +11,9 @@ import SwiftUI
 import WishKitShared
 import Combine
 
-extension View {
-    // MARK: Public - Wrap in Navigation
+// MARK: - Navigation Helper
 
+extension View {
     @ViewBuilder
     public func withNavigation() -> some View {
         NavigationView {
@@ -21,6 +21,8 @@ extension View {
         }.navigationViewStyle(.stack)
     }
 }
+
+// MARK: - LocalWishState
 
 enum LocalWishState: Hashable, Identifiable {
     case all
@@ -40,345 +42,160 @@ enum LocalWishState: Hashable, Identifiable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(description)
     }
-    
+
     func badgeColor(for colorScheme: ColorScheme) -> Color {
         switch self {
         case .all:
-            return Color.primary
+            return .primary
         case .library(let state):
             return state.badgeColor(for: colorScheme)
         }
     }
 }
 
+// MARK: - View Mode
+
+enum WishlistViewMode: String {
+    case kanban
+    case list
+}
+
+// MARK: - WishlistViewIOS
+
 struct WishlistViewIOS: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @State
-    private var selectedWishState: LocalWishState = .all
+    @ObservedObject var wishModel: WishModel
 
-    @ObservedObject
-    var wishModel: WishModel
+    @AppStorage("wishkit_view_mode")
+    private var viewMode: String = WishlistViewMode.kanban.rawValue
 
-    @State
-    var selectedWish: WishResponse? = nil
+    @AppStorage("wishkit_onboarding_seen")
+    private var hasSeenOnboarding = false
 
-    @State
-    private var currentWishList: [WishResponse] = []
-
-    private var isInTabBar: Bool {
-        let rootViewController = if #available(iOS 15, *) {
-            UIApplication
-                .shared
-                .connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-                .first?
-                .rootViewController
-        } else {
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
-        }
-
-        return rootViewController is UITabBarController
+    private var selectedMode: WishlistViewMode {
+        WishlistViewMode(rawValue: viewMode) ?? .kanban
     }
 
     private var addButtonBottomPadding: CGFloat {
-        let basePadding: CGFloat = isInTabBar ? 80 : 30
         switch WishKit.config.buttons.addButton.bottomPadding {
-        case .small:
-            return basePadding + 15
-        case .medium:
-            return basePadding + 30
-        case .large:
-            return basePadding + 60
+        case .small:  return 45
+        case .medium: return 60
+        case .large:  return 90
         }
     }
 
-    private var feedbackStateSelection: [LocalWishState] {
-        return [
-            .all,
-            .library(.pending),
-            .library(.inReview),
-            .library(.planned),
-            .library(.inProgress),
-            .library(.completed),
-        ]
-    }
-
-    private func getList() -> [WishResponse] {
-        switch selectedWishState {
-        case .all:
-            return wishModel.all
-        case .library(let state):
-            switch state {
-            case .pending:
-                return wishModel.pendingList
-            case .inReview, .approved:
-                return wishModel.inReviewList
-            case .planned:
-                return wishModel.plannedList
-            case .inProgress:
-                return wishModel.inProgressList
-            case .completed, .implemented:
-                return wishModel.completedList
-            case .rejected:
-                return []
-            }
-        }
-    }
-
-    private func getCountFor(state: LocalWishState) -> Int {
-        switch state {
-        case .all:
-            return wishModel.all.count
-        case .library(let wishState):
-            switch wishState {
-            case .pending:
-                return wishModel.pendingList.count
-            case .inReview, .approved:
-                return wishModel.inReviewList.count
-            case .planned:
-                return wishModel.plannedList.count
-            case .inProgress:
-                return wishModel.inProgressList.count
-            case .completed, .implemented:
-                return wishModel.completedList.count
-            case .rejected:
-                return 0
-            }
-        }
-    }
-    
-    var segmentedControl: some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: 8) {
-                        ForEach(feedbackStateSelection) { state in
-                            Button {
-                                selectedWishState = state
-                            } label: {
-                                HStack(spacing: 7) {
-                                    Text("\(getCountFor(state: state))")
-                                        .font(.system(size: 14, weight: .bold))
-                                        .frame(minWidth: 28)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            Capsule()
-                                                .fill(state == selectedWishState 
-                                                    ? state.badgeColor(for: colorScheme).opacity(0.3)
-                                                    : state.badgeColor(for: colorScheme).opacity(0.1))
-                                        )
-                                    
-                                    Text(state.description)
-                                        .font(.system(size: 15, weight: state == selectedWishState ? .bold : .medium))
-                                        .lineLimit(1)
-                                }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 6)
-                                .foregroundColor(state == selectedWishState
-                                    ? state.badgeColor(for: colorScheme)
-                                    : state.badgeColor(for: colorScheme).opacity(0.7))
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .fill(state == selectedWishState
-                                            ? state.badgeColor(for: colorScheme).opacity(0.15)
-                                            : Color.clear)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(state == selectedWishState
-                                            ? state.badgeColor(for: colorScheme).opacity(0.3)
-                                            : Color.clear, lineWidth: 1)
-                                )
-                            }
-                            .buttonStyle(ScaleButtonStyle())
-                        }
-                    }
-                    .padding(.vertical, 5)
-                    .scrollTargetLayout()
-                }
-                .scrollTargetBehavior(.viewAligned)
-                .contentMargins(6, for: .scrollContent)
-            } else {
-                // Fallback on earlier versions
-                Picker("", selection: $selectedWishState) {
-                    ForEach(feedbackStateSelection, id: \.self) { state in
-                        Text("\(state.description) (\(getCountFor(state: state)))")
-                            .tag(state)
-                    }
-                }
-            }
-        }
-    }
+    // MARK: - Body
 
     var body: some View {
-        ZStack {
+        Group {
+            if !hasSeenOnboarding {
+                RoadmapOnboardingView {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        hasSeenOnboarding = true
+                    }
+                }
+            } else {
+                roadmapContent
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(WishlistColors.background(for: colorScheme))
+        .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+        .navigationTitle(WishKit.config.localization.featureWishlist)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if hasSeenOnboarding {
+                ToolbarItem(placement: .topBarTrailing) {
+                    HStack(spacing: 12) {
+                        viewModePicker
+                        trailingToolbarContent
+                    }
+                }
+            }
+        }
+        .onAppear(perform: wishModel.fetchList)
+        .toolbar(.hidden, for: .tabBar)
+    }
 
+    // MARK: - Roadmap Content
+
+    private var roadmapContent: some View {
+        ZStack {
             if wishModel.isLoading && !wishModel.hasFetched {
                 ProgressView()
                     .imageScale(.large)
             }
 
-            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                Text("\(selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
+            if wishModel.hasFetched && !wishModel.isLoading && wishModel.all.isEmpty {
+                Text(WishKit.config.localization.noFeatureRequests)
             }
 
-            ScrollView {
-                
-                VStack {
-
-                    if WishKit.config.buttons.segmentedControl.display == .show {
-                        // Please check this if you think it's a good UI, or just remove it..
-                        // segmentedControl
-                        Picker("", selection: $selectedWishState) {
-                            ForEach(feedbackStateSelection, id: \.self) { state in
-                                Text("\(state.description) (\(getCountFor(state: state)))")
-                                    .tag(state)
-                            }
-                        }
-                    }
-
-                    Spacer(minLength: 15)
-
-                    if !getList().isEmpty {
-                        ForEach(getList()) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                            }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }.transition(.opacity)
-                    }
-                }
-
-                Spacer(minLength: isInTabBar ? 100 : 25)
+            switch selectedMode {
+            case .kanban:
+                KanbanBoardView(wishModel: wishModel)
+            case .list:
+                WishListBoardView(wishModel: wishModel)
             }
-            .refreshableCompat(action: { await wishModel.fetchList() })
-            .padding([.leading, .bottom, .trailing])
 
+            floatingAddButton
+        }
+    }
 
-            if WishKit.config.buttons.addButton.location == .floating {
+    // MARK: - Toolbar Picker
+
+    private var viewModePicker: some View {
+        Picker("", selection: $viewMode) {
+            Image(systemName: "rectangle.split.3x1")
+                .tag(WishlistViewMode.kanban.rawValue)
+            Image(systemName: "list.bullet")
+                .tag(WishlistViewMode.list.rawValue)
+        }
+        .pickerStyle(.segmented)
+        .frame(width: 120)
+    }
+
+    // MARK: - Trailing Toolbar
+
+    @ViewBuilder
+    private var trailingToolbarContent: some View {
+        if WishKit.config.buttons.doneButton.display == .show {
+            Button(WishKit.config.localization.done) {
+                UIApplication.shared.windows.first(where: \.isKeyWindow)?
+                    .rootViewController?.dismiss(animated: true)
+            }
+        }
+
+        if WishKit.config.buttons.addButton.location == .navigationBar {
+            NavigationLink {
+                CreateWishView(createActionCompletion: { wishModel.fetchList() })
+            } label: {
+                Text(WishKit.config.localization.addButtonInNavigationBar)
+            }
+        }
+    }
+
+    // MARK: - Floating Add Button
+
+    @ViewBuilder
+    private var floatingAddButton: some View {
+        if WishKit.config.buttons.addButton.location == .floating
+            && WishKit.config.buttons.addButton.display == .show {
+            VStack {
+                Spacer()
                 HStack {
                     Spacer()
-                    
-                    VStack(alignment: .trailing) {
-                        VStack {
-                            Spacer()
-                            
-                            if WishKit.config.buttons.addButton.display == .show {
-                                NavigationLink(
-                                    destination: {
-                                        CreateWishView(createActionCompletion: { wishModel.fetchList() })
-                                    }, label: {
-                                        AddButton(size: CGSize(width: 60, height: 60))
-                                    }
-                                )
-                            }
-                        }.padding(.bottom, addButtonBottomPadding)
-                    }.padding(.trailing, 20)
-                }.frame(maxWidth: 700)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .background(backgroundColor)
-        .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
-        .navigationTitle(WishKit.config.localization.featureWishlist)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-
-            ToolbarItem(placement: .topBarLeading) {
-                getRefreshButton()
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
-                if WishKit.config.buttons.doneButton.display == .show {
-                    Button(WishKit.config.localization.done) {
-                        UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController?.dismiss(animated: true)
+                    NavigationLink {
+                        CreateWishView(createActionCompletion: { wishModel.fetchList() })
+                    } label: {
+                        AddButton(size: CGSize(width: 60, height: 60))
                     }
-                }
-                
-                if WishKit.config.buttons.addButton.location == .navigationBar {
-                    NavigationLink(
-                        destination: {
-                            CreateWishView(createActionCompletion: { wishModel.fetchList() })
-                        }, label: {
-                            Text(WishKit.config.localization.addButtonInNavigationBar)
-                        }
-                    )
+                    .padding(.trailing, 20)
+                    .padding(.bottom, addButtonBottomPadding)
                 }
             }
-        }.onAppear(perform: wishModel.fetchList)
-    }
-
-    // MARK: - View
-
-    func getRefreshButton() -> some View {
-        if #unavailable(iOS 15) {
-            return Button(action: wishModel.fetchList) {
-                Image(systemName: "arrow.clockwise")
-            }
-        } else {
-            return EmptyView()
-        }
-    }
-}
-
-extension WishlistViewIOS {
-    var arrowColor: Color {
-        let userUUID = UUIDManager.getUUID()
-        
-        if
-            let selectedWish = selectedWish,
-            selectedWish.votingUsers.contains(where: { user in user.uuid == userUUID })
-        {
-            return WishKit.theme.primaryColor
-        }
-
-        switch colorScheme {
-        case .light:
-            return WishKit.config.buttons.voteButton.arrowColor.light
-        case .dark:
-            return WishKit.config.buttons.voteButton.arrowColor.dark
-        }
-    }
-
-    var cellBackgroundColor: Color {
-        switch colorScheme {
-        case .light:
-
-            if let color = WishKit.theme.secondaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            if let color = WishKit.theme.secondaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.elementBackgroundColor.dark
-        }
-    }
-
-    var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.light
-            }
-
-            return PrivateTheme.systemBackgroundColor.light
-        case .dark:
-            if let color = WishKit.theme.tertiaryColor {
-                return color.dark
-            }
-
-            return PrivateTheme.systemBackgroundColor.dark
         }
     }
 }

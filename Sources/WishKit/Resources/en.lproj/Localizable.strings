@@ -19,7 +19,7 @@
 "successfullyCreated" = "Successfully created";
 "done" = "Done";
 "detail" = "Detail";
-"featureWishlist" = "Feature Requests";
+"featureWishlist" = "Rahhal Roadmap";
 "confirm" = "Confirm";
 "cancel" = "Cancel";
 "ok" = "Ok";
@@ -49,3 +49,8 @@
 
 // Wishlist
 "All" = "All";
+
+// Onboarding
+"roadmapOnboardingTitle" = "Your Voice Shapes Rahhal";
+"roadmapOnboardingBody" = "This is our public roadmap — built around your feedback. Vote on the features that matter most to you, and we'll prioritize what you care about.";
+"roadmapOnboardingButton" = "Continue";

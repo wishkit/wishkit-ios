@@ -92,7 +92,9 @@ final class WishModel: ObservableObject {
         self.inProgressList = sortedList.filter { wish in wish.state == .inProgress }
         self.completedList = sortedList.filter { wish in wish.state == .completed  || wish.state == .implemented}
 
-        self.all = (self.pendingList + self.inReviewList + self.plannedList + self.inProgressList + self.completedList).sorted { $0.votingUsers.count > $1.votingUsers.count }
+        let activeWishes = (self.pendingList + self.inReviewList + self.plannedList + self.inProgressList)
+            .sorted { $0.votingUsers.count > $1.votingUsers.count }
+        self.all = activeWishes + self.completedList
 
         self.implementedWishlist = sortedList
     }

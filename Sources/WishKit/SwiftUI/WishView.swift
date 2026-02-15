@@ -9,6 +9,7 @@
 import SwiftUI
 import WishKitShared
 
+@available(iOS 15.0, *)
 struct WishView: View {
 
     // Helps differentiate where this view is used (in the list or in detail view).
@@ -61,6 +62,10 @@ struct WishView: View {
         return wishResponse.commentList.contains(where: { comment in comment.userId == userUUID })
     }
 
+    private var isCompleted: Bool {
+        wishResponse.state == .completed || wishResponse.state == .implemented
+    }
+
     init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
@@ -101,30 +106,30 @@ struct WishView: View {
             HStack(spacing: 16) {
                 Button(action: voteAction) {
                     HStack(spacing: 8) {
-                        if #available(iOS 17.0, *) {
-                            Image(systemName: hasVoted ? "arrow.up.circle.fill" : "arrow.up.circle")
+                        if #available(iOS 17.0, macOS 14.0, *) {
+                            Image(systemName: voteIconName)
                                 .imageScale(.medium)
-                                .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
+                                .foregroundStyle(voteColor)
                                 .symbolEffect(.bounce, value: voteCount)
                         } else {
-                            Image(systemName: hasVoted ? "arrow.up.circle.fill" : "arrow.up.circle")
+                            Image(systemName: voteIconName)
                                 .imageScale(.medium)
-                                .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
+                                .foregroundStyle(voteColor)
                         }
-                        
+
                         Text(String(describing: voteCount))
                             .font(.system(size: 15, weight: .medium))
-                            .foregroundColor(hasVoted ? arrowColor : textColor.opacity(0.6))
+                            .foregroundStyle(voteColor)
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(
                         Capsule()
-                            .fill(hasVoted ? arrowColor.opacity(0.15) : Color.primary.opacity(0.05))
+                            .fill(isCompleted ? Color.gray.opacity(0.1) : (hasVoted ? arrowColor.opacity(0.15) : Color.primary.opacity(0.05)))
                     )
                 }
                 .buttonStyle(ScaleButtonStyle())
-                .disabled(isLoading)
+                .disabled(isLoading || isCompleted)
                 
                 if isLoading {
                     ProgressView()
@@ -163,34 +168,35 @@ struct WishView: View {
                 .stroke(Color.primary.opacity(0.06), lineWidth: 1)
         )
         .alert(isPresented: $alertModel.showAlert) {
-            var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
-            switch alertModel.alertReason {
+            let title: Text = switch alertModel.alertReason {
             case .alreadyVoted:
-                title = Text(WishKit.config.localization.youCanOnlyVoteOnce)
-            case .alreadyImplemented:
-                title = Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
+                Text(WishKit.config.localization.youCanOnlyVoteOnce)
             case .voteReturnedError(let error):
-                title = Text("Something went wrong during your vote. Try again later.\n\n\(error)")
-            case .none:
-                title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+                Text("Something went wrong during your vote. Try again later.\n\n\(error)")
             default:
-                title = Text("Something went wrong during your vote. Try again later.")
+                Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
             }
             return Alert(title: title)
         }
     }
     
+    private var voteIconName: String {
+        if isCompleted { return "checkmark.circle.fill" }
+        return hasVoted ? "arrow.up.circle.fill" : "arrow.up.circle"
+    }
+
+    private var voteColor: Color {
+        if isCompleted { return .gray }
+        return hasVoted ? arrowColor : textColor.opacity(0.6)
+    }
+
     private func voteAction() {
+        guard !isCompleted else { return }
+
         withAnimation(.spring(response: 0.3)) {
             isLoading = true
         }
-        
-        if wishResponse.state == .implemented {
-            alertModel.alertReason = .alreadyImplemented
-            alertModel.showAlert = true
-            return
-        }
-        
+
         if (hasVoted) && WishKit.config.allowUndoVote == false {
             alertModel.alertReason = .alreadyVoted
             alertModel.showAlert = true
@@ -222,6 +228,7 @@ struct WishView: View {
 
 // MARK: - Darkmode
 
+@available(iOS 15.0, *)
 extension WishView {
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
@@ -288,86 +295,24 @@ extension WishView {
 }
 
 extension WishState {
-    
-    func badgeColor(for colorScheme: ColorScheme) -> Color {
+
+    private var badgeScheme: Theme.Scheme {
+        let badge = WishKit.theme.badgeColor
         switch self {
-        case .approved:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.approved.light
-            case .dark:
-                return WishKit.theme.badgeColor.approved.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.approved.light
-            }
-        case .implemented:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.implemented.light
-            case .dark:
-                return WishKit.theme.badgeColor.implemented.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.implemented.light
-            }
-            
-        case .pending:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.pending.light
-            case .dark:
-                return WishKit.theme.badgeColor.pending.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.pending.light
-            }
-        case .inReview:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.inReview.light
-            case .dark:
-                return WishKit.theme.badgeColor.inReview.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.inReview.light
-            }
-        case .planned:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.planned.light
-            case .dark:
-                return WishKit.theme.badgeColor.planned.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.planned.light
-            }
-        case .inProgress:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.inProgress.light
-            case .dark:
-                return WishKit.theme.badgeColor.inProgress.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.inProgress.light
-            }
-            
-        case .completed:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.completed.light
-            case .dark:
-                return WishKit.theme.badgeColor.completed.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.completed.light
-            }
-        case .rejected:
-            switch colorScheme {
-            case .light:
-                return WishKit.theme.badgeColor.rejected.light
-            case .dark:
-                return WishKit.theme.badgeColor.rejected.dark
-            @unknown default:
-                return WishKit.theme.badgeColor.rejected.light
-            }
-        default:
-            return .black
+        case .approved:     return badge.approved
+        case .implemented:  return badge.implemented
+        case .pending:      return badge.pending
+        case .inReview:     return badge.inReview
+        case .planned:      return badge.planned
+        case .inProgress:   return badge.inProgress
+        case .completed:    return badge.completed
+        case .rejected:     return badge.rejected
+        default:            return .setBoth(to: .primary)
         }
+    }
+
+    func badgeColor(for colorScheme: ColorScheme) -> Color {
+        badgeScheme.resolved(for: colorScheme)
     }
 }
 
