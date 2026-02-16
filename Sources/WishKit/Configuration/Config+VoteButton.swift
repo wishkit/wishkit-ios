@@ -14,5 +14,7 @@ extension Configuration {
         public var arrowColor: Theme.Scheme = .setBoth(to: .gray)
         
         public var textColor: Theme.Scheme = .set(light: .black, dark: .white)
+
+        public var icon: WishKitUpvoteIcon = .arrowUpvoteIcon
     }
 }

@@ -9,6 +9,14 @@
 import SwiftUI
 import WishKitShared
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
+#if canImport(AppKit)
+import AppKit
+#endif
+
 struct WishView: View {
 
     // Helps differentiate where this view is used (in the list or in detail view).
@@ -51,7 +59,8 @@ struct WishView: View {
         HStack(spacing: 0) {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
-                    Image(systemName: "arrowtriangle.up.fill")
+                    upvoteIconImage
+                        .renderingMode(.template)
                         .imageScale(.medium)
                         .foregroundColor(arrowColor)
                     Text(String(describing: voteCount))
@@ -234,6 +243,59 @@ struct WishView: View {
 // MARK: - Darkmode
 
 extension WishView {
+    private static let thumbsUpSystemName =
+
+    private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
+
+    var upvoteIconImage: Image {
+        switch WishKit.config.buttons.voteButton.icon {
+        case .systemName(let symbolName):
+            let trimmedSymbolName = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            guard !trimmedSymbolName.isEmpty else {
+                return fallbackUpvoteImage(reason: "Received empty upvote symbol name.")
+            }
+
+            guard isValidSystemSymbolName(trimmedSymbolName) else {
+                return fallbackUpvoteImage(reason: "Received invalid SF Symbol '\(trimmedSymbolName)'.")
+            }
+
+            return Image(systemName: trimmedSymbolName)
+        case .image(let image):
+            return image
+        #if canImport(UIKit)
+        case .uiImage(let image):
+            return Image(uiImage: image.withRenderingMode(.alwaysTemplate))
+        #endif
+        case .thumbsUpIcon:
+            return Image(systemName: Self.thumbsUpSystemName)
+        case .arrowUpvoteIcon:
+            return Image(systemName: Self.arrowUpvoteSystemName)
+        }
+    }
+
+    private func fallbackUpvoteImage(reason: String) -> Image {
+        printDebug(
+            WishView.self,
+            "Falling back to .arrowUpvoteIcon (\(Self.arrowUpvoteSystemName)). Reason: \(reason)"
+        )
+
+        return Image(systemName: Self.arrowUpvoteSystemName)
+    }
+
+    private func isValidSystemSymbolName(_ symbolName: String) -> Bool {
+        #if canImport(UIKit)
+        return UIImage(systemName: symbolName) != nil
+        #elseif canImport(AppKit)
+        return NSImage(
+            systemSymbolName: symbolName,
+            accessibilityDescription: nil
+        ) != nil
+        #else
+        return false
+        #endif
+    }
+
     var arrowColor: Color {
         let userUUID = UUIDManager.getUUID()
         if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
