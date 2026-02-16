@@ -243,7 +243,7 @@ struct WishView: View {
 // MARK: - Darkmode
 
 extension WishView {
-    private static let thumbsUpSystemName =
+    private static let thumbsUpSystemName = "hand.thumbsup.fill"
 
     private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
 
