@@ -60,7 +60,7 @@ struct WishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     upvoteIconImage
-                        .renderingMode(.template)
+//                        .renderingMode(.template)
                         .imageScale(.medium)
                         .foregroundColor(arrowColor)
                     Text(String(describing: voteCount))
@@ -260,17 +260,11 @@ extension WishView {
                 return fallbackUpvoteImage(reason: "Received invalid SF Symbol '\(trimmedSymbolName)'.")
             }
 
-            return Image(systemName: trimmedSymbolName)
-        case .image(let image):
-            return image
-        #if canImport(UIKit)
-        case .uiImage(let image):
-            return Image(uiImage: image.withRenderingMode(.alwaysTemplate))
-        #endif
+            return Image(systemName: trimmedSymbolName).renderingMode(.template)
         case .thumbsUpIcon:
-            return Image(systemName: Self.thumbsUpSystemName)
+            return Image(systemName: Self.thumbsUpSystemName).renderingMode(.template)
         case .arrowUpvoteIcon:
-            return Image(systemName: Self.arrowUpvoteSystemName)
+            return Image(systemName: Self.arrowUpvoteSystemName).renderingMode(.template)
         }
     }
 
