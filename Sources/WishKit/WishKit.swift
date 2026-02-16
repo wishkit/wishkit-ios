@@ -27,7 +27,7 @@ public struct WishKit {
     static var _theme = Theme()
     
     static var _config = Configuration()
-    
+
     public static var theme: Theme {
         get {
             return threadLock.withLock { _theme }
@@ -43,7 +43,7 @@ public struct WishKit {
             threadLock.withLock { _config = newValue }
         }
     }
-    
+
     #if canImport(UIKit) && !os(visionOS)
     /// (UIKit) The WishList viewcontroller.
     public static var viewController: UIViewController {
@@ -64,7 +64,7 @@ public struct WishKit {
     public static func configure(with apiKey: String) {
         WishKit.apiKey = apiKey
     }
-    
+
     /// FeedbackView that renders the list of feedback.
     public struct FeedbackListView: View {
         
