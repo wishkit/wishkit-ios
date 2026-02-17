@@ -35,6 +35,9 @@ struct WishView: View {
     private var voteCount: Int
 
     @State
+    private var isVotedByCurrentUser: Bool
+
+    @State
     private var isVoting = false
 
     @State
@@ -58,10 +61,16 @@ struct WishView: View {
     }
 
     init(wishResponse: WishResponse, viewKind: ViewKind, voteActionCompletion: @escaping (() -> Void)) {
+        let currentUserUUID = UUIDManager.getUUID()
+        let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
+            user.uuid == currentUserUUID
+        }
+
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
         self._voteCount = .init(initialValue: wishResponse.votingUsers.count)
+        self._isVotedByCurrentUser = .init(initialValue: hasVotedByCurrentUser)
     }
 
     var body: some View {
@@ -74,15 +83,15 @@ struct WishView: View {
                         .foregroundColor(arrowColor)
                     voteCountText
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
+                .padding(8)
                 .background(voteButtonBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .opacity(voteButtonOpacity)
             }
             .buttonStyle(.plain) // makes sure it looks good on macOS.
-            .padding(8)
+            .padding(.leading, 10)
+            .padding(.trailing, 8)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
                 if newValue {
@@ -93,6 +102,20 @@ struct WishView: View {
             }
             .onDisappear {
                 stopVoteButtonHeartbeat()
+            }
+            .onChange(of: wishResponse.votingUsers.count) { newValue in
+                guard isVoting == false else {
+                    return
+                }
+
+                voteCount = newValue
+            }
+            .onChange(of: serverHasVotedByCurrentUser) { newValue in
+                guard isVoting == false else {
+                    return
+                }
+
+                isVotedByCurrentUser = newValue
             }
             .alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
@@ -240,15 +263,13 @@ struct WishView: View {
             return
         }
         
-        let userUUID = UUIDManager.getUUID()
-        
-        let hasVoted = wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID })
-        
-        if (hasVoted) && WishKit.config.allowUndoVote == false {
+        if isVotedByCurrentUser && WishKit.config.allowUndoVote == false {
             alertModel.alertReason = .alreadyVoted
             alertModel.showAlert = true
             return
         }
+
+        let voteDelta = isVotedByCurrentUser ? -1 : 1
 
         let request = VoteWishRequest(wishId: wishResponse.id)
         let requestStartedAt = Date()
@@ -266,7 +287,6 @@ struct WishView: View {
                 isVoting = false
                 switch result {
                 case .success:
-                    let voteDelta = hasVoted && WishKit.config.allowUndoVote ? -1 : 1
                     applyVoteSuccessAnimations(voteDelta: voteDelta)
                     voteActionCompletion()
                 case .failure(let error):
@@ -283,6 +303,7 @@ struct WishView: View {
         }
 
         withAnimation(.easeOut(duration: 0.2)) {
+            isVotedByCurrentUser = voteDelta > 0
             voteCount += voteDelta
             voteCountScale = 1.15
         }
@@ -319,6 +340,13 @@ struct WishView: View {
     private func stopVoteButtonHeartbeat() {
         withAnimation(.easeOut(duration: 0.2)) {
             voteButtonOpacity = 1
+        }
+    }
+
+    private var serverHasVotedByCurrentUser: Bool {
+        let currentUserUUID = UUIDManager.getUUID()
+        return wishResponse.votingUsers.contains { user in
+            user.uuid == currentUserUUID
         }
     }
 }
@@ -374,8 +402,7 @@ extension WishView {
     }
 
     var arrowColor: Color {
-        let userUUID = UUIDManager.getUUID()
-        if wishResponse.votingUsers.contains(where: { user in user.uuid == userUUID }) {
+        if isVotedByCurrentUser {
             return WishKit.theme.primaryColor
         }
 
