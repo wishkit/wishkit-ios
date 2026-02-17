@@ -31,8 +31,17 @@ struct WishView: View {
     @ObservedObject
     private var alertModel = AlertModel()
 
-    @Binding
+    @State
     private var voteCount: Int
+
+    @State
+    private var isVoting = false
+
+    @State
+    private var voteCountScale: CGFloat = 1
+
+    @State
+    private var voteButtonOpacity: CGFloat = 1
 
     private let wishResponse: WishResponse
 
@@ -52,7 +61,7 @@ struct WishView: View {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
-        self._voteCount = .constant(wishResponse.votingUsers.count)
+        self._voteCount = .init(initialValue: wishResponse.votingUsers.count)
     }
 
     var body: some View {
@@ -60,18 +69,31 @@ struct WishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     upvoteIconImage
-//                        .renderingMode(.template)
+                        .renderingMode(.template)
                         .imageScale(.medium)
                         .foregroundColor(arrowColor)
-                    Text(String(describing: voteCount))
-                        .font(.system(size: 17))
-                        .foregroundColor(textColor)
-                        .frame(width: 35)
+                    voteCountText
                 }
-                .padding([.leading, .trailing], 12)
-                .cornerRadius(12)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(voteButtonBackgroundColor)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .opacity(voteButtonOpacity)
             }
             .buttonStyle(.plain) // makes sure it looks good on macOS.
+            .padding(8)
+            .disabled(isVoting)
+            .onChange(of: isVoting) { newValue in
+                if newValue {
+                    startVoteButtonHeartbeat()
+                } else {
+                    stopVoteButtonHeartbeat()
+                }
+            }
+            .onDisappear {
+                stopVoteButtonHeartbeat()
+            }
             .alert(isPresented: $alertModel.showAlert) {
                 var title = Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
                 switch alertModel.alertReason {
@@ -208,6 +230,10 @@ struct WishView: View {
     }
 
     private func voteAction() {
+        guard isVoting == false else {
+            return
+        }
+
         if wishResponse.state == .implemented {
             alertModel.alertReason = .alreadyImplemented
             alertModel.showAlert = true
@@ -225,17 +251,74 @@ struct WishView: View {
         }
 
         let request = VoteWishRequest(wishId: wishResponse.id)
+        let requestStartedAt = Date()
+        isVoting = true
         
         WishApi.voteWish(voteRequest: request) { result in
             Task { @MainActor in
+                let minimumPulseDuration: TimeInterval = 0.45
+                let elapsed = Date().timeIntervalSince(requestStartedAt)
+                if elapsed < minimumPulseDuration {
+                    let remaining = minimumPulseDuration - elapsed
+                    try? await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
+                }
+
+                isVoting = false
                 switch result {
                 case .success:
+                    let voteDelta = hasVoted && WishKit.config.allowUndoVote ? -1 : 1
+                    applyVoteSuccessAnimations(voteDelta: voteDelta)
                     voteActionCompletion()
                 case .failure(let error):
                     alertModel.alertReason = .voteReturnedError(error.localizedDescription)
                     alertModel.showAlert = true
                 }
             }
+        }
+    }
+
+    private func applyVoteSuccessAnimations(voteDelta: Int) {
+        guard voteDelta != 0 else {
+            return
+        }
+
+        withAnimation(.easeOut(duration: 0.2)) {
+            voteCount += voteDelta
+            voteCountScale = 1.15
+        }
+
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.7).delay(0.08)) {
+            voteCountScale = 1
+        }
+    }
+
+    @ViewBuilder
+    private var voteCountText: some View {
+        let base = Text(String(describing: voteCount))
+            .font(.footnote.weight(.semibold))
+            .foregroundColor(textColor)
+            .frame(minWidth: 35)
+            .scaleEffect(voteCountScale)
+
+        if #available(iOS 17.0, macOS 14.0, *) {
+            base.contentTransition(.numericText(value: Double(voteCount)))
+        } else {
+            base
+        }
+    }
+
+    @MainActor
+    private func startVoteButtonHeartbeat() {
+        voteButtonOpacity = 1
+        withAnimation(.easeInOut(duration: 0.22).repeatForever(autoreverses: true)) {
+            voteButtonOpacity = 0.62
+        }
+    }
+
+    @MainActor
+    private func stopVoteButtonHeartbeat() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            voteButtonOpacity = 1
         }
     }
 }
@@ -260,11 +343,11 @@ extension WishView {
                 return fallbackUpvoteImage(reason: "Received invalid SF Symbol '\(trimmedSymbolName)'.")
             }
 
-            return Image(systemName: trimmedSymbolName).renderingMode(.template)
+            return Image(systemName: trimmedSymbolName)
         case .thumbsUpIcon:
-            return Image(systemName: Self.thumbsUpSystemName).renderingMode(.template)
+            return Image(systemName: Self.thumbsUpSystemName)
         case .arrowUpvoteIcon:
-            return Image(systemName: Self.arrowUpvoteSystemName).renderingMode(.template)
+            return Image(systemName: Self.arrowUpvoteSystemName)
         }
     }
 
@@ -303,6 +386,17 @@ extension WishView {
             return WishKit.config.buttons.voteButton.arrowColor.dark
         @unknown default:
             return WishKit.config.buttons.voteButton.arrowColor.light
+        }
+    }
+
+    var voteButtonBackgroundColor: Color {
+        switch colorScheme {
+        case .light:
+            return arrowColor.opacity(0.12)
+        case .dark:
+            return arrowColor.opacity(0.2)
+        @unknown default:
+            return arrowColor.opacity(0.12)
         }
     }
 
