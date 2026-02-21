@@ -60,12 +60,12 @@ final class WishFilteringTests: XCTestCase {
         XCTAssertEqual(count, lists.completed.count)
     }
 
-    private func makeLists() -> WishFiltering.Lists {
+    private func makeLists() -> WishFilteringLists {
         let pending = makeWish(state: .pending)
         let approved = makeWish(state: .approved)
         let completed = makeWish(state: .completed)
 
-        return WishFiltering.Lists(
+        return WishFilteringLists(
             all: [pending, approved, completed],
             pending: [pending],
             approved: [approved],

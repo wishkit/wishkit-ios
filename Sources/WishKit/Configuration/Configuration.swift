@@ -11,50 +11,31 @@ import Foundation
 public struct Configuration {
 
     /// Hides/Shows the status badge of a wish e.g. "Approved" or "Implemented".
-    public var statusBadge: Display
+    public var statusBadge: ConfigurationDisplay
 
-    public var localization: Localization
+    public var localization: ConfigurationLocalization
 
-    public var buttons = Configuration.Buttons()
+    public var buttons = ConfigurationButtons()
 
-    public var tabBar = TabBar()
+    public var tabBar = ConfigurationTabBar()
 
     public var expandDescriptionInList: Bool = false
 
-    public var dropShadow: Display = .show
+    public var dropShadow: ConfigurationDisplay = .show
 
     public var cornerRadius: CGFloat = 16
 
-    public var emailField: EmailField = .optional
+    public var emailField: ConfigurationEmailField = .optional
 
-    public var commentSection: Display = .show
-    
+    public var commentSection: ConfigurationDisplay = .show
+
     public var allowUndoVote: Bool = false
 
     init(
-        statusBadgeDisplay: Display = .hide,
-        localization: Localization = .default()
+        statusBadgeDisplay: ConfigurationDisplay = .hide,
+        localization: ConfigurationLocalization = .default()
     ) {
         self.statusBadge = statusBadgeDisplay
         self.localization = localization
-    }
-}
-
-// MARK: - Display
-
-extension Configuration {
-    public enum Display {
-        case show
-        case hide
-    }
-}
-
-// MARK: - Email Field
-
-extension Configuration {
-    public enum EmailField {
-        case none
-        case optional
-        case required
     }
 }
