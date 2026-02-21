@@ -54,6 +54,6 @@ final class DetailWishViewModel: ObservableObject {
     private static func defaultCreateCommentAction(
         request: CreateCommentRequest
     ) async -> ApiResult<CommentResponse, ApiError> {
-        await CommentApi.createComment(request: request)
+        await CommentService.createComment(request: request)
     }
 }

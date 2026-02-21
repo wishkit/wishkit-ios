@@ -75,6 +75,6 @@ final class CreateWishViewModel: ObservableObject {
     private static func defaultCreateWishAction(
         createRequest: CreateWishRequest
     ) async -> ApiResult<CreateWishResponse, ApiError> {
-        await WishApi.createWish(createRequest: createRequest)
+        await WishService.createWish(createRequest: createRequest)
     }
 }

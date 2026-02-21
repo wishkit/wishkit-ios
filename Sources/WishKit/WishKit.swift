@@ -76,7 +76,7 @@ extension WishKit {
             let request = user.createRequest()
             sendUserTask = Task {
                 guard !Task.isCancelled else { return }
-                let _ = await UserApi.updateUser(userRequest: request)
+                let _ = await UserService.updateUser(userRequest: request)
             }
         }
     }

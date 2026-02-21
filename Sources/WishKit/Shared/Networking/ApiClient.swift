@@ -9,11 +9,11 @@
 import Foundation
 import WishKitShared
 
-struct Api: RequestCreatable {}
+struct ApiClient: RequestCreatable {}
 
 // MARK: - Generic Send Functions
 
-extension Api {
+extension ApiClient {
     static func send<T: Decodable>(request: URLRequest) async -> ApiResult<T, ApiError> {
         let method = request.httpMethod ?? ""
 

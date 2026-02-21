@@ -178,7 +178,7 @@ struct WishView: View {
         voteTask = Task { @MainActor in
             let requestStartedAt = Date()
             let request = VoteWishRequest(wishId: wishResponse.id)
-            let result = await WishApi.voteWish(voteRequest: request)
+            let result = await WishService.voteWish(voteRequest: request)
             guard !Task.isCancelled else {
                 return
             }

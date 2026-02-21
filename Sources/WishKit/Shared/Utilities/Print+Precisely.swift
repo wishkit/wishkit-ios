@@ -32,17 +32,9 @@ internal func printDebug<T>(_ type: T, _ text: String, line: Int = #line) {
 }
 
 /// Universal print that modifies the message to be consistent before printing it.
-fileprivate func printu<T>(_ kind: Kind, _ type: T, _ line: Int, _ text: String) {
+fileprivate func printu<T>(_ kind: PrintKind, _ type: T, _ line: Int, _ text: String) {
   let typeName = cleanUp(type: T.self)
   print("\(kind.rawValue) Line: \(line) | \(typeName) | \(text)")
-}
-
-fileprivate enum Kind: String {
-  case success = "✅"
-  case info = "🗒"
-  case warning = "⚠️"
-  case error = "❌"
-  case debug = "🐛"
 }
 
 /// Makes sure in case of "WishlistVC" and "WishlistVC.Type"
@@ -52,4 +44,3 @@ fileprivate func cleanUp<T>(type: T) -> String {
   let typeWordList = uncleanedType.split(separator: ".")
   return String(describing: typeWordList[0])
 }
-

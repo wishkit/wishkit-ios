@@ -65,7 +65,7 @@ final class WishModel: ObservableObject {
     func fetchListAsync() async {
         isLoading = true
 
-        let result = await WishApi.fetchWishList()
+        let result = await WishService.fetchWishList()
         switch result {
         case .success(let response):
             updateAllLists(with: response.list)

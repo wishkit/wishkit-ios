@@ -1,5 +1,5 @@
 //
-//  CommentApi.swift
+//  CommentService.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 8/14/23.
@@ -9,7 +9,7 @@
 import Foundation
 import WishKitShared
 
-struct CommentApi: RequestCreatable {
+struct CommentService: RequestCreatable {
 
     private static let baseUrl = "\(ProjectSettings.apiUrl)"
 
@@ -29,7 +29,7 @@ struct CommentApi: RequestCreatable {
             return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        return await Api.send(request: request)
+        return await ApiClient.send(request: request)
     }
 }
 

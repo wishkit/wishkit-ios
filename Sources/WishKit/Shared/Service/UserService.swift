@@ -1,5 +1,5 @@
 //
-//  UserApi.swift
+//  UserService.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 8/5/23.
@@ -9,7 +9,7 @@
 import Foundation
 import WishKitShared
 
-struct UserApi: RequestCreatable {
+struct UserService: RequestCreatable {
 
     private static let baseUrl = "\(ProjectSettings.apiUrl)"
 
@@ -29,6 +29,6 @@ struct UserApi: RequestCreatable {
             return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        return await Api.send(request: request)
+        return await ApiClient.send(request: request)
     }
 }

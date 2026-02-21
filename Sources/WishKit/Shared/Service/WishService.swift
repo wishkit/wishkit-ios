@@ -1,5 +1,5 @@
 //
-//  WishApi.swift
+//  WishService.swift
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 2/10/23.
@@ -9,7 +9,7 @@
 import Foundation
 import WishKitShared
 
-struct WishApi: RequestCreatable {
+struct WishService: RequestCreatable {
 
     private static let baseUrl = "\(ProjectSettings.apiUrl)"
 
@@ -42,7 +42,7 @@ struct WishApi: RequestCreatable {
             return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        return await Api.send(request: request)
+        return await ApiClient.send(request: request)
     }
 
     static func createWish(createRequest: CreateWishRequest) async -> ApiResult<CreateWishResponse, ApiError> {
@@ -50,7 +50,7 @@ struct WishApi: RequestCreatable {
             return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        return await Api.send(request: request)
+        return await ApiClient.send(request: request)
     }
 
     static func voteWish(voteRequest: VoteWishRequest) async -> ApiResult<VoteWishResponse, ApiError> {
@@ -58,6 +58,6 @@ struct WishApi: RequestCreatable {
             return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        return await Api.send(request: request)
+        return await ApiClient.send(request: request)
     }
 }
