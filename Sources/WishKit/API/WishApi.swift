@@ -17,19 +17,19 @@ struct WishApi: RequestCreatable {
 
     // MARK: - URLRequests
 
-    private static func fetchWishList() -> URLRequest? {
+    private static func makeFetchWishListRequest() -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("list")
         return createAuthedGETReuqest(to: url)
     }
 
-    private static func createWish(_ createRequest: CreateWishRequest) -> URLRequest? {
+    private static func makeCreateWishRequest(_ createRequest: CreateWishRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("create")
         return createAuthedPOSTReuqest(to: url, with: createRequest)
     }
 
-    private static func voteWish(_ voteRequest: VoteWishRequest) -> URLRequest? {
+    private static func makeVoteWishRequest(_ voteRequest: VoteWishRequest) -> URLRequest? {
         guard var url = endpoint else { return nil }
         url.appendPathComponent("vote")
         return createAuthedPOSTReuqest(to: url, with: voteRequest)
@@ -37,40 +37,56 @@ struct WishApi: RequestCreatable {
 
     // MARK: - Api Requests
 
+    static func fetchWishList() async -> ApiResult<ListWishResponse, ApiError> {
+        guard let request = makeFetchWishListRequest() else {
+            return .failure(ApiError(reason: .couldNotCreateRequest))
+        }
+
+        return await Api.send(request: request)
+    }
+
     static func fetchWishList(
         completionHandler: @escaping (ApiResult<ListWishResponse, ApiError>) -> Void
     ) {
-        guard let request = fetchWishList() else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
-            return
+        Task {
+            let result = await fetchWishList()
+            completionHandler(result)
+        }
+    }
+
+    static func createWish(createRequest: CreateWishRequest) async -> ApiResult<CreateWishResponse, ApiError> {
+        guard let request = makeCreateWishRequest(createRequest) else {
+            return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        return await Api.send(request: request)
     }
 
     static func createWish(
         createRequest: CreateWishRequest,
         completionHandler: @escaping (ApiResult<CreateWishResponse, ApiError>) -> Void
     ) {
+        Task {
+            let result = await createWish(createRequest: createRequest)
+            completionHandler(result)
+        }
+    }
 
-        guard let request = createWish(createRequest) else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
-            return
+    static func voteWish(voteRequest: VoteWishRequest) async -> ApiResult<VoteWishResponse, ApiError> {
+        guard let request = makeVoteWishRequest(voteRequest) else {
+            return .failure(ApiError(reason: .couldNotCreateRequest))
         }
 
-        Api.send(request: request, completionHandler: completionHandler)
+        return await Api.send(request: request)
     }
 
     static func voteWish(
         voteRequest: VoteWishRequest,
         completionHandler: @escaping (ApiResult<VoteWishResponse, ApiError>) -> Void
     ) {
-
-        guard let request = voteWish(voteRequest) else {
-            completionHandler(.failure(ApiError(reason: .couldNotCreateRequest)))
-            return
+        Task {
+            let result = await voteWish(voteRequest: voteRequest)
+            completionHandler(result)
         }
-
-        Api.send(request: request, completionHandler: completionHandler)
     }
 }

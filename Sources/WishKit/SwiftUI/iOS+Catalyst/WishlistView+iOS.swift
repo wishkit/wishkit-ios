@@ -9,7 +9,6 @@
 #if os(iOS)
 import SwiftUI
 import WishKitShared
-import Combine
 
 extension View {
     // MARK: Public - Wrap in Navigation
@@ -22,33 +21,13 @@ extension View {
     }
 }
 
-enum LocalWishState: Hashable, Identifiable {
-    case all
-    case library(WishState)
-
-    var id: String { description }
-
-    var description: String {
-        switch self {
-        case .all:
-            return "All"
-        case .library(let wishState):
-            return wishState.description
-        }
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(description)
-    }
-}
-
 struct WishlistViewIOS: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @State
-    private var selectedWishState: LocalWishState = .library(.approved)
+    @StateObject
+    private var viewModel = WishlistViewModel()
 
     @ObservedObject
     var wishModel: WishModel
@@ -57,9 +36,9 @@ struct WishlistViewIOS: View {
     var selectedWish: WishResponse? = nil
 
     @State
-    private var currentWishList: [WishResponse] = []
+    private var isInTabBar = false
 
-    private var isInTabBar: Bool {
+    private func resolveTabBarPresence() {
         let rootViewController = if #available(iOS 15, *) {
             UIApplication
                 .shared
@@ -71,7 +50,7 @@ struct WishlistViewIOS: View {
             UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
         }
 
-        return rootViewController is UITabBarController
+        isInTabBar = rootViewController is UITabBarController
     }
 
     private var addButtonBottomPadding: CGFloat {
@@ -86,60 +65,6 @@ struct WishlistViewIOS: View {
         }
     }
 
-    private var feedbackStateSelection: [LocalWishState] {
-        return [
-            .library(.pending),
-            .library(.approved),
-            .library(.completed),
-        ]
-    }
-
-    private func getList() -> [WishResponse] {
-        if WishKit.config.buttons.segmentedControl.display == .hide {
-            // When filter UI is hidden, preserve previous behavior: show full feed.
-            return wishModel.all
-        }
-
-        switch selectedWishState {
-        case .all:
-            return wishModel.all
-        case .library(let state):
-            switch state {
-            case .pending:
-                return wishModel.pendingList
-            case .approved, .inReview, .planned, .inProgress:
-                return wishModel.approvedList
-            case .completed, .implemented:
-                return wishModel.completedList
-            case .rejected:
-                return []
-            }
-        }
-    }
-
-    private func getCountFor(state: LocalWishState) -> Int {
-        if WishKit.config.buttons.segmentedControl.display == .hide {
-            // Keep counter aligned with full-feed fallback above.
-            return wishModel.all.count
-        }
-
-        switch state {
-        case .all:
-            return wishModel.all.count
-        case .library(let wishState):
-            switch wishState {
-            case .pending:
-                return wishModel.pendingList.count
-            case .approved, .inReview, .planned, .inProgress:
-                return wishModel.approvedList.count
-            case .completed, .implemented:
-                return wishModel.completedList.count
-            case .rejected:
-                return 0
-            }
-        }
-    }
-
     var body: some View {
         ZStack {
 
@@ -148,8 +73,8 @@ struct WishlistViewIOS: View {
                     .imageScale(.large)
             }
 
-            if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                Text("\(selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
+            if wishModel.hasFetched && !wishModel.isLoading && viewModel.list(for: wishModel).isEmpty {
+                Text("\(viewModel.selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
             }
 
             ScrollView {
@@ -158,9 +83,9 @@ struct WishlistViewIOS: View {
                     if WishKit.config.buttons.segmentedControl.display == .show {
                         Spacer(minLength: 15)
 
-                        Picker("", selection: $selectedWishState) {
-                            ForEach(feedbackStateSelection, id: \.self) { state in
-                                Text("\(state.description) (\(getCountFor(state: state)))")
+                        Picker("", selection: $viewModel.selectedWishState) {
+                            ForEach(viewModel.feedbackStateSelection, id: \.self) { state in
+                                Text("\(state.description) (\(viewModel.count(for: state, wishModel: wishModel)))")
                                     .tag(state)
                             }
                         }
@@ -168,8 +93,8 @@ struct WishlistViewIOS: View {
 
                     Spacer(minLength: 15)
 
-                    if getList().count > 0 {
-                        ForEach(getList()) { wish in
+                    if !viewModel.list(for: wishModel).isEmpty {
+                        ForEach(viewModel.list(for: wishModel)) { wish in
                             NavigationLink(destination: {
                                 DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
                             }, label: {
@@ -183,7 +108,7 @@ struct WishlistViewIOS: View {
 
                 Spacer(minLength: isInTabBar ? 100 : 25)
             }
-            .refreshableCompat(action: { await wishModel.fetchList() })
+            .refreshableCompat(action: { await wishModel.fetchListAsync() })
             .padding([.leading, .bottom, .trailing])
 
 
@@ -237,7 +162,11 @@ struct WishlistViewIOS: View {
                     )
                 }
             }
-        }.onAppear(perform: wishModel.fetchList)
+        }
+        .onAppear {
+            resolveTabBarPresence()
+            wishModel.fetchList()
+        }
     }
 
     // MARK: - View

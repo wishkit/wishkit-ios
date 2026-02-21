@@ -10,33 +10,13 @@
 import SwiftUI
 import WishKitShared
 
-enum LocalWishState: Hashable, Identifiable {
-    case all
-    case library(WishState)
-
-    var id: String { description }
-
-    var description: String {
-        switch self {
-        case .all:
-            return "All"
-        case .library(let wishState):
-            return wishState.description
-        }
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(description)
-    }
-}
-
 struct WishlistContainer: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @State
-    private var selectedWishState: LocalWishState = .library(.approved)
+    @StateObject
+    private var viewModel = WishlistViewModel()
 
     @State
     private var isRefreshing = false
@@ -70,50 +50,25 @@ struct WishlistContainer: View {
                 noSegmentedControlView
             }
 
-            WishlistView(wishModel: wishModel, selectedWishState: $selectedWishState)
+            WishlistView(
+                wishModel: wishModel,
+                selectedWishState: Binding(
+                    get: { viewModel.selectedWishState },
+                    set: { viewModel.selectedWishState = $0 }
+                )
+            )
                 .background(systemBackgroundColor)
             
         }.background(systemBackgroundColor)
-    }
-
-    private var feedbackStateSelection: [LocalWishState] {
-        return [
-            .library(.pending),
-            .library(.approved),
-            .library(.completed),
-        ]
-    }
-
-    private func getCountFor(state: LocalWishState) -> Int {
-        if WishKit.config.buttons.segmentedControl.display == .hide {
-            // Matches `WishlistView.getList()` behavior when no filter UI is visible.
-            return wishModel.all.count
-        }
-
-        switch state {
-        case .all:
-            return wishModel.all.count
-        case .library(let wishState):
-            switch wishState {
-            case .pending:
-                return wishModel.pendingList.count
-            case .approved, .inReview, .planned, .inProgress:
-                return wishModel.approvedList.count
-            case .completed, .implemented:
-                return wishModel.completedList.count
-            case .rejected:
-                return 0
-            }
-        }
     }
 
     var segmentedControlView: some View {
         HStack {
 
             if WishKit.config.buttons.segmentedControl.display == .show {
-                Picker("", selection: $selectedWishState) {
-                    ForEach(feedbackStateSelection, id: \.self) { state in
-                        Text("\(state.description) (\(getCountFor(state: state)))")
+                Picker("", selection: $viewModel.selectedWishState) {
+                    ForEach(viewModel.feedbackStateSelection, id: \.self) { state in
+                        Text("\(state.description) (\(viewModel.count(for: state, wishModel: wishModel)))")
                             .tag(state)
                     }
                 }.frame(maxWidth: 150)

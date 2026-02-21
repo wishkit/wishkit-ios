@@ -15,11 +15,6 @@ struct Api: RequestCreatable {
     }
 }
 
-enum ApiResult<Success, Error> {
-    case success(Success)
-    case failure(Error)
-}
-
 // MARK: - Generic Send Functions
 
 extension Api {
@@ -100,4 +95,3 @@ extension Api {
         }
     }
 }
-

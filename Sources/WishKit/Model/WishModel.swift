@@ -75,25 +75,8 @@ final class WishModel: ObservableObject {
 
     @MainActor
     func fetchList(completion: (() -> ())? = nil) {
-        isLoading = true
-        
-        WishApi.fetchWishList { result in
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.updateAllLists(with: response.list)
-                    self.shouldShowWatermark = response.shouldShowWatermark
-                    self.fullList = response.list
-                }
-            case .failure(let error):
-                printError(self, error.reason.description)
-            }
-
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.hasFetched = true
-            }
-            
+        Task { @MainActor in
+            await fetchListAsync()
             completion?()
         }
     }
@@ -101,6 +84,24 @@ final class WishModel: ObservableObject {
     @MainActor
     func fetchList() {
         fetchList(completion: nil)
+    }
+
+    @MainActor
+    func fetchListAsync() async {
+        isLoading = true
+
+        let result = await WishApi.fetchWishList()
+        switch result {
+        case .success(let response):
+            updateAllLists(with: response.list)
+            shouldShowWatermark = response.shouldShowWatermark
+            fullList = response.list
+        case .failure(let error):
+            printError(self, error.reason.description)
+        }
+
+        isLoading = false
+        hasFetched = true
     }
 
     private func updateAllLists(with list: [WishResponse]) {

@@ -8,7 +8,6 @@
 
 import SwiftUI
 import WishKitShared
-import Combine
 
 struct DetailWishView: View {
 
@@ -17,11 +16,8 @@ struct DetailWishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
-    private var commentModel = CommentModel()
-
-    @State
-    private var commentList: [CommentResponse] = []
+    @StateObject
+    private var viewModel: DetailWishViewModel
 
     private let wishResponse: WishResponse
 
@@ -37,7 +33,9 @@ struct DetailWishView: View {
         self.wishResponse = wishResponse
         self.voteActionCompletion = voteActionCompletion
         self.closeAction = closeAction
-        self._commentList = State(wrappedValue: wishResponse.commentList)
+        self._viewModel = StateObject(
+            wrappedValue: DetailWishViewModel(commentList: wishResponse.commentList)
+        )
     }
 
     var body: some View {
@@ -63,28 +61,13 @@ struct DetailWishView: View {
                         SeparatorView()
                             .padding([.top, .bottom], 15)
 
-                        CommentFieldView($commentModel.newCommentValue, isLoading: $commentModel.isLoading) {
-                            let request = CreateCommentRequest(wishId: wishResponse.id, description: commentModel.newCommentValue)
-
-                            commentModel.isLoading = true
-                            let response = await CommentApi.createComment(request: request)
-                            commentModel.isLoading = false
-
-                            switch response {
-                            case .success(let commentResponse):
-                                withAnimation {
-                                    commentList.insert(commentResponse, at: 0)
-                                }
-
-                                commentModel.newCommentValue = ""
-                            case .failure(let error):
-                                print("❌ \(error.localizedDescription)")
-                            }
+                        CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
+                            await viewModel.submitComment(for: wishResponse.id)
                         }.frame(maxWidth: 700)
 
                         Spacer(minLength: 20)
 
-                        CommentListView(commentList: $commentList)
+                        CommentListView(commentList: $viewModel.commentList)
                             .frame(maxWidth: 700)
                     }
                 }.padding([.leading, .bottom, .trailing])

@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Combine
 import WishKitShared
 
 struct CreateWishView: View {
@@ -21,23 +20,8 @@ struct CreateWishView: View {
     @ObservedObject
     private var alertModel = AlertModel()
 
-    @State
-    private var titleCharCount = 0
-
-    @State
-    private var titleText = ""
-
-    @State
-    private var emailText = ""
-
-    @State
-    private var descriptionText = ""
-
-    @State
-    private var isButtonDisabled = true
-
-    @State
-    private var isButtonLoading: Bool? = false
+    @StateObject
+    private var viewModel = CreateWishViewModel()
 
     @State
     private var showConfirmationAlert = false
@@ -79,30 +63,32 @@ struct CreateWishView: View {
                         HStack {
                             Text(WishKit.config.localization.title)
                             Spacer()
-                            Text("\(titleText.count)/50")
+                            Text("\(viewModel.titleText.count)/50")
                         }
                         .font(.caption2)
                         .padding([.leading, .trailing, .bottom], 5)
 
-                        TextField("", text: $titleText)
+                        TextField("", text: $viewModel.titleText)
                             .padding(10)
                             .textFieldStyle(.plain)
                             .foregroundColor(textColor)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                            .onReceive(Just(titleText)) { _ in handleTitleAndDescriptionChange() }
+                            .onChange(of: viewModel.titleText) { _ in
+                                viewModel.handleTitleAndDescriptionChange()
+                            }
                     }
 
                     VStack(spacing: 0) {
                         HStack {
                             Text(WishKit.config.localization.description)
                             Spacer()
-                            Text("\(descriptionText.count)/500")
+                            Text("\(viewModel.descriptionText.count)/500")
                         }
                         .font(.caption2)
                         .padding([.leading, .trailing, .bottom], 5)
 
-                        TextEditor(text: $descriptionText)
+                        TextEditor(text: $viewModel.descriptionText)
                             .padding([.leading, .trailing], 5)
                             .padding([.top, .bottom], 10)
                             .lineSpacing(3)
@@ -111,7 +97,9 @@ struct CreateWishView: View {
                             .scrollContentBackgroundCompat(.hidden)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                            .onReceive(Just(descriptionText)) { _ in handleTitleAndDescriptionChange() }
+                            .onChange(of: viewModel.descriptionText) { _ in
+                                viewModel.handleTitleAndDescriptionChange()
+                            }
                     }
 
                     if WishKit.config.emailField != .none {
@@ -132,7 +120,7 @@ struct CreateWishView: View {
                                 Spacer()
                             }
 
-                            TextField("", text: $emailText)
+                            TextField("", text: $viewModel.emailText)
                                 .padding(10)
                                 .textFieldStyle(.plain)
                                 .foregroundColor(textColor)
@@ -149,10 +137,13 @@ struct CreateWishView: View {
                         text: WishKit.config.localization.save,
                         action: submitAction,
                         style: .primary,
-                        isLoading: $isButtonLoading,
+                        isLoading: Binding<Bool?>(
+                            get: { viewModel.isButtonLoading },
+                            set: { viewModel.isButtonLoading = $0 ?? false }
+                        ),
                         size: saveButtonSize
                     )
-                    .disabled(isButtonDisabled)
+                    .disabled(viewModel.isButtonDisabled)
                     .alert(isPresented: $alertModel.showAlert) {
 
                         switch alertModel.alertReason {
@@ -226,59 +217,25 @@ struct CreateWishView: View {
         #endif
     }
 
-    private func handleTitleAndDescriptionChange() {
-
-        // Keep characters within limits
-        let titleLimit = 50
-        let descriptionLimit = 500
-
-        if titleText.count > titleLimit {
-            titleText = String(titleText.prefix(titleLimit))
-        }
-
-        if descriptionText.count > descriptionLimit {
-            descriptionText = String(descriptionText.prefix(descriptionLimit))
-        }
-
-        // Enable/Disable button
-        isButtonDisabled = titleText.isEmpty || descriptionText.isEmpty
-    }
-
     private func submitAction() {
-
-        if WishKit.config.emailField == .required && emailText.isEmpty {
-            alertModel.alertReason = .emailRequired
-            alertModel.showAlert = true
-            return
-        }
-
-        let isInvalidEmailFormat = (emailText.count < 6 || !emailText.contains("@") || !emailText.contains("."))
-        if !emailText.isEmpty && isInvalidEmailFormat {
-            alertModel.alertReason = .emailFormatWrong
-            alertModel.showAlert = true
-            return
-        }
-
-        isButtonLoading = true
-
-        let createRequest = CreateWishRequest(title: titleText, description: descriptionText, email: emailText)
-        WishApi.createWish(createRequest: createRequest) { result in
-            Task { @MainActor in
-                isButtonLoading = false
-                switch result {
-                case .success:
-                    alertModel.alertReason = .successfullyCreated
-                    alertModel.showAlert = true
-                case .failure(let error):
-                    alertModel.alertReason = .createReturnedError(error.reason.description)
-                    alertModel.showAlert = true
-                }
+        Task { @MainActor in
+            let result = await viewModel.submit()
+            switch result {
+            case .success:
+                alertModel.alertReason = .successfullyCreated
+            case .emailRequired:
+                alertModel.alertReason = .emailRequired
+            case .emailFormatWrong:
+                alertModel.alertReason = .emailFormatWrong
+            case .createReturnedError(let errorText):
+                alertModel.alertReason = .createReturnedError(errorText)
             }
+            alertModel.showAlert = true
         }
     }
 
     private func dismissViewAction() {
-        if !titleText.isEmpty || !descriptionText.isEmpty || !emailText.isEmpty {
+        if !viewModel.titleText.isEmpty || !viewModel.descriptionText.isEmpty || !viewModel.emailText.isEmpty {
             showConfirmationAlert = true
         } else {
             crossPlatformDismiss()
