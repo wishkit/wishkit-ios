@@ -198,7 +198,7 @@ extension Configuration {
             Localization(
                 requested: "Requested",
                 pending: "Pending",
-                approved: "In Review",
+                approved: "Approved",
                 implemented: "Completed",
                 inReview: "In Review",
                 planned: "Planned",

@@ -12,6 +12,23 @@ import Foundation
 import SwiftUI
 
 final class WishModel: ObservableObject {
+    // Maps many backend states into the 3 user-facing filter buckets.
+    enum FilterBucket: Equatable {
+        case pending
+        case approved
+        case completed
+        case excluded
+    }
+
+    struct FilteredLists {
+        let sortedList: [WishResponse]
+        let pending: [WishResponse]
+        let approved: [WishResponse]
+        let completed: [WishResponse]
+        let inReview: [WishResponse]
+        let planned: [WishResponse]
+        let inProgress: [WishResponse]
+    }
 
     @Published
     @available(*, deprecated, message: "Use `inReviewList` instead.")
@@ -26,6 +43,9 @@ final class WishModel: ObservableObject {
 
     @Published
     var pendingList: [WishResponse] = []
+
+    @Published
+    var approvedList: [WishResponse] = []
 
     @Published
     var inReviewList: [WishResponse] = []
@@ -84,16 +104,90 @@ final class WishModel: ObservableObject {
     }
 
     private func updateAllLists(with list: [WishResponse]) {
+        let lists = Self.makeFilteredLists(
+            from: list,
+            currentUserUUID: UUIDManager.getUUID()
+        )
+
+        self.pendingList = lists.pending
+        self.approvedList = lists.approved
+        self.completedList = lists.completed
+
+        // Keep old lists populated so existing public behavior is preserved.
+        self.inReviewList = lists.inReview
+        self.plannedList = lists.planned
+        self.inProgressList = lists.inProgress
+
+        self.all = (lists.pending + lists.approved + lists.completed)
+            .sorted { $0.votingUsers.count > $1.votingUsers.count }
+
+        self.implementedWishlist = lists.sortedList
+    }
+
+    static func bucket(for wish: WishResponse, currentUserUUID: UUID) -> FilterBucket {
+        switch wish.state {
+        case .pending:
+            // Pending should only surface your own requests.
+            // Excluded here means pending wishes created by other users.
+            return wish.userUUID == currentUserUUID ? .pending : .excluded
+        case .completed, .implemented:
+            return .completed
+        case .rejected:
+            // Rejected is intentionally hidden from all 3 tabs.
+            return .excluded
+        case .approved, .inReview, .planned, .inProgress:
+            // "Approved" view intentionally groups all active non-pending work.
+            return .approved
+        @unknown default:
+            // Safety fallback for future states not yet handled by this SDK version.
+            return .excluded
+        }
+    }
+
+    static func makeFilteredLists(from list: [WishResponse], currentUserUUID: UUID) -> FilteredLists {
         let sortedList = list.sorted { $0.votingUsers.count > $1.votingUsers.count }
 
-        self.pendingList = sortedList.filter { wish in wish.state == .pending && wish.userUUID == UUIDManager.getUUID() }
-        self.inReviewList = sortedList.filter { wish in wish.state == .inReview || wish.state == .approved }
-        self.plannedList = sortedList.filter { wish in wish.state == .planned }
-        self.inProgressList = sortedList.filter { wish in wish.state == .inProgress }
-        self.completedList = sortedList.filter { wish in wish.state == .completed  || wish.state == .implemented}
+        struct Accumulator {
+            var pending: [WishResponse] = []
+            var approved: [WishResponse] = []
+            var completed: [WishResponse] = []
+            var inReview: [WishResponse] = []
+            var planned: [WishResponse] = []
+            var inProgress: [WishResponse] = []
+        }
 
-        self.all = (self.pendingList + self.inReviewList + self.plannedList + self.inProgressList + self.completedList).sorted { $0.votingUsers.count > $1.votingUsers.count }
+        let result = sortedList.reduce(into: Accumulator()) { result, wish in
+            switch bucket(for: wish, currentUserUUID: currentUserUUID) {
+            case .pending:
+                result.pending.append(wish)
+            case .completed:
+                result.completed.append(wish)
+            case .approved:
+                result.approved.append(wish)
+            case .excluded:
+                break
+            }
 
-        self.implementedWishlist = sortedList
+            switch wish.state {
+            case .approved, .inReview:
+                result.inReview.append(wish)
+            case .planned:
+                result.planned.append(wish)
+            case .inProgress:
+                result.inProgress.append(wish)
+            default:
+                break
+            }
+        }
+
+        return FilteredLists(
+            sortedList: sortedList,
+            pending: result.pending,
+            approved: result.approved,
+            completed: result.completed,
+            inReview: result.inReview,
+            planned: result.planned,
+            inProgress: result.inProgress
+        )
     }
 }

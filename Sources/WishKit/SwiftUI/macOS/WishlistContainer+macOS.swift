@@ -36,7 +36,7 @@ struct WishlistContainer: View {
     private var colorScheme
 
     @State
-    private var selectedWishState: LocalWishState = .all
+    private var selectedWishState: LocalWishState = .library(.approved)
 
     @State
     private var isRefreshing = false
@@ -78,16 +78,18 @@ struct WishlistContainer: View {
 
     private var feedbackStateSelection: [LocalWishState] {
         return [
-            .all,
             .library(.pending),
-            .library(.inReview),
-            .library(.planned),
-            .library(.inProgress),
+            .library(.approved),
             .library(.completed),
         ]
     }
 
     private func getCountFor(state: LocalWishState) -> Int {
+        if WishKit.config.buttons.segmentedControl.display == .hide {
+            // Matches `WishlistView.getList()` behavior when no filter UI is visible.
+            return wishModel.all.count
+        }
+
         switch state {
         case .all:
             return wishModel.all.count
@@ -95,12 +97,8 @@ struct WishlistContainer: View {
             switch wishState {
             case .pending:
                 return wishModel.pendingList.count
-            case .inReview, .approved:
-                return wishModel.inReviewList.count
-            case .planned:
-                return wishModel.plannedList.count
-            case .inProgress:
-                return wishModel.inProgressList.count
+            case .approved, .inReview, .planned, .inProgress:
+                return wishModel.approvedList.count
             case .completed, .implemented:
                 return wishModel.completedList.count
             case .rejected:

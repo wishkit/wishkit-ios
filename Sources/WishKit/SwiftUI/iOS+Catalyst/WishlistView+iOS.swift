@@ -48,7 +48,7 @@ struct WishlistViewIOS: View {
     private var colorScheme
 
     @State
-    private var selectedWishState: LocalWishState = .all
+    private var selectedWishState: LocalWishState = .library(.approved)
 
     @ObservedObject
     var wishModel: WishModel
@@ -88,16 +88,18 @@ struct WishlistViewIOS: View {
 
     private var feedbackStateSelection: [LocalWishState] {
         return [
-            .all,
             .library(.pending),
-            .library(.inReview),
-            .library(.planned),
-            .library(.inProgress),
+            .library(.approved),
             .library(.completed),
         ]
     }
 
     private func getList() -> [WishResponse] {
+        if WishKit.config.buttons.segmentedControl.display == .hide {
+            // When filter UI is hidden, preserve previous behavior: show full feed.
+            return wishModel.all
+        }
+
         switch selectedWishState {
         case .all:
             return wishModel.all
@@ -105,12 +107,8 @@ struct WishlistViewIOS: View {
             switch state {
             case .pending:
                 return wishModel.pendingList
-            case .inReview, .approved:
-                return wishModel.inReviewList
-            case .planned:
-                return wishModel.plannedList
-            case .inProgress:
-                return wishModel.inProgressList
+            case .approved, .inReview, .planned, .inProgress:
+                return wishModel.approvedList
             case .completed, .implemented:
                 return wishModel.completedList
             case .rejected:
@@ -120,6 +118,11 @@ struct WishlistViewIOS: View {
     }
 
     private func getCountFor(state: LocalWishState) -> Int {
+        if WishKit.config.buttons.segmentedControl.display == .hide {
+            // Keep counter aligned with full-feed fallback above.
+            return wishModel.all.count
+        }
+
         switch state {
         case .all:
             return wishModel.all.count
@@ -127,12 +130,8 @@ struct WishlistViewIOS: View {
             switch wishState {
             case .pending:
                 return wishModel.pendingList.count
-            case .inReview, .approved:
-                return wishModel.inReviewList.count
-            case .planned:
-                return wishModel.plannedList.count
-            case .inProgress:
-                return wishModel.inProgressList.count
+            case .approved, .inReview, .planned, .inProgress:
+                return wishModel.approvedList.count
             case .completed, .implemented:
                 return wishModel.completedList.count
             case .rejected:

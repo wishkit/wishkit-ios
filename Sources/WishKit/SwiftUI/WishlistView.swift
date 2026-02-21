@@ -28,6 +28,11 @@ struct WishlistView: View {
     var selectedWishState: LocalWishState
 
     func getList() -> [WishResponse] {
+        if WishKit.config.buttons.segmentedControl.display == .hide {
+            // No picker shown -> render the unfiltered combined list.
+            return wishModel.all
+        }
+
         switch selectedWishState {
         case .all:
             return wishModel.all
@@ -35,12 +40,8 @@ struct WishlistView: View {
             switch state {
             case .pending:
                 return wishModel.pendingList
-            case .inReview, .approved:
-                return wishModel.inReviewList
-            case .planned:
-                return wishModel.plannedList
-            case .inProgress:
-                return wishModel.inProgressList
+            case .approved, .inReview, .planned, .inProgress:
+                return wishModel.approvedList
             case .completed, .implemented:
                 return wishModel.completedList
             case .rejected:
