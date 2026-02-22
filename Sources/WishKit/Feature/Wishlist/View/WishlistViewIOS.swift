@@ -13,7 +13,6 @@ import WishKitShared
 extension View {
     // MARK: Public - Wrap in Navigation
 
-    @ViewBuilder
     public func withNavigation() -> some View {
         NavigationView {
             self
@@ -87,7 +86,13 @@ struct WishlistViewIOS: View {
             ScrollView {
                 VStack {
 
-                    segmentedControlSection
+                    WishlistSegmentedControlSectionView(
+                        selectedWishState: $viewModel.selectedWishState,
+                        feedbackStateSelection: viewModel.feedbackStateSelection,
+                        countProvider: { state in
+                            viewModel.count(for: state, wishModel: wishModel)
+                        }
+                    )
 
                     Spacer(minLength: 15)
 
@@ -110,7 +115,12 @@ struct WishlistViewIOS: View {
             .padding([.leading, .bottom, .trailing])
 
 
-            floatingAddButton
+            WishlistFloatingAddButtonView(
+                isVisible: WishKit.config.buttons.addButton.location == .floating,
+                isAddButtonShown: WishKit.config.buttons.addButton.display == .show,
+                addButtonBottomPadding: addButtonBottomPadding,
+                createActionCompletion: { wishModel.fetchList() }
+            )
         }
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
@@ -124,7 +134,12 @@ struct WishlistViewIOS: View {
             }
 
             ToolbarItem(placement: .topBarTrailing) {
-                navigationBarActions
+                WishlistNavigationBarActionsView(
+                    isDoneButtonVisible: WishKit.config.buttons.doneButton.display == .show,
+                    isNavigationBarAddVisible: WishKit.config.buttons.addButton.location == .navigationBar,
+                    dismissAction: { presentationMode.wrappedValue.dismiss() },
+                    createActionCompletion: { wishModel.fetchList() }
+                )
             }
         }
         .onAppear {
@@ -135,70 +150,13 @@ struct WishlistViewIOS: View {
 
     // MARK: - View
 
-    func getRefreshButton() -> some View {
+    func getRefreshButton() -> AnyView {
         if #unavailable(iOS 15) {
-            return Button(action: wishModel.fetchList) {
+            return AnyView(Button(action: wishModel.fetchList) {
                 Image(systemName: "arrow.clockwise")
-            }
+            })
         } else {
-            return EmptyView()
-        }
-    }
-
-    @ViewBuilder
-    private var segmentedControlSection: some View {
-        if WishKit.config.buttons.segmentedControl.display == .show {
-            Spacer(minLength: 15)
-            Picker("", selection: $viewModel.selectedWishState) {
-                ForEach(viewModel.feedbackStateSelection, id: \.self) { state in
-                    Text("\(state.description) (\(viewModel.count(for: state, wishModel: wishModel)))")
-                        .tag(state)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var floatingAddButton: some View {
-        if WishKit.config.buttons.addButton.location == .floating {
-            HStack {
-                Spacer()
-
-                VStack(alignment: .trailing) {
-                    VStack {
-                        Spacer()
-
-                        if WishKit.config.buttons.addButton.display == .show {
-                            NavigationLink(
-                                destination: {
-                                    CreateWishView(createActionCompletion: { wishModel.fetchList() })
-                                }, label: {
-                                    AddButton(size: CGSize(width: 60, height: 60))
-                                }
-                            )
-                        }
-                    }.padding(.bottom, addButtonBottomPadding)
-                }.padding(.trailing, 20)
-            }.frame(maxWidth: 700)
-        }
-    }
-
-    @ViewBuilder
-    private var navigationBarActions: some View {
-        if WishKit.config.buttons.doneButton.display == .show {
-            Button(WishKit.config.localization.done) {
-                presentationMode.wrappedValue.dismiss()
-            }
-        }
-
-        if WishKit.config.buttons.addButton.location == .navigationBar {
-            NavigationLink(
-                destination: {
-                    CreateWishView(createActionCompletion: { wishModel.fetchList() })
-                }, label: {
-                    Text(WishKit.config.localization.addButtonInNavigationBar)
-                }
-            )
+            return AnyView(EmptyView())
         }
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct ConfigurationVoteButton {
 
-    public var icon: WishKitUpvoteIcon = .thumbsUpIcon
+    public var icon: WishKitUpvoteIcon = .arrowUpvoteIcon
 
     public var arrowColor = ThemeScheme(light: .black, dark: .white)
 }

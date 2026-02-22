@@ -70,7 +70,11 @@ struct WishView: View {
                         .renderingMode(.template)
                         .imageScale(.medium)
                         .foregroundColor(arrowColor)
-                    voteCountText
+                    WishVoteCountTextView(
+                        voteCount: voteCount,
+                        textColor: textColor,
+                        voteCountScale: voteCountScale
+                    )
                 }
                 .padding(8)
                 .background(voteButtonBackgroundColor)
@@ -217,21 +221,6 @@ struct WishView: View {
 
         withAnimation(.spring(response: 0.35, dampingFraction: 0.7).delay(0.08)) {
             voteCountScale = 1
-        }
-    }
-
-    @ViewBuilder
-    private var voteCountText: some View {
-        let base = Text(String(describing: voteCount))
-            .font(.footnote.weight(.semibold))
-            .foregroundColor(textColor)
-            .frame(minWidth: 35)
-            .scaleEffect(voteCountScale)
-
-        if #available(iOS 17.0, macOS 14.0, *) {
-            base.contentTransition(.numericText(value: Double(voteCount)))
-        } else {
-            base
         }
     }
 
