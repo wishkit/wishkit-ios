@@ -63,6 +63,20 @@ struct WishView: View {
     }
 
     var body: some View {
+        Group {
+            if viewKind == .detail {
+                content
+                    .padding(10)
+                    .background(backgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+            } else {
+                content
+                    .padding(.vertical, 4)
+            }
+        }
+    }
+
+    private var content: some View {
         HStack(spacing: 0) {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
@@ -83,7 +97,6 @@ struct WishView: View {
                 .opacity(voteButtonOpacity)
             }
             .buttonStyle(.plain)
-            .padding(.leading, 10)
             .padding(.trailing, 8)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
@@ -148,10 +161,6 @@ struct WishView: View {
                 }
             }
         }
-        .padding([.top, .bottom, .trailing], 10)
-        .background(backgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-        .wkShadow()
     }
 
     func badgeColor(for wishState: WishState) -> Color {

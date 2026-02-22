@@ -44,7 +44,7 @@ struct CommentFieldView: View {
                 .padding([.trailing], 40)
                 .foregroundColor(textColor)
                 .background(backgroundColor)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
 
             HStack {
                 Spacer()

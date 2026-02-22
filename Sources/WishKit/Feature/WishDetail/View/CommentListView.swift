@@ -15,17 +15,18 @@ struct CommentListView: View {
     var commentList: [CommentResponse]
 
     var body: some View {
-        LazyVStack {
-            ForEach(self.commentList, id: \.id) { comment in
+        if commentList.isEmpty {
+            // needed to expand the parent view all the way to the bottom.
+            Spacer()
+        } else {
+            List(commentList, id: \.id) { comment in
                 SingleCommentView(
                     comment: comment.description,
                     createdAt: comment.createdAt,
                     isAdmin: comment.isAdmin
                 )
-                .padding(.bottom, 10)
+                .fullWidthListSeparatorCompat()
             }
         }
-        .padding(1)
-        .padding(.bottom, 30)
     }
 }

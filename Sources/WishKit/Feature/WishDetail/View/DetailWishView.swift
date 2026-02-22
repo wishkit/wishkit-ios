@@ -47,33 +47,34 @@ struct DetailWishView: View {
                 }
             }
 
-            ScrollView {
-                VStack {
+            VStack {
 
-                    Spacer(minLength: 15)
+                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                    .padding()
+                    .frame(maxWidth: 700)
 
-                    WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
-                        .frame(maxWidth: 700)
+                if WishKit.config.commentSection == .show {
+                    SeparatorView()
+                        .padding([.leading, .trailing])
+                        .padding([.top, .bottom], 15)
 
-                    Spacer(minLength: 15)
-
-                    if WishKit.config.commentSection == .show {
-                        SeparatorView()
-                            .padding([.top, .bottom], 15)
-
-                        CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
-                            await viewModel.submitComment(for: wishResponse.id)
-                        }.frame(maxWidth: 700)
-
-                        Spacer(minLength: 20)
-
-                        CommentListView(commentList: $viewModel.commentList)
-                            .frame(maxWidth: 700)
+                    CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
+                        await viewModel.submitComment(for: wishResponse.id)
                     }
-                }.padding([.leading, .bottom, .trailing])
-            }.ignoresSafeArea(edges: [.bottom, .leading, .trailing])
+                    .padding([.leading, .trailing])
+                    .frame(maxWidth: 700)
 
-            Spacer()
+                    CommentListView(commentList: $viewModel.commentList)
+                        .frame(maxWidth: 700, maxHeight: .infinity)
+                } else {
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            if WishKit.config.commentSection == .hide {
+                Spacer()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)

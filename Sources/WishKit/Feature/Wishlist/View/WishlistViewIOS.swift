@@ -83,36 +83,27 @@ struct WishlistViewIOS: View {
                 Text("\(viewModel.selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
             }
 
-            ScrollView {
-                VStack {
-
-                    WishlistSegmentedControlSectionView(
-                        selectedWishState: $viewModel.selectedWishState,
-                        feedbackStateSelection: viewModel.feedbackStateSelection,
-                        countProvider: { state in
-                            viewModel.count(for: state, wishModel: wishModel)
-                        }
-                    )
-
-                    Spacer(minLength: 15)
-
-                    if !currentList.isEmpty {
-                        ForEach(currentList) { wish in
-                            NavigationLink(destination: {
-                                DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
-                            }, label: {
-                                WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                                    .padding(.all, 5)
-                                    .frame(maxWidth: 700)
-                            })
-                        }.transition(.opacity)
+            VStack(spacing: 0) {
+                WishlistSegmentedControlSectionView(
+                    selectedWishState: $viewModel.selectedWishState,
+                    feedbackStateSelection: viewModel.feedbackStateSelection,
+                    countProvider: { state in
+                        viewModel.count(for: state, wishModel: wishModel)
                     }
-                }
+                )
 
-                Spacer(minLength: isInTabBar ? 100 : 25)
+                if !currentList.isEmpty {
+                    List(currentList) { wish in
+                        NavigationLink(destination: {
+                            DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
+                        }, label: {
+                            WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                        })
+                        .fullWidthListSeparatorCompat()
+                    }
+                    .refreshableCompat(action: { await wishModel.fetchListAsync() })
+                }
             }
-            .refreshableCompat(action: { await wishModel.fetchListAsync() })
-            .padding([.leading, .bottom, .trailing])
 
 
             WishlistFloatingAddButtonView(

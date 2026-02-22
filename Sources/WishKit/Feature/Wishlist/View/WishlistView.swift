@@ -70,16 +70,11 @@ struct WishlistView: View {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                     }
-                    .listRowSeparatorCompat(.hidden)
                     .buttonStyle(.plain)
+                    .fullWidthListSeparatorCompat()
                 }
                 .transition(.opacity)
-                .scrollIndicatorsCompat(.hidden)
-                .scrollContentBackgroundCompat(.hidden)
-                .listStyle(PlainListStyle())
-                .background(.clear)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                     DetailWishView(
                         wishResponse: wish,

@@ -1,11 +1,12 @@
 import SwiftUI
 
-extension ScrollView {
+extension View {
+    @ViewBuilder
     func refreshableCompat(action: @escaping @Sendable () async -> Void) -> some View {
         if #available(iOS 15, *) {
-            return self.refreshable(action: action)
+            self.refreshable(action: action)
+        } else {
+            self
         }
-
-        return self
     }
 }

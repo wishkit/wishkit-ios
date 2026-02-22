@@ -10,11 +10,6 @@ import SwiftUI
 
 struct SingleCommentView: View {
 
-    @Environment(\.colorScheme)
-    var colorScheme
-
-    private let cornerRadius: CGFloat = 12
-
     private let comment: String
 
     private let createdAt: Date
@@ -28,55 +23,26 @@ struct SingleCommentView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 0){
+        VStack(spacing: 4) {
+            HStack(spacing: 0) {
 
                 Text("\(isAdmin ? WishKit.config.localization.admin : WishKit.config.localization.user)")
                     .font(.caption2)
-                    .foregroundColor(textColor.opacity(1/3))
+                    .foregroundColor(.secondary)
+                
                 Spacer()
+                
                 Text(createdAt.wkFormatted())
                     .font(.caption2)
-                    .foregroundColor(textColor.opacity(1/3))
+                    .foregroundColor(.secondary)
             }
-            .padding([.top, .bottom], 5)
-            .padding([.leading, .trailing], 10)
 
-            Divider()
-
-            HStack {
-                Text(comment)
-                    .font(.footnote)
-                    .padding(10)
-                    .foregroundColor(textColor)
-                Spacer()
-            }
+            Text(comment)
+                .font(.body)
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 8)
         }
         .frame(maxWidth: .infinity)
-        .background(backgroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        .wkShadow()
-    }
-
-    var textColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.textColor?.light ?? .black
-        case .dark:
-            WishKit.theme.textColor?.dark ?? .white
-        @unknown default:
-            .black
-        }
-    }
-
-    var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
-        @unknown default:
-            PrivateTheme.elementBackgroundColor.dark
-        }
     }
 }
