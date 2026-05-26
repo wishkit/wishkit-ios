@@ -1,11 +1,12 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
     name: "wishkit-ios",
     platforms: [
         .macOS(.v12),
-        .iOS(.v14)
+        .iOS(.v14),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "WishKit", targets: ["WishKit"])
