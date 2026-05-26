@@ -7,10 +7,12 @@ extension WishKit {
         public init() {}
 
         public var body: some View {
-            #if os(macOS) || os(visionOS)
+            #if os(iOS)
+                WishlistView(wishModel: WishModel())
+            #elseif os(macOS)
                 WishlistContainer(wishModel: WishModel())
-            #else
-                WishlistViewIOS(wishModel: WishModel())
+            #elseif os(visionOS)
+                WishlistContainer(wishModel: WishModel())
             #endif
         }
     }
