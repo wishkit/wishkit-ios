@@ -50,7 +50,7 @@ struct CommentFieldView: View {
                 Spacer()
                 if isLoading {
                     ProgressView()
-                        .controlSizeCompat(.small)
+                        .controlSize(.small)
                         .padding(10)
                 } else {
                     Button(action: startSubmitTask) {

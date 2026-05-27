@@ -25,7 +25,7 @@ struct CommentListView: View {
                     createdAt: comment.createdAt,
                     isAdmin: comment.isAdmin
                 )
-                .fullWidthListSeparatorCompat()
+                .fullWidthListSeparator()
             }
         }
     }

@@ -26,7 +26,7 @@ public struct Theme {
     public var textColor: ThemeScheme?
 
     init(
-        primaryColor: Color = Theme.systemGreen,
+        primaryColor: Color = .accentColor,
         badgeColor: ThemeBadgeTheme = .default(),
         secondaryColor: ThemeScheme? = nil,
         tertiaryColor: ThemeScheme? = nil,
@@ -38,10 +38,4 @@ public struct Theme {
         self.tertiaryColor = tertiaryColor
         self.textColor = textColor
     }
-
-    #if os(macOS)
-    private static let systemGreen = Color(NSColor.systemGreen)
-    #elseif canImport(UIKit)
-    private static let systemGreen = Color(UIColor.systemGreen)
-    #endif
 }

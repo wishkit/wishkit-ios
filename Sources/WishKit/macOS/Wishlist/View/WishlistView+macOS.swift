@@ -63,7 +63,7 @@ struct WishlistView: View {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                     }
                     .buttonStyle(.plain)
-                    .fullWidthListSeparatorCompat()
+                    .fullWidthListSeparator()
                 }
                 .transition(.opacity)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in

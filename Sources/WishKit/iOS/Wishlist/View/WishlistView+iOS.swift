@@ -4,9 +4,9 @@ import WishKitShared
 
 extension View {
     public func withNavigation() -> some View {
-        NavigationView {
+        NavigationStack {
             self
-        }.navigationViewStyle(.stack)
+        }
     }
 }
 
@@ -60,9 +60,9 @@ struct WishlistView: View {
                         }, label: {
                             WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                         })
-                        .fullWidthListSeparatorCompat()
+                        .fullWidthListSeparator()
                     }
-                    .refreshableCompat(action: { await wishModel.fetchListAsync() })
+                    .refreshable { await wishModel.fetchListAsync() }
                 }
             }
 
@@ -79,11 +79,6 @@ struct WishlistView: View {
         .navigationTitle(WishKit.config.localization.featureWishlist)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-
-            ToolbarItem(placement: .topBarLeading) {
-                getRefreshButton()
-            }
-
             ToolbarItem(placement: .topBarTrailing) {
                 WishlistNavigationBarActionsView(
                     isDoneButtonVisible: WishKit.config.buttons.doneButton.display == .show,
@@ -117,29 +112,13 @@ struct WishlistView: View {
         viewModel.list(for: wishModel)
     }
 
-    // MARK: - View
-
-    func getRefreshButton() -> AnyView {
-        if #unavailable(iOS 15) {
-            return AnyView(Button(action: wishModel.fetchList) {
-                Image(systemName: "arrow.clockwise")
-            })
-        } else {
-            return AnyView(EmptyView())
-        }
-    }
-    
     private func resolveTabBarPresence() {
-        let rootViewController = if #available(iOS 15, *) {
-            UIApplication
-                .shared
-                .connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-                .first?
-                .rootViewController
-        } else {
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
-        }
+        let rootViewController = UIApplication
+            .shared
+            .connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first?
+            .rootViewController
 
         isInTabBar = rootViewController is UITabBarController
     }

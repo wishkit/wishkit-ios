@@ -14,7 +14,5 @@ public struct ConfigurationButtons {
 
     public var voteButton = ConfigurationVoteButton()
 
-    public var saveButton = ConfigurationSaveButton()
-
     public var doneButton = ConfigurationDoneButton()
 }

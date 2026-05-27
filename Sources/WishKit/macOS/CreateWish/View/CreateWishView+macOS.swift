@@ -23,10 +23,6 @@ struct CreateWishView: View {
 
     var closeAction: (() -> Void)? = nil
 
-    var saveButtonSize: CGSize {
-        CGSize(width: 100, height: 30)
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -81,7 +77,7 @@ struct CreateWishView: View {
                             .lineSpacing(3)
                             .frame(height: 200)
                             .foregroundColor(textColor)
-                            .scrollContentBackgroundCompat(.hidden)
+                            .scrollContentBackground(.hidden)
                             .background(fieldBackgroundColor)
                             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                             .onChange(of: viewModel.descriptionText) { _ in
@@ -118,14 +114,20 @@ struct CreateWishView: View {
 
                     Spacer()
 
-                    WKButton(
-                        text: WishKit.config.localization.save,
-                        action: submitAction,
-                        style: .primary,
-                        isLoading: $viewModel.isButtonLoading,
-                        size: saveButtonSize
-                    )
-                    .disabled(viewModel.isButtonDisabled)
+                    Button(action: submitAction) {
+                        HStack {
+                            if viewModel.isButtonLoading {
+                                ProgressView()
+                                    .controlSize(.small)
+                            }
+                            Text(WishKit.config.localization.save)
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .tint(WishKit.theme.primaryColor)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
                     .alert(isPresented: $alertModel.showAlert, content: makeAlert)
                 }
                 .frame(maxWidth: 700)
