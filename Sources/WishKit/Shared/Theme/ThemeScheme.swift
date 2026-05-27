@@ -26,4 +26,9 @@ public struct ThemeScheme {
     public static func setBoth(to color: Color) -> ThemeScheme {
         ThemeScheme(light: color, dark: color)
     }
+
+    /// Returns the color for the given color scheme.
+    public func resolved(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? dark : light
+    }
 }

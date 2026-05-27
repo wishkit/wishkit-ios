@@ -105,30 +105,15 @@ extension WishlistView {
             return WishKit.theme.primaryColor
         }
 
-        switch colorScheme {
-        case .light:
-            return WishKit.config.buttons.voteButton.arrowColor.light
-        case .dark:
-            return WishKit.config.buttons.voteButton.arrowColor.dark
-        }
+        return WishKit.config.buttons.voteButton.arrowColor.resolved(for: colorScheme)
     }
 
     var cellBackgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
-        }
+        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 
     var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
-        case .dark:
-            WishKit.theme.tertiaryColor?.dark ?? PrivateTheme.systemBackgroundColor.dark
-        }
+        WishKit.theme.tertiaryColor?.resolved(for: colorScheme) ?? PrivateTheme.systemBackground
     }
 }
 #endif

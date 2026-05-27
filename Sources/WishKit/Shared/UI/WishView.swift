@@ -339,46 +339,18 @@ extension WishView {
             return WishKit.theme.primaryColor
         }
 
-        switch colorScheme {
-        case .light:
-            return WishKit.config.buttons.voteButton.arrowColor.light
-        case .dark:
-            return WishKit.config.buttons.voteButton.arrowColor.dark
-        @unknown default:
-            return WishKit.config.buttons.voteButton.arrowColor.light
-        }
+        return WishKit.config.buttons.voteButton.arrowColor.resolved(for: colorScheme)
     }
 
     var voteButtonBackgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            return arrowColor.opacity(0.12)
-        case .dark:
-            return arrowColor.opacity(0.2)
-        @unknown default:
-            return arrowColor.opacity(0.12)
-        }
+        arrowColor.opacity(colorScheme == .dark ? 0.2 : 0.12)
     }
 
     var textColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.textColor?.light ?? .black
-        case .dark:
-            WishKit.theme.textColor?.dark ?? .white
-        @unknown default:
-            WishKit.theme.textColor?.light ?? .black
-        }
+        WishKit.theme.textColor?.resolved(for: colorScheme) ?? .primary
     }
 
     var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
-        @unknown default:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        }
+        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }

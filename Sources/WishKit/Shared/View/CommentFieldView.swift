@@ -86,24 +86,10 @@ struct CommentFieldView: View {
 extension CommentFieldView {
 
     var textColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.textColor?.light ?? .black
-        case .dark:
-            WishKit.theme.textColor?.dark ?? .white
-        @unknown default:
-            .black
-        }
+        WishKit.theme.textColor?.resolved(for: colorScheme) ?? .primary
     }
 
     var backgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
-        @unknown default:
-            PrivateTheme.elementBackgroundColor.dark
-        }
+        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }

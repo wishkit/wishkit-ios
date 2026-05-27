@@ -95,14 +95,7 @@ struct WishlistContainer: View {
     }
 
     var systemBackgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
-        case .dark:
-            WishKit.theme.tertiaryColor?.dark ?? PrivateTheme.systemBackgroundColor.dark
-        @unknown default:
-            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
-        }
+        WishKit.theme.tertiaryColor?.resolved(for: colorScheme) ?? PrivateTheme.systemBackground
     }
 }
 #endif
