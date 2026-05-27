@@ -2,8 +2,8 @@
 //  CreateWishView+macOS.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 8/27/23.
-//  Copyright © 2023 Martin Lasek. All rights reserved.
+//  Created by Martin Lasek on 5/26/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
 #if os(macOS)
@@ -48,80 +48,44 @@ struct CreateWishView: View {
                     }
             }
 
-            ScrollView {
-                VStack(spacing: 15) {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text(WishKit.config.localization.title)
-                            Spacer()
-                            Text("\(viewModel.titleText.count)/50")
+            Form {
+                Section {
+                    TextField(WishKit.config.localization.title, text: $viewModel.titleText)
+                        .onChange(of: viewModel.titleText) { _ in
+                            viewModel.handleTitleAndDescriptionChange()
                         }
-                        .font(.caption2)
-                        .padding([.leading, .trailing, .bottom], 5)
-
-                        TextField("", text: $viewModel.titleText)
-                            .padding(10)
-                            .textFieldStyle(.plain)
-                            .foregroundColor(textColor)
-                            .background(fieldBackgroundColor)
-                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                            .onChange(of: viewModel.titleText) { _ in
-                                viewModel.handleTitleAndDescriptionChange()
-                            }
+                } footer: {
+                    HStack {
+                        Spacer()
+                        Text("\(viewModel.titleText.count)/50")
                     }
+                }
 
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text(WishKit.config.localization.description)
-                            Spacer()
-                            Text("\(viewModel.descriptionText.count)/500")
-                        }
-                        .font(.caption2)
-                        .padding([.leading, .trailing, .bottom], 5)
-
-                        TextEditor(text: $viewModel.descriptionText)
-                            .padding([.leading, .trailing], 5)
-                            .padding([.top, .bottom], 10)
-                            .lineSpacing(3)
-                            .frame(height: 200)
-                            .foregroundColor(textColor)
-                            .scrollContentBackground(.hidden)
-                            .background(fieldBackgroundColor)
-                            .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                            .onChange(of: viewModel.descriptionText) { _ in
-                                viewModel.handleTitleAndDescriptionChange()
-                            }
+                Section {
+                    TextField(
+                        WishKit.config.localization.description,
+                        text: $viewModel.descriptionText,
+                        axis: .vertical
+                    )
+                    .lineLimit(5...10)
+                    .onChange(of: viewModel.descriptionText) { _ in
+                        viewModel.handleTitleAndDescriptionChange()
                     }
-
-                    if WishKit.config.emailField != .none {
-                        VStack(spacing: 0) {
-                            HStack {
-                                if WishKit.config.emailField == .optional {
-                                    Text(WishKit.config.localization.emailOptional)
-                                        .font(.caption2)
-                                        .padding([.leading, .trailing, .bottom], 5)
-                                }
-
-                                if WishKit.config.emailField == .required {
-                                    Text(WishKit.config.localization.emailRequired)
-                                        .font(.caption2)
-                                        .padding([.leading, .trailing, .bottom], 5)
-                                }
-
-                                Spacer()
-                            }
-
-                            TextField("", text: $viewModel.emailText)
-                                .padding(10)
-                                .textFieldStyle(.plain)
-                                .foregroundColor(textColor)
-                                .background(fieldBackgroundColor)
-                                .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-                        }
+                } footer: {
+                    HStack {
+                        Spacer()
+                        Text("\(viewModel.descriptionText.count)/500")
                     }
+                }
 
-                    Spacer()
+                if WishKit.config.emailField != .none {
+                    Section {
+                        TextField(emailPlaceholder, text: $viewModel.emailText)
+                            .autocorrectionDisabled()
+                    }
+                }
 
+                Section {
                     Button(action: submitAction) {
                         HStack {
                             if viewModel.isButtonLoading {
@@ -136,15 +100,19 @@ struct CreateWishView: View {
                     .tint(WishKit.theme.primaryColor)
                     .keyboardShortcut(.defaultAction)
                     .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
-                    .alert(isPresented: $alertModel.showAlert, content: makeAlert)
                 }
-                .frame(maxWidth: 700)
-                .padding()
             }
+            .scrollContentBackground(.hidden)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
-        .ignoresSafeArea(edges: [.leading, .trailing])
+        .alert(isPresented: $alertModel.showAlert, content: makeAlert)
+    }
+
+    private var emailPlaceholder: String {
+        WishKit.config.emailField == .required
+            ? WishKit.config.localization.emailRequired
+            : WishKit.config.localization.emailOptional
     }
 
     private func submitAction() {
@@ -223,20 +191,7 @@ struct CreateWishView: View {
     }
 }
 
-// MARK: - Color Scheme
-
 extension CreateWishView {
-
-    var textColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.textColor?.light ?? .black
-        case .dark:
-            WishKit.theme.textColor?.dark ?? .white
-        @unknown default:
-            WishKit.theme.textColor?.light ?? .black
-        }
-    }
 
     var backgroundColor: Color {
         switch colorScheme {
@@ -244,17 +199,6 @@ extension CreateWishView {
             WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         case .dark:
             WishKit.theme.tertiaryColor?.dark ?? PrivateTheme.systemBackgroundColor.dark
-        @unknown default:
-            WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
-        }
-    }
-
-    var fieldBackgroundColor: Color {
-        switch colorScheme {
-        case .light:
-            WishKit.theme.secondaryColor?.light ?? PrivateTheme.elementBackgroundColor.light
-        case .dark:
-            WishKit.theme.secondaryColor?.dark ?? PrivateTheme.elementBackgroundColor.dark
         @unknown default:
             WishKit.theme.tertiaryColor?.light ?? PrivateTheme.systemBackgroundColor.light
         }
