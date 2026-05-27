@@ -1,3 +1,11 @@
+//
+//  Bundle+AppIcon+visionOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/8/23.
+//  Copyright © 2023 Martin Lasek. All rights reserved.
+//
+
 #if os(visionOS)
 import UIKit
 

@@ -1,3 +1,11 @@
+//
+//  WishlistNavigationBarActionsView+iOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/26/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
 #if os(iOS)
 import SwiftUI
 
@@ -5,7 +13,7 @@ struct WishlistNavigationBarActionsView: View {
 
     let isDoneButtonVisible: Bool
 
-    let isNavigationBarAddVisible: Bool
+    let isAddButtonVisible: Bool
 
     let dismissAction: () -> Void
 
@@ -19,14 +27,13 @@ struct WishlistNavigationBarActionsView: View {
                 }
             }
 
-            if isNavigationBarAddVisible {
-                NavigationLink(
-                    destination: {
-                        CreateWishView(createActionCompletion: createActionCompletion)
-                    }, label: {
-                        Text(WishKit.config.localization.addButtonInNavigationBar)
-                    }
-                )
+            if isAddButtonVisible {
+                NavigationLink {
+                    CreateWishView(createActionCompletion: createActionCompletion)
+                } label: {
+                    Image(systemName: "plus")
+                        .accessibilityLabel(WishKit.config.localization.addButtonInNavigationBar)
+                }
             }
         }
     }

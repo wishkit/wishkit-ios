@@ -1,3 +1,11 @@
+//
+//  DetailWishView+iOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 8/13/23.
+//  Copyright © 2023 Martin Lasek. All rights reserved.
+//
+
 #if os(iOS)
 import SwiftUI
 import WishKitShared

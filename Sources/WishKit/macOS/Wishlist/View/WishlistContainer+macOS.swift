@@ -1,3 +1,11 @@
+//
+//  WishlistContainer+macOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 3/11/23.
+//  Copyright © 2023 Martin Lasek. All rights reserved.
+//
+
 #if os(macOS)
 import SwiftUI
 import WishKitShared
@@ -70,21 +78,6 @@ struct WishlistContainer: View {
                     Text(WishKit.config.localization.refresh)
                 }
             }
-
-            if WishKit.config.buttons.addButton.location == .navigationBar {
-                Button(action: { self.showingCreateSheet.toggle() }) {
-                    Text(WishKit.config.localization.addButtonInNavigationBar)
-                }
-                .padding(.leading, 15)
-                .sheet(isPresented: $showingCreateSheet) {
-                    CreateWishView(
-                        createActionCompletion: { wishModel.fetchList() },
-                        closeAction: { self.showingCreateSheet = false }
-                    )
-                    .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                    .background(systemBackgroundColor)
-                }
-            }
         }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
     }
 
@@ -96,22 +89,8 @@ struct WishlistContainer: View {
                 } else {
                     Text(WishKit.config.localization.refresh)
                 }
-            }.padding(.trailing, WishKit.config.buttons.addButton.location == .floating ? 15 : 0)
-
-            if WishKit.config.buttons.addButton.location == .navigationBar {
-                Button(action: { self.showingCreateSheet.toggle() }) {
-                    Text(WishKit.config.localization.addButtonInNavigationBar)
-                }
-                .padding(.leading, 15)
-                .sheet(isPresented: $showingCreateSheet) {
-                    CreateWishView(
-                        createActionCompletion: { wishModel.fetchList() },
-                        closeAction: { self.showingCreateSheet = false }
-                    )
-                    .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                    .background(systemBackgroundColor)
-                }
             }
+            .padding(.trailing, 15)
         }.padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 15))
     }
 

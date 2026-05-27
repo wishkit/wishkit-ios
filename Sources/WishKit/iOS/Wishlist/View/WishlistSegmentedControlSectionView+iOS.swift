@@ -1,3 +1,11 @@
+//
+//  WishlistSegmentedControlSectionView+iOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/25/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
 #if os(iOS)
 import SwiftUI
 import WishKitShared

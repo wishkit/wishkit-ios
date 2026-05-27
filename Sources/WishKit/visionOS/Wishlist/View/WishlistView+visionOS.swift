@@ -1,3 +1,11 @@
+//
+//  WishlistView+visionOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 3/8/23.
+//  Copyright © 2023 Martin Lasek. All rights reserved.
+//
+
 #if os(visionOS)
 import SwiftUI
 import WishKitShared
@@ -90,7 +98,7 @@ struct WishlistView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    if WishKit.config.buttons.addButton.location == .floating {
+                    if WishKit.config.buttons.addButton.display == .show {
                         AddButton(buttonAction: createWishAction)
                             .padding([.bottom, .trailing], 20)
                             .sheet(isPresented: $showingCreateSheet) {

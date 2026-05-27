@@ -1,3 +1,11 @@
+//
+//  AddButton+visionOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/25/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
 #if os(visionOS)
 import SwiftUI
 
@@ -22,7 +30,7 @@ struct AddButton: View {
         Button(action: buttonAction) {
             Image(systemName: "plus")
                 .frame(width: size.width, height: size.height)
-                .foregroundColor(addButtonTextColor)
+                .foregroundColor(.white)
                 .background(WishKit.theme.primaryColor)
                 .clipShape(.circle)
         }
@@ -32,17 +40,6 @@ struct AddButton: View {
         .background(WishKit.theme.primaryColor)
         .clipShape(.circle)
         .shadow(color: .black.opacity(0.33), radius: 5, x: 0, y: 5)
-    }
-
-    var addButtonTextColor: Color {
-        switch colorScheme {
-        case .light:
-            return WishKit.config.buttons.addButton.textColor.light
-        case .dark:
-            return WishKit.config.buttons.addButton.textColor.dark
-        @unknown default:
-            return WishKit.config.buttons.addButton.textColor.light
-        }
     }
 }
 

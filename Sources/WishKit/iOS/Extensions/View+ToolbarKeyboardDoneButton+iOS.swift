@@ -1,3 +1,11 @@
+//
+//  View+ToolbarKeyboardDoneButton+iOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/26/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
 #if os(iOS)
 import SwiftUI
 

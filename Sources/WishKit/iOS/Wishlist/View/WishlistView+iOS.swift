@@ -1,3 +1,11 @@
+//
+//  WishlistView+iOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 5/26/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
 #if os(iOS)
 import SwiftUI
 import WishKitShared
@@ -26,9 +34,6 @@ struct WishlistView: View {
 
     @State
     var selectedWish: WishResponse? = nil
-
-    @State
-    private var isInTabBar = false
 
     var body: some View {
         ZStack {
@@ -65,13 +70,6 @@ struct WishlistView: View {
                     .refreshable { await wishModel.fetchListAsync() }
                 }
             }
-
-            WishlistFloatingAddButtonView(
-                isVisible: WishKit.config.buttons.addButton.location == .floating,
-                isAddButtonShown: WishKit.config.buttons.addButton.display == .show,
-                addButtonBottomPadding: addButtonBottomPadding,
-                createActionCompletion: { wishModel.fetchList() }
-            )
         }
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
@@ -82,45 +80,17 @@ struct WishlistView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 WishlistNavigationBarActionsView(
                     isDoneButtonVisible: WishKit.config.buttons.doneButton.display == .show,
-                    isNavigationBarAddVisible: WishKit.config.buttons.addButton.location == .navigationBar,
+                    isAddButtonVisible: WishKit.config.buttons.addButton.display == .show,
                     dismissAction: { presentationMode.wrappedValue.dismiss() },
                     createActionCompletion: { wishModel.fetchList() }
                 )
             }
         }
-        .onAppear {
-            resolveTabBarPresence()
-            wishModel.fetchList()
-        }
-    }
-    
-    // MARK: - Computed
-
-    private var addButtonBottomPadding: CGFloat {
-        let basePadding: CGFloat = isInTabBar ? 80 : 30
-        switch WishKit.config.buttons.addButton.bottomPadding {
-        case .small:
-            return basePadding + 15
-        case .medium:
-            return basePadding + 30
-        case .large:
-            return basePadding + 60
-        }
+        .onAppear { wishModel.fetchList() }
     }
 
     private var currentList: [WishResponse] {
         viewModel.list(for: wishModel)
-    }
-
-    private func resolveTabBarPresence() {
-        let rootViewController = UIApplication
-            .shared
-            .connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?
-            .rootViewController
-
-        isInTabBar = rootViewController is UITabBarController
     }
 }
 
