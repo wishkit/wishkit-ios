@@ -20,13 +20,15 @@ struct WishlistSegmentedControlSectionView: View {
     let countProvider: (LocalWishState) -> Int
     
     var body: some View {
-        Spacer(minLength: 15)
         Picker("", selection: $selectedWishState) {
             ForEach(feedbackStateSelection, id: \.self) { state in
                 Text("\(state.description) (\(countProvider(state)))")
                     .tag(state)
             }
         }
+        .pickerStyle(.segmented)
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
 }
 #endif

@@ -32,9 +32,6 @@ struct WishlistView: View {
     @ObservedObject
     var wishModel: WishModel
 
-    @State
-    var selectedWish: WishResponse? = nil
-
     var body: some View {
         ZStack {
 
@@ -95,23 +92,6 @@ struct WishlistView: View {
 }
 
 extension WishlistView {
-    var arrowColor: Color {
-        let userUUID = UUIDManager.getUUID()
-
-        if
-            let selectedWish = selectedWish,
-            selectedWish.votingUsers.contains(where: { user in user.uuid == userUUID })
-        {
-            return WishKit.theme.primaryColor
-        }
-
-        return WishKit.config.buttons.voteButton.arrowColor.resolved(for: colorScheme)
-    }
-
-    var cellBackgroundColor: Color {
-        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
-    }
-
     var backgroundColor: Color {
         WishKit.theme.tertiaryColor?.resolved(for: colorScheme) ?? PrivateTheme.systemBackground
     }

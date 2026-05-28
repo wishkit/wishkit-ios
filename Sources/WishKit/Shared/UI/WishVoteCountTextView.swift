@@ -12,14 +12,11 @@ struct WishVoteCountTextView: View {
 
     let voteCount: Int
 
-    let textColor: Color
-
     let voteCountScale: CGFloat
 
     var body: some View {
         let base = Text(String(describing: voteCount))
             .font(.footnote.weight(.semibold))
-            .foregroundColor(textColor)
             .frame(minWidth: 35)
             .scaleEffect(voteCountScale)
 

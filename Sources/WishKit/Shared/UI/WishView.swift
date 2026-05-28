@@ -81,22 +81,18 @@ struct WishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     upvoteIconImage
-                        .renderingMode(.template)
                         .imageScale(.medium)
-                        .foregroundColor(arrowColor)
                     WishVoteCountTextView(
                         voteCount: voteCount,
-                        textColor: textColor,
                         voteCountScale: voteCountScale
                     )
                 }
-                .padding(8)
-                .background(voteButtonBackgroundColor)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .frame(minWidth: 44)
                 .opacity(voteButtonOpacity)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .voteButtonBorderShape()
+            .tint(voteTint)
             .padding(.trailing, 8)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
@@ -334,16 +330,8 @@ extension WishView {
         return Image(systemName: Self.arrowUpvoteSystemName)
     }
 
-    var arrowColor: Color {
-        if isVotedByCurrentUser {
-            return WishKit.theme.primaryColor
-        }
-
-        return WishKit.config.buttons.voteButton.arrowColor.resolved(for: colorScheme)
-    }
-
-    var voteButtonBackgroundColor: Color {
-        arrowColor.opacity(colorScheme == .dark ? 0.2 : 0.12)
+    var voteTint: Color {
+        isVotedByCurrentUser ? WishKit.theme.primaryColor : .secondary
     }
 
     var textColor: Color {
@@ -352,5 +340,16 @@ extension WishView {
 
     var backgroundColor: Color {
         WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func voteButtonBorderShape() -> some View {
+        if #available(macOS 14.0, *) {
+            buttonBorderShape(.roundedRectangle(radius: 12))
+        } else {
+            buttonBorderShape(.roundedRectangle)
+        }
     }
 }
