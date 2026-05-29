@@ -36,34 +36,29 @@ struct CommentFieldView: View {
     }
 
     var body: some View {
-        ZStack {
+        HStack(spacing: 8) {
             TextField(WishKit.config.localization.writeAComment, text: $textFieldValue)
                 .textFieldStyle(.plain)
                 .font(.footnote)
-                .padding([.top, .leading, .bottom], 15)
-                .padding([.trailing], 40)
                 .foregroundColor(textColor)
-                .background(backgroundColor)
-                .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
 
-            HStack {
-                Spacer()
-                if isLoading {
-                    ProgressView()
-                        .controlSize(.small)
-                        .padding(10)
-                } else {
-                    Button(action: startSubmitTask) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(WishKit.theme.primaryColor)
-                            .padding(8)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(textFieldValue.trimmingCharacters(in: .whitespaces).isEmpty)
+            if isLoading {
+                ProgressView()
+                    .controlSize(.small)
+            } else {
+                Button(action: startSubmitTask) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(WishKit.theme.primaryColor)
                 }
+                .buttonStyle(.plain)
+                .disabled(textFieldValue.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
+        .padding(.horizontal, 15)
+        .frame(height: 44)
+        .background(backgroundColor)
+        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
         .onDisappear {
             submitTask?.cancel()
             submitTask = nil
