@@ -122,9 +122,6 @@ WishKit.config.expandDescriptionInList = true
 // Hide comment section
 WishKit.config.commentSection = .hide
 
-// Position the Add-Button.
-WishKit.config.buttons.addButton.bottomPadding = .large
-
 // Show the status badge of a feature request (e.g. pending, approved, etc.).
 WishKit.config.statusBadge = .show
 
@@ -142,7 +139,8 @@ WishKit.config.dropShadow = .hide
 #### You can theme WishKit to fit your apps color. 🎨
 
 ```swift
-// This is for the Add-Button, Segmented Control, and Vote-Button.
+// Accent color for primary actions (Save button, active Vote-Button, comment send).
+// Defaults to your app's accent color so WishKit blends in natively.
 WishKit.theme.primaryColor = .yellow
 
 // Set the secondary color (this is for the cells and text fields).
@@ -150,14 +148,6 @@ WishKit.theme.secondaryColor = .set(light: .orange, dark: .red)
 
 // Set the tertiary color (this is for the background).
 WishKit.theme.tertiaryColor = .set(light: .gray, dark: .black)
-
-// Segmented Control (Text color)
-WishKit.config.buttons.segmentedControl.defaultTextColor = .setBoth(to: .white)
-
-WishKit.config.buttons.segmentedControl.activeTextColor = .setBoth(to: .white)
-
-// Save Button (Text color)
-WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 
 ```
 
@@ -201,8 +191,9 @@ WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment
 
 ### **Platforms**
 
-- iOS 14+
-- macOS 12+
+- iOS 16+
+- macOS 13+
+- visionOS 1+
 
 ---
 

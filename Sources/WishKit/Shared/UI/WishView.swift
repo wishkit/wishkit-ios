@@ -87,7 +87,7 @@ struct WishView: View {
                         voteCountScale: voteCountScale
                     )
                 }
-                .frame(minWidth: 44)
+                .frame(width: 44, height: 44)
                 .opacity(voteButtonOpacity)
             }
             .buttonStyle(.bordered)
