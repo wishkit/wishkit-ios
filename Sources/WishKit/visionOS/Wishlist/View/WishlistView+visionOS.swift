@@ -19,9 +19,6 @@ struct WishlistView: View {
     var wishModel: WishModel
 
     @State
-    var showingCreateSheet = false
-
-    @State
     var selectedWish: WishResponse? = nil
 
     @Binding
@@ -47,10 +44,6 @@ struct WishlistView: View {
                 return []
             }
         }
-    }
-
-    private func createWishAction() {
-        self.showingCreateSheet.toggle()
     }
 
     var body: some View {
@@ -92,25 +85,6 @@ struct WishlistView: View {
                         .opacity(0.33)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
                 }.zIndex(0)
-            }
-
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    if WishKit.config.buttons.addButton.display == .show {
-                        AddButton(buttonAction: createWishAction)
-                            .padding([.bottom, .trailing], 20)
-                            .sheet(isPresented: $showingCreateSheet) {
-                                CreateWishView(
-                                    createActionCompletion: { wishModel.fetchList() },
-                                    closeAction: { self.showingCreateSheet = false }
-                                )
-                                .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
-                                .background(backgroundColor)
-                            }
-                    }
-                }
             }
         }
     }

@@ -78,6 +78,8 @@ struct WishlistContainer: View {
                     Text(WishKit.config.localization.refresh)
                 }
             }
+
+            createButton
         }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
     }
 
@@ -90,8 +92,28 @@ struct WishlistContainer: View {
                     Text(WishKit.config.localization.refresh)
                 }
             }
-            .padding(.trailing, 15)
-        }.padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 15))
+
+            Spacer()
+
+            createButton
+        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
+    }
+
+    @ViewBuilder
+    var createButton: some View {
+        if WishKit.config.buttons.addButton.display == .show {
+            Button(action: { showingCreateSheet = true }) {
+                Image(systemName: "plus")
+            }
+            .sheet(isPresented: $showingCreateSheet) {
+                CreateWishView(
+                    createActionCompletion: { wishModel.fetchList() },
+                    closeAction: { self.showingCreateSheet = false }
+                )
+                .frame(minWidth: 500, idealWidth: 500, minHeight: 400, maxHeight: 600)
+                .background(systemBackgroundColor)
+            }
+        }
     }
 
     var systemBackgroundColor: Color {
