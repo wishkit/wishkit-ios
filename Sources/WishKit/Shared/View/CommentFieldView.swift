@@ -54,12 +54,13 @@ struct CommentFieldView: View {
                         .padding(10)
                 } else {
                     Button(action: startSubmitTask) {
-                        Image(systemName: "paperplane.fill")
-                            .padding(10)
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(WishKit.theme.primaryColor)
+                            .padding(8)
                     }
                     .buttonStyle(.plain)
-                    .foregroundColor(WishKit.theme.primaryColor)
-                    .disabled(textFieldValue.replacingOccurrences(of: " ", with: "").isEmpty)
+                    .disabled(textFieldValue.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }
