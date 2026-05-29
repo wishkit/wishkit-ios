@@ -35,11 +35,6 @@ struct WishlistView: View {
     var body: some View {
         ZStack {
 
-            if wishModel.isLoading && !wishModel.hasFetched {
-                ProgressView()
-                    .imageScale(.large)
-            }
-
             if wishModel.hasFetched && !wishModel.isLoading && currentList.isEmpty {
                 Text("\(viewModel.selectedWishState.description): \(WishKit.config.localization.noFeatureRequests)")
             }
@@ -55,7 +50,9 @@ struct WishlistView: View {
                     )
                 }
 
-                if !currentList.isEmpty {
+                if wishModel.isLoading && !wishModel.hasFetched {
+                    WishlistSkeletonView()
+                } else if !currentList.isEmpty {
                     List(currentList) { wish in
                         NavigationLink(destination: {
                             DetailWishView(wishResponse: wish, voteActionCompletion: { wishModel.fetchList() })
@@ -67,10 +64,10 @@ struct WishlistView: View {
                     .refreshable { await wishModel.fetchListAsync() }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .frame(maxWidth: .infinity)
-        .background(backgroundColor)
-        .ignoresSafeArea(edges: [.leading, .bottom, .trailing])
+        .background(backgroundColor.ignoresSafeArea())
         .navigationTitle(WishKit.config.localization.featureWishlist)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

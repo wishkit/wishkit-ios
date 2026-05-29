@@ -89,6 +89,8 @@ struct CreateWishView: View {
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
         .background(backgroundColor)
+        .navigationTitle(WishKit.config.localization.createWish)
+        .navigationBarTitleDisplayMode(.inline)
         .alert(isPresented: $alertModel.showAlert, content: makeAlert)
     }
 
