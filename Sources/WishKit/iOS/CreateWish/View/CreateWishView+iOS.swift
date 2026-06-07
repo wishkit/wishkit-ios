@@ -29,32 +29,36 @@ struct CreateWishView: View {
     var body: some View {
         Form {
             Section {
-                TextField(WishKit.config.localization.title, text: $viewModel.titleText)
+                TextField("", text: $viewModel.titleText)
                     .onChange(of: viewModel.titleText) { _ in
                         viewModel.handleTitleAndDescriptionChange()
                     }
-            } footer: {
+                    .font(.subheadline)
+            } header: {
                 HStack {
+                    Text(WishKit.config.localization.title)
                     Spacer()
                     Text("\(viewModel.titleText.count)/50")
                 }
+                .font(.caption2)
+                .textCase(nil)
             }
 
             Section {
-                TextField(
-                    WishKit.config.localization.description,
-                    text: $viewModel.descriptionText,
-                    axis: .vertical
-                )
-                .lineLimit(5...10)
-                .onChange(of: viewModel.descriptionText) { _ in
-                    viewModel.handleTitleAndDescriptionChange()
-                }
-            } footer: {
+                TextField("", text: $viewModel.descriptionText, axis: .vertical)
+                    .font(.subheadline)
+                    .lineLimit(4...8)
+                    .onChange(of: viewModel.descriptionText) { _ in
+                        viewModel.handleTitleAndDescriptionChange()
+                    }
+            } header: {
                 HStack {
+                    Text(WishKit.config.localization.description)
                     Spacer()
                     Text("\(viewModel.descriptionText.count)/500")
                 }
+                .font(.caption2)
+                .textCase(nil)
             }
 
             if WishKit.config.emailField != .none {

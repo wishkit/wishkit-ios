@@ -58,8 +58,7 @@ struct CommentFieldView: View {
         .padding(.horizontal, 15)
         .frame(height: 44)
         .background(backgroundColor)
-        // 10pt matches the system grouped Form cell radius used by the create-feedback text fields.
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
         .onDisappear {
             submitTask?.cancel()
             submitTask = nil

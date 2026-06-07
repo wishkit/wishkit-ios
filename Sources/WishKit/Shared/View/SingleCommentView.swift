@@ -38,10 +38,9 @@ struct SingleCommentView: View {
             }
 
             Text(comment)
-                .font(.body)
+                .font(.footnote)
                 .foregroundColor(.primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, 8)
         }
         .frame(maxWidth: .infinity)
     }

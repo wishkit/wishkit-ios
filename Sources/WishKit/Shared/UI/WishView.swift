@@ -81,18 +81,19 @@ struct WishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     upvoteIconImage
-                        .imageScale(.medium)
+                        .imageScale(.small)
                     WishVoteCountTextView(
                         voteCount: voteCount,
                         voteCountScale: voteCountScale
                     )
                 }
-                .frame(width: 44, height: 44)
+                .frame(width: 50, height: 50)
                 .opacity(voteButtonOpacity)
             }
-            .buttonStyle(.bordered)
-            .voteButtonBorderShape()
+            .buttonStyle(.borderless)
             .tint(voteTint)
+            .background(voteTint.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .padding(.trailing, 8)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
@@ -129,7 +130,7 @@ struct WishView: View {
                 HStack {
                     Text(wishResponse.title)
                         .foregroundColor(textColor)
-                        .font(.system(size: 17))
+                        .font(.body)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
                         .lineLimit(viewKind == .list ? 1 : nil)
@@ -139,7 +140,7 @@ struct WishView: View {
                     if viewKind == .list && WishKit.config.statusBadge == .show {
                         Text(wishResponse.state.description.uppercased())
                             .opacity(0.8)
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.caption2)
                             .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
                             .foregroundColor(.primary)
                             .background(badgeColor(for: wishResponse.state).opacity(1 / 3))
@@ -150,7 +151,7 @@ struct WishView: View {
                 HStack {
                     Text(wishResponse.description)
                         .foregroundColor(textColor)
-                        .font(.system(size: 13))
+                        .font(.footnote)
                         .multilineTextAlignment(.leading)
                         .lineLimit(descriptionLineLimit)
                     Spacer()
@@ -331,7 +332,7 @@ extension WishView {
     }
 
     var voteTint: Color {
-        isVotedByCurrentUser ? WishKit.theme.primaryColor : .secondary
+        isVotedByCurrentUser ? WishKit.theme.primaryColor : .primary
     }
 
     var textColor: Color {

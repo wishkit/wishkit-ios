@@ -15,17 +15,20 @@ struct CommentListView: View {
     var commentList: [CommentResponse]
 
     var body: some View {
-        if commentList.isEmpty {
-            // needed to expand the parent view all the way to the bottom.
-            Spacer()
-        } else {
-            List(commentList, id: \.id) { comment in
-                SingleCommentView(
-                    comment: comment.description,
-                    createdAt: comment.createdAt,
-                    isAdmin: comment.isAdmin
-                )
-                .fullWidthListSeparator()
+        List {
+            Section {
+                ForEach(commentList, id: \.id) { comment in
+                    SingleCommentView(
+                        comment: comment.description,
+                        createdAt: comment.createdAt,
+                        isAdmin: comment.isAdmin
+                    )
+                    .fullWidthListSeparator()
+                }
+            } header: {
+                Text(WishKit.config.localization.comments)
+                    .font(.caption2)
+                    .textCase(nil)
             }
         }
     }

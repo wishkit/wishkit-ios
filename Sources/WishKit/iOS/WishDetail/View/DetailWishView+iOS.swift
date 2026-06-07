@@ -42,10 +42,6 @@ struct DetailWishView: View {
                     .frame(maxWidth: 700)
 
                 if WishKit.config.commentSection == .show {
-                    SeparatorView()
-                        .padding([.leading, .trailing])
-                        .padding([.top, .bottom], 15)
-
                     CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
                         await viewModel.submitComment(for: wishResponse.id)
                     }

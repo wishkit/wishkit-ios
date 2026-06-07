@@ -223,7 +223,7 @@ public struct ConfigurationLocalization {
                 titleDescriptionCannotBeEmpty: "Title/Description cannot be empty.",
                 votes: "Votes",
                 close: "Close",
-                createWish: "Create Feature",
+                createWish: "Create Feedback",
                 optional: "optional",
                 required: "required",
                 emailRequiredText: "Please enter your email address.",
