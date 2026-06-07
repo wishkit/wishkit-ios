@@ -24,6 +24,9 @@ struct CreateWishView: View {
     @StateObject
     private var viewModel = CreateWishViewModel()
 
+    @FocusState
+    private var titleFieldFocused: Bool
+
     let createActionCompletion: () -> Void
 
     var body: some View {
@@ -46,6 +49,7 @@ struct CreateWishView: View {
                         TextField("", text: $viewModel.titleText)
                             .textFieldStyle(.plain)
                             .font(.subheadline)
+                            .focused($titleFieldFocused)
                             .onChange(of: viewModel.titleText) { _ in
                                 viewModel.handleTitleAndDescriptionChange()
                             }
@@ -124,6 +128,11 @@ struct CreateWishView: View {
         .navigationTitle(WishKit.config.localization.createWish)
         .navigationBarTitleDisplayMode(.inline)
         .alert(isPresented: $alertModel.showAlert, content: makeAlert)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                titleFieldFocused = true
+            }
+        }
     }
 
     private var emailPlaceholder: String {

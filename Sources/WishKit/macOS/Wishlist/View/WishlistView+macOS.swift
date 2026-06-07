@@ -50,8 +50,7 @@ struct WishlistView: View {
         ZStack {
 
             if wishModel.isLoading && !wishModel.hasFetched {
-                ProgressView()
-                    .imageScale(.small)
+                WishlistSkeletonView()
             }
 
             if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {

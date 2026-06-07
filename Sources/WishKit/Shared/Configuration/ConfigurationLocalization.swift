@@ -214,7 +214,7 @@ public struct ConfigurationLocalization {
                 poweredBy: "Powered by",
                 successfullyCreated: "Successfully created",
                 done: "Done",
-                detail: "Detail",
+                detail: "Detail View",
                 featureWishlist: "Feature Requests",
                 confirm: "Confirm",
                 cancel: "Cancel",

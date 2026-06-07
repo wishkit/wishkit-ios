@@ -1,12 +1,11 @@
 //
-//  WishlistSkeletonView+iOS.swift
+//  WishlistSkeletonView.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 5/28/26.
+//  Created by Martin Lasek on 6/7/26.
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS)
 import SwiftUI
 
 struct WishlistSkeletonView: View {
@@ -14,7 +13,7 @@ struct WishlistSkeletonView: View {
         List(0..<6, id: \.self) { _ in
             HStack(spacing: 8) {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(uiColor: .tertiarySystemFill))
+                    .fill(skeletonFill)
                     .frame(width: 50, height: 50)
 
                 VStack(alignment: .leading, spacing: 6) {
@@ -32,5 +31,12 @@ struct WishlistSkeletonView: View {
         .redacted(reason: .placeholder)
         .disabled(true)
     }
+
+    private var skeletonFill: Color {
+        #if os(macOS)
+        Color.gray.opacity(0.25)
+        #else
+        Color(uiColor: .tertiarySystemFill)
+        #endif
+    }
 }
-#endif

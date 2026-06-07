@@ -49,6 +49,8 @@ struct DetailWishView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .background(backgroundColor)
+        .navigationTitle(WishKit.config.localization.detail)
+        .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
             if WishKit.config.commentSection == .show {
                 CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
