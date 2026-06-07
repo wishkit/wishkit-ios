@@ -15,7 +15,7 @@ struct WishlistSkeletonView: View {
             HStack(spacing: 8) {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(Color(uiColor: .tertiarySystemFill))
-                    .frame(width: 44, height: 44)
+                    .frame(width: 50, height: 50)
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Placeholder title")

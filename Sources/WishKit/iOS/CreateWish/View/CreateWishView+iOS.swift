@@ -2,7 +2,7 @@
 //  CreateWishView+iOS.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 5/26/26.
+//  Created by Martin Lasek on 6/7/26.
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
@@ -27,51 +27,80 @@ struct CreateWishView: View {
     let createActionCompletion: () -> Void
 
     var body: some View {
-        Form {
-            Section {
-                TextField("", text: $viewModel.titleText)
-                    .onChange(of: viewModel.titleText) { _ in
-                        viewModel.handleTitleAndDescriptionChange()
+        ScrollView {
+            VStack(spacing: 16) {
+
+                // Title
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(WishKit.config.localization.title)
+                        Spacer()
+                        Text("\(viewModel.titleText.count)/50")
                     }
-                    .font(.subheadline)
-            } header: {
-                HStack {
-                    Text(WishKit.config.localization.title)
-                    Spacer()
-                    Text("\(viewModel.titleText.count)/50")
-                }
-                .font(.caption2)
-                .textCase(nil)
-            }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .textCase(nil)
+                    .padding(.horizontal, 15)
 
-            Section {
-                TextField("", text: $viewModel.descriptionText, axis: .vertical)
-                    .font(.subheadline)
-                    .lineLimit(4...8)
-                    .onChange(of: viewModel.descriptionText) { _ in
-                        viewModel.handleTitleAndDescriptionChange()
+                    HStack {
+                        TextField("", text: $viewModel.titleText)
+                            .textFieldStyle(.plain)
+                            .font(.subheadline)
+                            .onChange(of: viewModel.titleText) { _ in
+                                viewModel.handleTitleAndDescriptionChange()
+                            }
                     }
-            } header: {
-                HStack {
-                    Text(WishKit.config.localization.description)
-                    Spacer()
-                    Text("\(viewModel.descriptionText.count)/500")
+                    .padding(.horizontal, 15)
+                    .frame(height: 44)
+                    .background(fieldBackgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                 }
-                .font(.caption2)
-                .textCase(nil)
-            }
 
-            if WishKit.config.emailField != .none {
-                Section {
-                    TextField(emailPlaceholder, text: $viewModel.emailText)
-                        .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .textContentType(.emailAddress)
-                        .autocorrectionDisabled()
+                // Description
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(WishKit.config.localization.description)
+                        Spacer()
+                        Text("\(viewModel.descriptionText.count)/500")
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .textCase(nil)
+                    .padding(.horizontal, 15)
+
+                    HStack {
+                        TextField("", text: $viewModel.descriptionText, axis: .vertical)
+                            .textFieldStyle(.plain)
+                            .font(.subheadline)
+                            .lineLimit(4...8)
+                            .onChange(of: viewModel.descriptionText) { _ in
+                                viewModel.handleTitleAndDescriptionChange()
+                            }
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 12)
+                    .background(fieldBackgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                 }
-            }
 
-            Section {
+                // Email (optional)
+                if WishKit.config.emailField != .none {
+                    HStack {
+                        TextField(emailPlaceholder, text: $viewModel.emailText)
+                            .textFieldStyle(.plain)
+                            .font(.subheadline)
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .textContentType(.emailAddress)
+                            .autocorrectionDisabled()
+                    }
+                    .padding(.horizontal, 15)
+                    .frame(height: 44)
+                    .background(fieldBackgroundColor)
+                    .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+                }
+
+                // Save
                 Button(action: submitAction) {
                     HStack {
                         if viewModel.isButtonLoading {
@@ -86,12 +115,11 @@ struct CreateWishView: View {
                 .controlSize(.large)
                 .tint(WishKit.theme.primaryColor)
                 .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+                .padding(.top, 8)
             }
+            .padding()
         }
         .scrollDismissesKeyboard(.interactively)
-        .scrollContentBackground(.hidden)
         .background(backgroundColor)
         .navigationTitle(WishKit.config.localization.createWish)
         .navigationBarTitleDisplayMode(.inline)
@@ -176,6 +204,10 @@ extension CreateWishView {
 
     var backgroundColor: Color {
         WishKit.theme.tertiaryColor?.resolved(for: colorScheme) ?? PrivateTheme.systemBackground
+    }
+
+    var fieldBackgroundColor: Color {
+        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }
 #endif
