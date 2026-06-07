@@ -148,14 +148,11 @@ struct WishView: View {
                     }
                 }
 
-                HStack {
-                    Text(wishResponse.description)
-                        .foregroundColor(textColor)
-                        .font(.footnote)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(descriptionLineLimit)
-                    Spacer()
-                }
+                Text(wishResponse.description)
+                    .foregroundColor(textColor)
+                    .font(.footnote)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(descriptionLineLimit)
             }
         }
     }
