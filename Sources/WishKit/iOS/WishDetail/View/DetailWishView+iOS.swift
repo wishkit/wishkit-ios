@@ -34,34 +34,31 @@ struct DetailWishView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            VStack {
-
+        ScrollView {
+            VStack(spacing: 0) {
                 WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
                     .padding()
                     .frame(maxWidth: 700)
 
                 if WishKit.config.commentSection == .show {
-                    CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
-                        await viewModel.submitComment(for: wishResponse.id)
-                    }
-                    .padding([.leading, .trailing])
-                    .frame(maxWidth: 700)
-
                     CommentListView(commentList: $viewModel.commentList)
-                        .frame(maxWidth: 700, maxHeight: .infinity)
-                } else {
-                    Spacer()
+                        .frame(maxWidth: 700)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-            if WishKit.config.commentSection == .hide {
-                Spacer()
+            .frame(maxWidth: .infinity)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .background(backgroundColor)
+        .safeAreaInset(edge: .bottom) {
+            if WishKit.config.commentSection == .show {
+                CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
+                    await viewModel.submitComment(for: wishResponse.id)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(backgroundColor)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(backgroundColor)
     }
 }
 

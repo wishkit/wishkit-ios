@@ -63,7 +63,6 @@ struct CommentFieldView: View {
             submitTask?.cancel()
             submitTask = nil
         }
-        .toolbarKeyboardDoneButton()
     }
 
     private func startSubmitTask() {
