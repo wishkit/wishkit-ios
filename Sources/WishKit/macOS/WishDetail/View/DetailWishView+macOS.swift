@@ -50,7 +50,7 @@ struct DetailWishView: View {
                         .padding()
                         .frame(maxWidth: 700)
 
-                    if WishKit.config.commentSection == .show {
+                    if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {
                         CommentListView(commentList: $viewModel.commentList)
                             .frame(maxWidth: 700)
                     }

@@ -126,7 +126,7 @@ struct WishView: View {
                 Alert(title: voteAlertTitle)
             }
 
-            VStack(spacing: 5) {
+            VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     Text(wishResponse.title)
                         .foregroundColor(textColor)
@@ -154,6 +154,7 @@ struct WishView: View {
                     .multilineTextAlignment(.leading)
                     .lineLimit(descriptionLineLimit)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 

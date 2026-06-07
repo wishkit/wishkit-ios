@@ -22,7 +22,7 @@ public struct Configuration {
     public var expandDescriptionInList: Bool = false
 
     public var cornerRadius: CGFloat = {
-        if #available(iOS 26.0, visionOS 26.0, *) {
+        if #available(iOS 26.0, visionOS 26.0, macOS 26.0, *) {
             return 24
         } else {
             return 8

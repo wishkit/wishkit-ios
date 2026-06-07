@@ -61,6 +61,8 @@ struct WishlistView: View {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .fullWidthListSeparator()
