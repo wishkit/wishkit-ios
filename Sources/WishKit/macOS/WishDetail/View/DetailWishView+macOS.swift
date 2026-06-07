@@ -66,7 +66,6 @@ struct DetailWishView: View {
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .background(backgroundColor)
             }
         }
     }

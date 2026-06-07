@@ -71,13 +71,22 @@ struct WishlistView: View {
         .navigationTitle(WishKit.config.localization.featureWishlist)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                WishlistNavigationBarActionsView(
-                    isDoneButtonVisible: WishKit.config.buttons.doneButton.display == .show,
-                    isAddButtonVisible: WishKit.config.buttons.addButton.display == .show,
-                    dismissAction: { presentationMode.wrappedValue.dismiss() },
-                    createActionCompletion: { wishModel.fetchList() }
-                )
+            if WishKit.config.buttons.doneButton.display == .show {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(WishKit.config.localization.done) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            if WishKit.config.buttons.addButton.display == .show {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        CreateWishView(createActionCompletion: { wishModel.fetchList() })
+                    } label: {
+                        Image(systemName: "plus")
+                            .accessibilityLabel(WishKit.config.localization.addButtonInNavigationBar)
+                    }
+                }
             }
         }
         .onAppear { wishModel.fetchList() }

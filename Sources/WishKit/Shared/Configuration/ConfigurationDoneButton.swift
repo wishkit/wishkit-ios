@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct ConfigurationDoneButton {
 
-    public var display: ConfigurationDisplay = .show
+    public var display: ConfigurationDisplay = .hide
 
     public var textColor = ThemeScheme(light: .black, dark: .white)
 }

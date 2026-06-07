@@ -21,9 +21,13 @@ public struct Configuration {
 
     public var expandDescriptionInList: Bool = false
 
-    public var dropShadow: ConfigurationDisplay = .show
-
-    public var cornerRadius: CGFloat = 20
+    public var cornerRadius: CGFloat = {
+        if #available(iOS 26.0, visionOS 26.0, *) {
+            return 24
+        } else {
+            return 8
+        }
+    }()
 
     public var emailField: ConfigurationEmailField = .none
 

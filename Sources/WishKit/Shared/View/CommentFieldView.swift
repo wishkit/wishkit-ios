@@ -59,6 +59,7 @@ struct CommentFieldView: View {
         .frame(height: 44)
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
+        .shadow(color: .black.opacity(0.10), radius: 10, x: 0, y: 0)
         .onDisappear {
             submitTask?.cancel()
             submitTask = nil
