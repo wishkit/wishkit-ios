@@ -38,35 +38,39 @@ struct DetailWishView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                CloseButton(closeAction: { closeAction?() })
-            }
+        ScrollView {
+            VStack(spacing: 0) {
+                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
+                    .padding()
+                    .frame(maxWidth: 700)
 
-            ScrollView {
-                VStack(spacing: 0) {
-                    WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
-                        .padding()
+                if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {
+                    CommentListView(commentList: $viewModel.commentList)
                         .frame(maxWidth: 700)
-
-                    if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {
-                        CommentListView(commentList: $viewModel.commentList)
-                            .frame(maxWidth: 700)
-                    }
                 }
-                .frame(maxWidth: .infinity)
             }
+            .frame(maxWidth: .infinity)
         }
         .background(backgroundColor)
         .safeAreaInset(edge: .bottom) {
-            if WishKit.config.commentSection == .show {
-                CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
-                    await viewModel.submitComment(for: wishResponse.id)
+            VStack(spacing: 8) {
+                if WishKit.config.commentSection == .show {
+                    CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
+                        await viewModel.submitComment(for: wishResponse.id)
+                    }
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+
+                Button(action: { closeAction?() }) {
+                    Text(WishKit.config.localization.close)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .keyboardShortcut(.cancelAction)
             }
+            .padding(.horizontal)
+            .padding(.bottom)
+            .padding(.top, 8)
         }
     }
 }

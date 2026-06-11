@@ -51,8 +51,7 @@ struct WishlistContainer: View {
             WishlistView(
                 wishModel: wishModel,
                 selectedWishState: $viewModel.selectedWishState
-            )
-                .background(systemBackgroundColor)
+            ).background(systemBackgroundColor)
 
         }.background(systemBackgroundColor)
     }
@@ -80,7 +79,8 @@ struct WishlistContainer: View {
             }
 
             createButton
-        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
+        }
+        .padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 20))
     }
 
     var noSegmentedControlView: some View {
@@ -96,7 +96,7 @@ struct WishlistContainer: View {
             Spacer()
 
             createButton
-        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 20))
+        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 20))
     }
 
     @ViewBuilder

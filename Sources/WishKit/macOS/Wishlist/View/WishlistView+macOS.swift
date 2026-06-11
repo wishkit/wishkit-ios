@@ -24,28 +24,6 @@ struct WishlistView: View {
     @Binding
     var selectedWishState: LocalWishState
 
-    func getList() -> [WishResponse] {
-        if WishKit.config.buttons.segmentedControl.display == .hide {
-            return wishModel.all
-        }
-
-        switch selectedWishState {
-        case .all:
-            return wishModel.all
-        case .library(let state):
-            switch state {
-            case .pending:
-                return wishModel.pendingList
-            case .approved, .inReview, .planned, .inProgress:
-                return wishModel.approvedList
-            case .completed, .implemented:
-                return wishModel.completedList
-            case .rejected:
-                return []
-            }
-        }
-    }
-
     var body: some View {
         ZStack {
 
@@ -86,6 +64,28 @@ struct WishlistView: View {
                         .opacity(0.33)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
                 }.zIndex(0)
+            }
+        }
+    }
+    
+    func getList() -> [WishResponse] {
+        if WishKit.config.buttons.segmentedControl.display == .hide {
+            return wishModel.all
+        }
+
+        switch selectedWishState {
+        case .all:
+            return wishModel.all
+        case .library(let state):
+            switch state {
+            case .pending:
+                return wishModel.pendingList
+            case .approved, .inReview, .planned, .inProgress:
+                return wishModel.approvedList
+            case .completed, .implemented:
+                return wishModel.completedList
+            case .rejected:
+                return []
             }
         }
     }

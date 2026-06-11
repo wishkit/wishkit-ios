@@ -50,6 +50,14 @@ struct WishView: View {
         return WishKit.config.expandDescriptionInList ? nil : 1
     }
 
+    private var buttonCornerRadius: CGFloat {
+        if #available(iOS 26.0, visionOS 26.0, macOS 26.0, *) {
+            return 12
+        } else {
+            return 8
+        }
+    }
+
     init(wishResponse: WishResponse, viewKind: WishViewKind, voteActionCompletion: @escaping (() -> Void)) {
         let currentUserUUID = UUIDManager.getUUID()
         let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
@@ -94,7 +102,7 @@ struct WishView: View {
             .buttonStyle(.borderless)
             .tint(voteTint)
             .background(voteTint.opacity(0.15))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous))
             .padding(.trailing, 8)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
