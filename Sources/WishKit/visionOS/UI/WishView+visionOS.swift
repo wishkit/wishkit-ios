@@ -90,10 +90,11 @@ struct WishView: View {
             Button(action: voteAction) {
                 VStack(spacing: 5) {
                     upvoteIconImage
-                        .imageScale(.small)
+                        .imageScale(.medium)
                     WishVoteCountTextView(
                         voteCount: voteCount,
-                        voteCountScale: voteCountScale
+                        voteCountScale: voteCountScale,
+                        font: .callout.weight(.semibold)
                     )
                 }
                 .frame(width: 50, height: 50)
@@ -103,7 +104,7 @@ struct WishView: View {
             .tint(voteTint)
             .background(voteTint.opacity(0.15))
             .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous))
-            .padding(.trailing, 8)
+            .padding(.trailing, 14)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
                 if newValue {
@@ -139,7 +140,7 @@ struct WishView: View {
                 HStack {
                     Text(wishResponse.title)
                         .foregroundColor(textColor)
-                        .font(.body)
+                        .font(.title3)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
                         .lineLimit(viewKind == .list ? 1 : nil)
@@ -159,7 +160,7 @@ struct WishView: View {
 
                 Text(wishResponse.description)
                     .foregroundColor(textColor)
-                    .font(.footnote)
+                    .font(.callout)
                     .multilineTextAlignment(.leading)
                     .lineLimit(descriptionLineLimit)
             }

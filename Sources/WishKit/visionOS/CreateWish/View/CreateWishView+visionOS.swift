@@ -36,21 +36,6 @@ struct CreateWishView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                CloseButton(closeAction: dismissViewAction)
-                    .alert(isPresented: $showConfirmationAlert) {
-                        let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
-
-                        return Alert(
-                            title: Text(WishKit.config.localization.info),
-                            message: Text(WishKit.config.localization.discardEnteredInformation),
-                            primaryButton: button,
-                            secondaryButton: .cancel()
-                        )
-                    }
-            }
-
             ScrollView {
                 VStack(spacing: 16) {
 
@@ -125,26 +110,48 @@ struct CreateWishView: View {
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
 
-                    // Save
-                    Button(action: submitAction) {
-                        HStack {
-                            if viewModel.isButtonLoading {
-                                ProgressView()
-                                    .controlSize(.small)
-                            }
-                            Text(WishKit.config.localization.save)
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .tint(WishKit.theme.primaryColor)
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
-                    .padding(.top, 8)
                 }
                 .padding()
             }
+
+            // Cancel + Save (pinned to bottom)
+            HStack(spacing: 8) {
+                Button(action: dismissViewAction) {
+                    Text(WishKit.config.localization.cancel)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .keyboardShortcut(.cancelAction)
+                .alert(isPresented: $showConfirmationAlert) {
+                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
+
+                    return Alert(
+                        title: Text(WishKit.config.localization.info),
+                        message: Text(WishKit.config.localization.discardEnteredInformation),
+                        primaryButton: button,
+                        secondaryButton: .cancel()
+                    )
+                }
+
+                Button(action: submitAction) {
+                    HStack {
+                        if viewModel.isButtonLoading {
+                            ProgressView()
+                                .controlSize(.small)
+                        }
+                        Text(WishKit.config.localization.save)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .tint(WishKit.theme.primaryColor)
+                .keyboardShortcut(.defaultAction)
+                .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)

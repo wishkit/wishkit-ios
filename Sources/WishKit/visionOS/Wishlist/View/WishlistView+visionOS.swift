@@ -49,18 +49,31 @@ struct WishlistView: View {
     var body: some View {
         ZStack {
 
-            if wishModel.isLoading && !wishModel.hasFetched {
+            if wishModel.isLoading && (!wishModel.hasFetched || getList().isEmpty) {
                 WishlistSkeletonView()
             }
 
             if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                Text(WishKit.config.localization.noFeatureRequests)
+                List {
+                    VStack {
+                        Spacer(minLength: 20)
+
+                        HStack(alignment: .center) {
+                            Text(WishKit.config.localization.noFeatureRequests)
+                                .font(.title3)
+                        }.frame(maxWidth: .infinity)
+                        
+                        Spacer(minLength: 20)
+                    }
+                }.transition(.opacity)
             }
 
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .fullWidthListSeparator()
