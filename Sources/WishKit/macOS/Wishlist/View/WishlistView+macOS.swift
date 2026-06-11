@@ -32,7 +32,16 @@ struct WishlistView: View {
             }
 
             if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
-                Text(WishKit.config.localization.noFeatureRequests)
+                List {
+                    VStack {
+                        Spacer(minLength: 20)
+                        
+                        HStack(alignment: .center) {
+                            Text(WishKit.config.localization.noFeatureRequests)
+                                .font(.title3)
+                        }.frame(maxWidth: .infinity)
+                    }
+                }.transition(.opacity)
             }
 
             if getList().count > 0 {
