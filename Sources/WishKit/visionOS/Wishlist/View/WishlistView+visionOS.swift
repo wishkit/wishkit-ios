@@ -56,16 +56,19 @@ struct WishlistView: View {
             if wishModel.hasFetched && !wishModel.isLoading && getList().isEmpty {
                 List {
                     VStack {
-                        Spacer(minLength: 20)
+                        Spacer(minLength: 30)
 
                         HStack(alignment: .center) {
                             Text(WishKit.config.localization.noFeatureRequests)
                                 .font(.title3)
                         }.frame(maxWidth: .infinity)
-                        
-                        Spacer(minLength: 20)
+
+                        Spacer(minLength: 30)
                     }
-                }.transition(.opacity)
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .transition(.opacity)
             }
 
             if getList().count > 0 {
@@ -73,11 +76,12 @@ struct WishlistView: View {
                     Button(action: { selectWish(wish: wish) }) {
                         WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.bordered)
                     .fullWidthListSeparator()
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
                 .transition(.opacity)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in
                     DetailWishView(

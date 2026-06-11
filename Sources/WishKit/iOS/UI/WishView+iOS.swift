@@ -100,8 +100,8 @@ struct WishView: View {
                 .opacity(voteButtonOpacity)
             }
             .buttonStyle(.borderless)
-            .tint(voteTint)
-            .background(voteTint.opacity(0.15))
+            .tint(isVotedByCurrentUser ? .white : voteTint)
+            .background(isVotedByCurrentUser ? WishKit.theme.primaryColor : voteTint.opacity(0.15))
             .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous))
             .padding(.trailing, 14)
             .disabled(isVoting)

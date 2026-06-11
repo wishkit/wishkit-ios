@@ -65,7 +65,7 @@ struct WishlistContainer: View {
                         Text("\(state.description) (\(viewModel.count(for: state, wishModel: wishModel)))")
                             .tag(state)
                     }
-                }.frame(maxWidth: 150)
+                }
             }
 
             Spacer()
@@ -79,7 +79,7 @@ struct WishlistContainer: View {
             }
 
             createButton
-        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 20))
+        }.padding(EdgeInsets(top: 15, leading: 44, bottom: 5, trailing: 44))
     }
 
     var noSegmentedControlView: some View {
@@ -95,7 +95,7 @@ struct WishlistContainer: View {
             Spacer()
 
             createButton
-        }.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 20))
+        }.padding(EdgeInsets(top: 15, leading: 30, bottom: 5, trailing: 30))
     }
 
     @ViewBuilder
