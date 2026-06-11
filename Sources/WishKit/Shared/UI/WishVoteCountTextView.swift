@@ -14,9 +14,11 @@ struct WishVoteCountTextView: View {
 
     let voteCountScale: CGFloat
 
+    var font: Font = .footnote.weight(.semibold)
+
     var body: some View {
         let base = Text(String(describing: voteCount))
-            .font(.footnote.weight(.semibold))
+            .font(font)
             .scaleEffect(voteCountScale)
 
         if #available(iOS 17.0, macOS 14.0, *) {

@@ -1,11 +1,12 @@
 //
-//  WishView.swift
+//  WishView+iOS.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 8/12/23.
-//  Copyright © 2023 Martin Lasek. All rights reserved.
+//  Created by Martin Lasek on 6/10/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
+#if os(iOS)
 import SwiftUI
 import WishKitShared
 
@@ -49,6 +50,14 @@ struct WishView: View {
         return WishKit.config.expandDescriptionInList ? nil : 1
     }
 
+    private var buttonCornerRadius: CGFloat {
+        if #available(iOS 26.0, visionOS 26.0, macOS 26.0, *) {
+            return 12
+        } else {
+            return 8
+        }
+    }
+    
     init(wishResponse: WishResponse, viewKind: WishViewKind, voteActionCompletion: @escaping (() -> Void)) {
         let currentUserUUID = UUIDManager.getUUID()
         let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
@@ -93,8 +102,8 @@ struct WishView: View {
             .buttonStyle(.borderless)
             .tint(voteTint)
             .background(voteTint.opacity(0.15))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .padding(.trailing, 8)
+            .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous))
+            .padding(.trailing, 14)
             .disabled(isVoting)
             .onChange(of: isVoting) { newValue in
                 if newValue {
@@ -341,14 +350,4 @@ extension WishView {
         WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }
-
-private extension View {
-    @ViewBuilder
-    func voteButtonBorderShape() -> some View {
-        if #available(macOS 14.0, *) {
-            buttonBorderShape(.roundedRectangle(radius: 12))
-        } else {
-            buttonBorderShape(.roundedRectangle)
-        }
-    }
-}
+#endif

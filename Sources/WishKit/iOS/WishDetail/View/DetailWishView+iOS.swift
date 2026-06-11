@@ -38,6 +38,7 @@ struct DetailWishView: View {
             VStack(spacing: 0) {
                 WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
                     .padding()
+                    .padding(.bottom, 8)
                     .frame(maxWidth: 700)
 
                 if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {

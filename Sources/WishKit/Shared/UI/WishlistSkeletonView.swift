@@ -9,10 +9,19 @@
 import SwiftUI
 
 struct WishlistSkeletonView: View {
+
+    private var buttonCornerRadius: CGFloat {
+        if #available(iOS 26.0, visionOS 26.0, macOS 26.0, *) {
+            return 12
+        } else {
+            return 8
+        }
+    }
+    
     var body: some View {
         List(0..<6, id: \.self) { _ in
-            HStack(spacing: 8) {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+            HStack(spacing: 14) {
+                RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous)
                     .fill(skeletonFill)
                     .frame(width: 50, height: 50)
 

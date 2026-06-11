@@ -24,7 +24,6 @@ struct CommentListView: View {
                 .foregroundColor(.secondary)
                 .textCase(nil)
                 .padding(.horizontal, 32)
-                .padding(.top, 16)
                 .padding(.bottom, 8)
 
             LazyVStack(spacing: 0) {
