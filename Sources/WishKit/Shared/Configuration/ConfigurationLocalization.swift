@@ -212,7 +212,7 @@ public struct ConfigurationLocalization {
                 youCanNotVoteForAnImplementedWish: "You can not vote for a feature that is already implemented.",
                 youCanNotVoteForYourOwnWish: "You cannot vote for your own feature request.",
                 poweredBy: "Powered by",
-                successfullyCreated: "Successfully created",
+                successfullyCreated: "Successfully submitted",
                 done: "Done",
                 detail: "Detail View",
                 featureWishlist: "Feature Requests",

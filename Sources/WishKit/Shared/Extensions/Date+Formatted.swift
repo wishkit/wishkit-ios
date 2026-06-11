@@ -10,10 +10,12 @@ import SwiftUI
 
 extension Date {
 
-    /// Returns date of August 10, 2023 formatted as: 08/10/23
+    /// Locale-aware numeric date with two-digit month and day (e.g. "06/07/2026" in en-US, "07.06.2026" in de-DE, "2026/06/07" in ja-JP).
     func wkFormatted() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yy"
-        return formatter.string(from: self)
+        formatted(
+            Date.FormatStyle(date: .numeric)
+                .month(.twoDigits)
+                .day(.twoDigits)
+        )
     }
 }
