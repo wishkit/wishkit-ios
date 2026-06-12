@@ -25,14 +25,16 @@ struct WishlistSkeletonView: View {
                 HStack(spacing: 0) {
                     RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous)
                         .fill(Color.gray.opacity(0.25))
-                        .frame(width: 50, height: 50)
+                        .frame(width: 90, height: 74)
+                        .background(.thinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 36, style: .continuous))
                         .padding(.trailing, 14)
 
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Placeholder title")
+                        Text("Here's to the crazy ones.")
                             .font(.title3)
                             .fontWeight(.semibold)
-                        Text("A placeholder description.")
+                        Text("The misfits. The rebels. The troublemakers.")
                             .font(.callout)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,6 +42,7 @@ struct WishlistSkeletonView: View {
                 .padding(.vertical, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .background(Color.gray.opacity(0.10))
             .buttonStyle(.bordered)
             .listRowInsets(EdgeInsets())
         }
