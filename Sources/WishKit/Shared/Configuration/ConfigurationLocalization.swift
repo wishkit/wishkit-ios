@@ -235,7 +235,7 @@ public struct ConfigurationLocalization {
                 noFeatureRequests: "No feature requests, yet ✨",
                 emailOptional: "Email (optional)",
                 emailRequired: "Email (required)",
-                discardEnteredInformation: "Discard entered information?",
+                discardEnteredInformation: "Discard changes?",
                 addButtonInNavigationBar: "Create",
                 refresh: "Refresh",
                 refreshing: "Refreshing.."

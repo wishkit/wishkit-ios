@@ -68,7 +68,7 @@ struct WishView: View {
             if viewKind == .detail {
                 content
                     .padding(10)
-                    .background(backgroundColor)
+                    .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
             } else {
                 content

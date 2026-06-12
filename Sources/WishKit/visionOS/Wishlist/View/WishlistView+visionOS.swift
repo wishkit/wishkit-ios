@@ -70,7 +70,7 @@ struct WishlistView: View {
                 .scrollContentBackground(.hidden)
                 .transition(.opacity)
             }
-
+                
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
@@ -78,9 +78,11 @@ struct WishlistView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.bordered)
+                    .listRowInsets(EdgeInsets())
                     .fullWidthListSeparator()
                 }
                 .listStyle(.plain)
+                .listRowSpacing(15)
                 .scrollContentBackground(.hidden)
                 .transition(.opacity)
                 .sheet(item: $selectedWish, onDismiss: { wishModel.fetchList() }) { wish in

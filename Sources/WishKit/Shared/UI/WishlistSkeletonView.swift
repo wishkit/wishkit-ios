@@ -6,6 +6,7 @@
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
+#if os(iOS) || os(macOS)
 import SwiftUI
 
 struct WishlistSkeletonView: View {
@@ -49,3 +50,4 @@ struct WishlistSkeletonView: View {
         #endif
     }
 }
+#endif

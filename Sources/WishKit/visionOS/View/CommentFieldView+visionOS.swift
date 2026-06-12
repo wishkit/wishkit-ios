@@ -1,12 +1,12 @@
 //
-//  SwiftUIView.swift
+//  CommentFieldView+visionOS.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 8/14/23.
-//  Copyright © 2023 Martin Lasek. All rights reserved.
+//  Created by Martin Lasek on 6/11/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS) || os(macOS)
+#if os(visionOS)
 import SwiftUI
 import WishKitShared
 
@@ -58,9 +58,8 @@ struct CommentFieldView: View {
         }
         .padding(.horizontal, 15)
         .frame(height: 44)
-        .background(backgroundColor)
+        .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-        .shadow(color: .black.opacity(0.10), radius: 10, x: 0, y: 0)
         .onDisappear {
             submitTask?.cancel()
             submitTask = nil
@@ -84,10 +83,6 @@ extension CommentFieldView {
 
     var textColor: Color {
         WishKit.theme.textColor?.resolved(for: colorScheme) ?? .primary
-    }
-
-    var backgroundColor: Color {
-        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }
 #endif

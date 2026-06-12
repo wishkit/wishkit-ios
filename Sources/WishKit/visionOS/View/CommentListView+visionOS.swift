@@ -1,12 +1,12 @@
 //
-//  CommentListView.swift
+//  CommentListView+visionOS.swift
 //  wishkit-ios
 //
-//  Created by Martin Lasek on 6/7/26.
+//  Created by Martin Lasek on 6/11/26.
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS) || os(macOS)
+#if os(visionOS)
 import SwiftUI
 import WishKitShared
 
@@ -43,14 +43,10 @@ struct CommentListView: View {
                     }
                 }
             }
-            .background(containerBackground)
+            .background(.thinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
             .padding(.horizontal, 16)
         }
-    }
-
-    private var containerBackground: Color {
-        WishKit.theme.secondaryColor?.resolved(for: colorScheme) ?? PrivateTheme.elementBackground
     }
 }
 #endif

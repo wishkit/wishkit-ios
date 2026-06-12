@@ -62,7 +62,7 @@ struct CreateWishView: View {
                         }
                         .padding(.horizontal, 15)
                         .frame(height: 44)
-                        .background(fieldBackgroundColor)
+                        .background(.thinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
 
@@ -89,7 +89,7 @@ struct CreateWishView: View {
                         }
                         .padding(.horizontal, 15)
                         .padding(.vertical, 12)
-                        .background(fieldBackgroundColor)
+                        .background(.thinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
 
@@ -106,7 +106,7 @@ struct CreateWishView: View {
                         }
                         .padding(.horizontal, 15)
                         .frame(height: 44)
-                        .background(fieldBackgroundColor)
+                        .background(.thinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
                     }
 
@@ -123,16 +123,6 @@ struct CreateWishView: View {
                 .buttonStyle(.bordered)
                 .controlSize(.large)
                 .keyboardShortcut(.cancelAction)
-                .alert(isPresented: $showConfirmationAlert) {
-                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
-
-                    return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text(WishKit.config.localization.discardEnteredInformation),
-                        primaryButton: button,
-                        secondaryButton: .cancel()
-                    )
-                }
 
                 Button(action: submitAction) {
                     HStack {
@@ -156,6 +146,16 @@ struct CreateWishView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
         .alert(isPresented: $alertModel.showAlert, content: makeAlert)
+        .alert(isPresented: $showConfirmationAlert) {
+            let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
+
+            return Alert(
+                title: Text(WishKit.config.localization.info),
+                message: Text(WishKit.config.localization.discardEnteredInformation),
+                primaryButton: button,
+                secondaryButton: .cancel()
+            )
+        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 titleFieldFocused = true
