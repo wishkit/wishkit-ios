@@ -21,19 +21,12 @@ struct CommentFieldView: View {
     @Binding
     private var isLoading: Bool
 
-    @State
-    private var submitTask: Task<Void, Never>?
-
-    private let submitAction: () async throws -> ()
-
     init(
         _ textFieldValue: Binding<String>,
         isLoading: Binding<Bool>,
-        submitAction: @escaping () async throws -> ()
     ) {
         self._textFieldValue = textFieldValue
         self._isLoading = isLoading
-        self.submitAction = submitAction
     }
 
     var body: some View {
@@ -42,40 +35,12 @@ struct CommentFieldView: View {
                 .textFieldStyle(.plain)
                 .font(.footnote)
                 .foregroundColor(textColor)
-
-            if isLoading {
-                ProgressView()
-                    .controlSize(.small)
-            } else {
-                Button(action: startSubmitTask) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.title2)
-                        .foregroundStyle(WishKit.theme.primaryColor)
-                }
-                .buttonStyle(.plain)
-                .disabled(textFieldValue.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
+                .disabled(isLoading)
         }
         .padding(.horizontal, 15)
         .frame(height: 44)
         .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: WishKit.config.cornerRadius, style: .continuous))
-        .onDisappear {
-            submitTask?.cancel()
-            submitTask = nil
-        }
-    }
-
-    private func startSubmitTask() {
-        submitTask?.cancel()
-        submitTask = Task { @MainActor in
-            defer { submitTask = nil }
-            do {
-                try await submitAction()
-            } catch {
-                print("❌ \(error.localizedDescription)")
-            }
-        }
     }
 }
 

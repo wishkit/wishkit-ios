@@ -23,6 +23,9 @@ struct DetailWishView: View {
     private let voteActionCompletion: () -> Void
 
     private let closeAction: (() -> Void)?
+    
+    @State
+    private var submitTask: Task<Void, Never>?
 
     init(
         wishResponse: WishResponse,
@@ -55,22 +58,54 @@ struct DetailWishView: View {
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 8) {
                 if WishKit.config.commentSection == .show {
-                    CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading) {
-                        await viewModel.submitComment(for: wishResponse.id)
+                    CommentFieldView($viewModel.newCommentValue, isLoading: $viewModel.isLoading)
+                }
+                
+                HStack(spacing: 8) {
+                    Button(action: { closeAction?() }) {
+                        Text(WishKit.config.localization.close)
+                            .frame(maxWidth: .infinity)
                     }
-                }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .keyboardShortcut(.cancelAction)
 
-                Button(action: { closeAction?() }) {
-                    Text(WishKit.config.localization.close)
+                    Button(action: submitAction) {
+                        HStack {
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .controlSize(.small)
+                            } else {
+                                Text(WishKit.config.localization.save)
+                            }
+                        }
                         .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .tint(WishKit.theme.primaryColor)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(viewModel.newCommentValue.isEmpty || viewModel.isLoading)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .keyboardShortcut(.cancelAction)
             }
             .padding(.horizontal)
             .padding(.bottom)
             .padding(.top, 8)
+        }.onDisappear {
+            submitTask?.cancel()
+            submitTask = nil
+        }
+    }
+    
+    private func submitAction() {
+        submitTask?.cancel()
+        submitTask = Task { @MainActor in
+            defer { submitTask = nil }
+            do {
+                try await viewModel.submitComment(for: wishResponse.id)
+            } catch {
+                print("❌ \(error.localizedDescription)")
+            }
         }
     }
 }
