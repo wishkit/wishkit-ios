@@ -76,7 +76,7 @@ struct DetailWishView: View {
                                 ProgressView()
                                     .controlSize(.small)
                             } else {
-                                Text(WishKit.config.localization.save)
+                                Text(WishKit.config.localization.submitComment)
                             }
                         }
                         .frame(maxWidth: .infinity)

@@ -6,6 +6,7 @@
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
+#if !os(watchOS)
 import SwiftUI
 
 extension View {
@@ -15,3 +16,4 @@ extension View {
             .alignmentGuide(.listRowSeparatorTrailing) { dimensions in dimensions.width }
     }
 }
+#endif

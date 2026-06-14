@@ -6,7 +6,8 @@ let package = Package(
     platforms: [
         .macOS(.v13),
         .iOS(.v16),
-        .visionOS(.v1)
+        .visionOS(.v1),
+        .watchOS(.v10)
     ],
     products: [
         .library(name: "WishKit", targets: ["WishKit"])

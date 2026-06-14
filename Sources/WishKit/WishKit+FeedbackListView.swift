@@ -21,6 +21,8 @@ extension WishKit {
                 WishlistContainer(wishModel: WishModel())
             #elseif os(visionOS)
                 WishlistContainer(wishModel: WishModel())
+            #elseif os(watchOS)
+                WishlistView(wishModel: WishModel())
             #endif
         }
     }

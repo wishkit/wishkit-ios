@@ -1,0 +1,158 @@
+//
+//  WishView+watchOS.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 6/13/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
+#if os(watchOS)
+import SwiftUI
+import WishKitShared
+
+struct WishView: View {
+
+    @State
+    private var voteCount: Int
+
+    @State
+    private var isVotedByCurrentUser: Bool
+
+    @State
+    private var isVoting = false
+
+    @State
+    private var voteTask: Task<Void, Never>?
+
+    private let wishResponse: WishResponse
+
+    private let voteActionCompletion: () -> Void
+
+    private let viewKind: WishViewKind
+
+    init(wishResponse: WishResponse, viewKind: WishViewKind, voteActionCompletion: @escaping (() -> Void)) {
+        let currentUserUUID = UUIDManager.getUUID()
+        let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
+            user.uuid == currentUserUUID
+        }
+
+        self.wishResponse = wishResponse
+        self.viewKind = viewKind
+        self.voteActionCompletion = voteActionCompletion
+        self._voteCount = .init(initialValue: wishResponse.votingUsers.count)
+        self._isVotedByCurrentUser = .init(initialValue: hasVotedByCurrentUser)
+    }
+
+    var body: some View {
+        Group {
+            if viewKind == .detail {
+                detailContent
+            } else {
+                listContent
+            }
+        }
+        .onDisappear {
+            voteTask?.cancel()
+            voteTask = nil
+        }
+    }
+
+    private var listContent: some View {
+        HStack(spacing: 8) {
+            voteChip
+            Text(wishResponse.title)
+                .font(.footnote.weight(.semibold))
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.vertical, 2)
+    }
+
+    private var detailContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(wishResponse.title)
+                .font(.headline)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(wishResponse.description)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            voteButtonFullWidth
+                .padding(.top, 4)
+        }
+    }
+
+    private var voteChip: some View {
+        Button(action: voteAction) {
+            HStack(spacing: 4) {
+                Image(systemName: "arrowtriangle.up.fill")
+                    .imageScale(.small)
+                Text("\(voteCount)")
+                    .font(.caption2.weight(.semibold))
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(voteTint.opacity(0.20))
+            .clipShape(Capsule())
+            .foregroundStyle(voteTint)
+        }
+        .buttonStyle(.plain)
+        .disabled(isVoting)
+    }
+
+    private var voteButtonFullWidth: some View {
+        Button(action: voteAction) {
+            HStack(spacing: 6) {
+                if isVoting {
+                    ProgressView()
+                        .controlSize(.small)
+                } else {
+                    Image(systemName: "arrowtriangle.up.fill")
+                    Text("\(voteCount)")
+                        .font(.body.weight(.semibold))
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(isVotedByCurrentUser ? WishKit.theme.primaryColor : .gray)
+        .disabled(isVoting)
+    }
+
+    private var voteTint: Color {
+        isVotedByCurrentUser ? WishKit.theme.primaryColor : .primary
+    }
+
+    private func voteAction() {
+        guard !isVoting else { return }
+        guard wishResponse.state != .implemented else { return }
+        if isVotedByCurrentUser && WishKit.config.allowUndoVote == false { return }
+
+        let voteDelta = isVotedByCurrentUser ? -1 : 1
+        isVoting = true
+
+        voteTask?.cancel()
+        voteTask = Task { @MainActor in
+            let request = VoteWishRequest(wishId: wishResponse.id)
+            let result = await WishService.voteWish(voteRequest: request)
+            guard !Task.isCancelled else { return }
+
+            isVoting = false
+
+            switch result {
+            case .success:
+                isVotedByCurrentUser = voteDelta > 0
+                voteCount += voteDelta
+                voteActionCompletion()
+            case .failure:
+                break
+            }
+        }
+    }
+}
+#endif

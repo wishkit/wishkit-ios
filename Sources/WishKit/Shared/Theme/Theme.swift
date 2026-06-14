@@ -26,7 +26,7 @@ public struct Theme {
     public var textColor: ThemeScheme?
 
     init(
-        primaryColor: Color = .accentColor,
+        primaryColor: Color = Theme.defaultPrimaryColor,
         badgeColor: ThemeBadgeTheme = .default(),
         secondaryColor: ThemeScheme? = nil,
         tertiaryColor: ThemeScheme? = nil,
@@ -37,5 +37,17 @@ public struct Theme {
         self.secondaryColor = secondaryColor
         self.tertiaryColor = tertiaryColor
         self.textColor = textColor
+    }
+
+    // On iOS/macOS/visionOS, .accentColor inherits the host app's accent (typically system blue by default).
+    // On watchOS, apps don't have a default accent — Color.accentColor often resolves to a neutral that's
+    // visually indistinguishable from gray. So we fall back to an explicit blue there so the SDK looks
+    // right out of the box without requiring every consumer to override.
+    private static var defaultPrimaryColor: Color {
+        #if os(watchOS)
+        return .blue
+        #else
+        return .accentColor
+        #endif
     }
 }

@@ -21,7 +21,7 @@ struct WishVoteCountTextView: View {
             .font(font)
             .scaleEffect(voteCountScale)
 
-        if #available(iOS 17.0, macOS 14.0, *) {
+        if #available(iOS 17.0, macOS 14.0, watchOS 10.0, *) {
             base.contentTransition(.numericText(value: Double(voteCount)))
         } else {
             base

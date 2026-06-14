@@ -80,6 +80,8 @@ public struct ConfigurationLocalization {
 
         public var writeAComment: String
 
+        public var submitComment: String
+
         public var admin: String
 
         public var user: String
@@ -135,6 +137,7 @@ public struct ConfigurationLocalization {
             emailFormatWrongText: String = ConfigurationLocalization.default().emailFormatWrongText,
             comments: String = ConfigurationLocalization.default().comments,
             writeAComment: String = ConfigurationLocalization.default().writeAComment,
+            submitComment: String = ConfigurationLocalization.default().submitComment,
             admin: String = ConfigurationLocalization.default().admin,
             user: String = ConfigurationLocalization.default().user,
             noFeatureRequests: String = ConfigurationLocalization.default().noFeatureRequests,
@@ -181,6 +184,7 @@ public struct ConfigurationLocalization {
             self.emailFormatWrongText = emailFormatWrongText
             self.comments = comments
             self.writeAComment = writeAComment
+            self.submitComment = submitComment
             self.admin = admin
             self.user = user
             self.noFeatureRequests = noFeatureRequests
@@ -230,6 +234,7 @@ public struct ConfigurationLocalization {
                 emailFormatWrongText: "Wrong email format.",
                 comments: "Comments",
                 writeAComment: "Write a comment..",
+                submitComment: "Send",
                 admin: "Admin",
                 user: "User",
                 noFeatureRequests: "No feature requests, yet ✨",
