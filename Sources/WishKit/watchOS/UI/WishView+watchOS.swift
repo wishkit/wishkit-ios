@@ -55,16 +55,40 @@ struct WishView: View {
             voteTask?.cancel()
             voteTask = nil
         }
+        .onChange(of: wishResponse.votingUsers.count) { newValue in
+            guard isVoting == false else { return }
+            voteCount = newValue
+        }
+        .onChange(of: serverHasVotedByCurrentUser) { newValue in
+            guard isVoting == false else { return }
+            isVotedByCurrentUser = newValue
+        }
+    }
+
+    private var serverHasVotedByCurrentUser: Bool {
+        let currentUserUUID = UUIDManager.getUUID()
+        return wishResponse.votingUsers.contains { user in
+            user.uuid == currentUserUUID
+        }
     }
 
     private var listContent: some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .center, spacing: 8) {
             voteChip
-            Text(wishResponse.title)
-                .font(.footnote.weight(.semibold))
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(wishResponse.title)
+                    .font(.footnote.weight(.semibold))
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+
+                Text(wishResponse.description)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 2)
     }
