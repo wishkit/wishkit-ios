@@ -12,21 +12,9 @@ import WishKitShared
 
 struct DetailWishView: View {
 
-    @State
-    private var commentList: [CommentResponse]
+    let wishResponse: WishResponse
 
-    private let wishResponse: WishResponse
-
-    private let voteActionCompletion: () -> Void
-
-    init(
-        wishResponse: WishResponse,
-        voteActionCompletion: @escaping (() -> Void)
-    ) {
-        self.wishResponse = wishResponse
-        self.voteActionCompletion = voteActionCompletion
-        self._commentList = .init(initialValue: wishResponse.commentList)
-    }
+    let voteActionCompletion: () -> Void
 
     var body: some View {
         ScrollView {
@@ -37,8 +25,8 @@ struct DetailWishView: View {
                     voteActionCompletion: voteActionCompletion
                 )
 
-                if WishKit.config.commentSection == .show && !commentList.isEmpty {
-                    CommentListView(commentList: $commentList)
+                if WishKit.config.commentSection == .show && !wishResponse.commentList.isEmpty {
+                    CommentListView(commentList: .constant(wishResponse.commentList))
                 }
             }
             .padding(40)

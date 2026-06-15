@@ -10,14 +10,6 @@
 import SwiftUI
 import WishKitShared
 
-extension View {
-    public func withNavigation() -> some View {
-        NavigationStack {
-            self
-        }
-    }
-}
-
 struct WishlistView: View {
 
     @StateObject

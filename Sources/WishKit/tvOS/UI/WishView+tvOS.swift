@@ -153,10 +153,6 @@ struct WishView: View {
         .disabled(isVoting)
     }
 
-    private var voteTint: Color {
-        isVotedByCurrentUser ? WishKit.theme.primaryColor : .primary
-    }
-
     private var serverHasVotedByCurrentUser: Bool {
         let currentUserUUID = UUIDManager.getUUID()
         return wishResponse.votingUsers.contains { user in
