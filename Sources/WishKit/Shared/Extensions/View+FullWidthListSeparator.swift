@@ -6,7 +6,7 @@
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
-#if !os(watchOS)
+#if !os(watchOS) && !os(tvOS)
 import SwiftUI
 
 extension View {

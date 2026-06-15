@@ -6,7 +6,7 @@
 //  Copyright © 2026 Martin Lasek. All rights reserved.
 //
 
-#if os(iOS) || os(macOS)
+#if os(iOS) || os(macOS) || os(tvOS)
 import SwiftUI
 import WishKitShared
 
@@ -29,13 +29,20 @@ struct CommentListView: View {
 
             LazyVStack(spacing: 0) {
                 ForEach(commentList, id: \.id) { comment in
-                    SingleCommentView(
+                    let row = SingleCommentView(
                         comment: comment.description,
                         createdAt: comment.createdAt,
                         isAdmin: comment.isAdmin
                     )
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
+
+                    #if os(tvOS)
+                    Button(action: {}) { row }
+                        .buttonStyle(.plain)
+                    #else
+                    row
+                    #endif
 
                     if comment.id != commentList.last?.id {
                         Divider()

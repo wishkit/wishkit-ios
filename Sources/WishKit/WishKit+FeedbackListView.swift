@@ -23,6 +23,8 @@ extension WishKit {
                 WishlistContainer(wishModel: WishModel())
             #elseif os(watchOS)
                 WishlistView(wishModel: WishModel())
+            #elseif os(tvOS)
+                WishlistView(wishModel: WishModel())
             #endif
         }
     }
