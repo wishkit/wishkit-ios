@@ -19,30 +19,43 @@ struct WishlistView: View {
     var wishModel: WishModel
 
     var body: some View {
-        Group {
-            if wishModel.isLoading && !wishModel.hasFetched {
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if wishModel.hasFetched && currentList.isEmpty {
-                Text(WishKit.config.localization.noFeatureRequests)
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                List(currentList) { wish in
-                    NavigationLink {
-                        DetailWishView(
-                            wishResponse: wish,
-                            voteActionCompletion: { wishModel.fetchList() }
-                        )
-                    } label: {
-                        WishView(
-                            wishResponse: wish,
-                            viewKind: .list,
-                            voteActionCompletion: { wishModel.fetchList() }
-                        )
+        VStack(spacing: 16) {
+            if WishKit.config.buttons.segmentedControl.display == .show {
+                WishlistFilterCycleButton(
+                    selectedWishState: $viewModel.selectedWishState,
+                    feedbackStateSelection: viewModel.feedbackStateSelection,
+                    countProvider: { state in
+                        viewModel.count(for: state, wishModel: wishModel)
+                    }
+                )
+                .padding(.horizontal)
+            }
+
+            Group {
+                if wishModel.isLoading && !wishModel.hasFetched {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if wishModel.hasFetched && currentList.isEmpty {
+                    Text(WishKit.config.localization.noFeatureRequests)
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List(currentList) { wish in
+                        NavigationLink {
+                            DetailWishView(
+                                wishResponse: wish,
+                                voteActionCompletion: { wishModel.fetchList() }
+                            )
+                        } label: {
+                            WishView(
+                                wishResponse: wish,
+                                viewKind: .list,
+                                voteActionCompletion: { wishModel.fetchList() }
+                            )
+                        }
                     }
                 }
             }
