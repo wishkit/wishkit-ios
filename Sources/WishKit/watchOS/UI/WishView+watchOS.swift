@@ -78,12 +78,12 @@ struct WishView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(wishResponse.title)
-                    .font(.footnote.weight(.semibold))
+                    .font(.caption2.weight(.semibold))
                     .lineLimit(1)
                     .multilineTextAlignment(.leading)
 
                 Text(wishResponse.description)
-                    .font(.caption2)
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .multilineTextAlignment(.leading)
@@ -113,16 +113,16 @@ struct WishView: View {
 
     private var voteChip: some View {
         Button(action: voteAction) {
-            HStack(spacing: 4) {
+            VStack(spacing: 2) {
                 Image(systemName: "arrowtriangle.up.fill")
-                    .imageScale(.small)
                 Text("\(voteCount)")
-                    .font(.caption2.weight(.semibold))
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
+            .font(.system(size: 12, weight: .semibold))
+            .frame(minWidth: 24)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
             .background(voteTint.opacity(0.20))
-            .clipShape(Capsule())
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .foregroundStyle(voteTint)
         }
         .buttonStyle(.plain)
@@ -138,13 +138,17 @@ struct WishView: View {
                 } else {
                     Image(systemName: "arrowtriangle.up.fill")
                     Text("\(voteCount)")
-                        .font(.body.weight(.semibold))
+                        .font(.caption.weight(.semibold))
                 }
             }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
+            .foregroundColor(.white)
+            .background(isVotedByCurrentUser ? WishKit.theme.primaryColor : Color.gray.opacity(0.5))
+            .clipShape(Capsule())
         }
-        .buttonStyle(.borderedProminent)
-        .tint(isVotedByCurrentUser ? WishKit.theme.primaryColor : .gray)
+        .buttonStyle(.plain)
         .disabled(isVoting)
     }
 

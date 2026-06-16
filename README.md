@@ -194,6 +194,23 @@ WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment
 - iOS 16+
 - macOS 13+
 - visionOS 1+
+- watchOS 10+
+- tvOS 17+
+
+### **Platform feature matrix**
+
+| Feature | iOS | macOS | visionOS | watchOS | tvOS |
+|---|:-:|:-:|:-:|:-:|:-:|
+| Browse wishes | Yes | Yes | Yes | Yes | Yes |
+| Vote / undo vote | Yes | Yes | Yes | Yes | Yes |
+| Create wish | Yes | Yes | Yes | — | — |
+| Read comments | Yes | Yes | Yes | — | Yes |
+| Post comments | Yes | Yes | Yes | — | — |
+| State filter (`buttons.segmentedControl`) | Yes | Yes | Yes | — | — |
+| Done button (`buttons.doneButton`) | Yes | Yes | Yes | — | — |
+| Add button (`buttons.addButton`) | Yes | Yes | Yes | — | — |
+
+watchOS and tvOS are intentionally scoped to browse + vote. Config keys for unsupported features are silently ignored on those platforms.
 
 ---
 
