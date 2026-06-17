@@ -18,53 +18,12 @@ WishKit allows your users to request and vote on features in your app that <b>ju
 <img src="Resources/banner-min.png" />
 
 ## Index
-- [Setup (UIKit)](#uikit)
 - [Setup (SwiftUI)](#swiftui)
 - [Theming](#theming)
 - [User Segmentation](#user-segmentation)
 - [Control UI Elements](#ui-elements)
 - [Localization](#localization)
-
-# UIKit
-
-## 1. Add WishKit (v4.7.0) as a dependency in Xcode.
-```
-https://github.com/wishkit/wishkit-ios.git
-```
-
-## 2. Configure WishKit with your API Key.
-###### You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>.
-```swift
-import UIKit
-import WishKit
-
-@main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-	    WishKit.configure(with: "your_api_key")
-        return true
-    }
-    
-    ...
-}
-```
-
-## 3. Now you can present the WishKit viewController.
-```swift
-import UIKit
-import WishKit
-
-class HomeViewController: UIViewController {
-    ...
-  
-    @objc func buttonTapped() {
-        present(WishKit.viewController.withNavigation(), animated: true)  
-    }
-}
-```
-###### NOTE: If you are pushing the `WishKit.viewController`, you won't need to call `withNavigation()`.
----
+- [Migrating from v4 (UIKit)](#migrating-from-v4-uikit)
 
 # SwiftUI
 
@@ -122,9 +81,6 @@ WishKit.config.expandDescriptionInList = true
 // Hide comment section
 WishKit.config.commentSection = .hide
 
-// Position the Add-Button.
-WishKit.config.buttons.addButton.bottomPadding = .large
-
 // Show the status badge of a feature request (e.g. pending, approved, etc.).
 WishKit.config.statusBadge = .show
 
@@ -134,6 +90,10 @@ WishKit.config.buttons.segmentedControl.display = .hide
 // Remove drop shadow.
 WishKit.config.dropShadow = .hide
 
+// Show internal debug logs in the console (network requests, errors, etc.).
+// Off by default so production builds stay quiet.
+WishKit.config.showDebugLogs = true
+
 ```
 
 ---
@@ -142,7 +102,8 @@ WishKit.config.dropShadow = .hide
 #### You can theme WishKit to fit your apps color. 🎨
 
 ```swift
-// This is for the Add-Button, Segmented Control, and Vote-Button.
+// Accent color for primary actions (Save button, active Vote-Button, comment send).
+// Defaults to your app's accent color so WishKit blends in natively.
 WishKit.theme.primaryColor = .yellow
 
 // Set the secondary color (this is for the cells and text fields).
@@ -150,14 +111,6 @@ WishKit.theme.secondaryColor = .set(light: .orange, dark: .red)
 
 // Set the tertiary color (this is for the background).
 WishKit.theme.tertiaryColor = .set(light: .gray, dark: .black)
-
-// Segmented Control (Text color)
-WishKit.config.buttons.segmentedControl.defaultTextColor = .setBoth(to: .white)
-
-WishKit.config.buttons.segmentedControl.activeTextColor = .setBoth(to: .white)
-
-// Save Button (Text color)
-WishKit.config.buttons.saveButton.textColor = .set(light: .white, dark: .white)
 
 ```
 
@@ -201,10 +154,52 @@ WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment
 
 ### **Platforms**
 
-- iOS 14+
-- macOS 12+
+- iOS 16+
+- macOS 13+
+- visionOS 1+
+- watchOS 10+
+- tvOS 17+
+
+### **Platform feature matrix**
+
+| Feature | iOS | macOS | visionOS | watchOS | tvOS |
+|---|:-:|:-:|:-:|:-:|:-:|
+| Browse wishes | Yes | Yes | Yes | Yes | Yes |
+| Vote / undo vote | Yes | Yes | Yes | Yes | Yes |
+| Create wish | Yes | Yes | Yes | — | — |
+| Read comments | Yes | Yes | Yes | — | Yes |
+| Post comments | Yes | Yes | Yes | — | — |
+| State filter (`buttons.segmentedControl`) | Yes | Yes | Yes | Yes | Yes |
+| Done button (`buttons.doneButton`) | Yes | Yes | Yes | — | — |
+| Add button (`buttons.addButton`) | Yes | Yes | Yes | — | — |
+
+watchOS and tvOS are intentionally scoped to browse + vote. Config keys for unsupported features are silently ignored on those platforms. On tvOS, users dismiss the feedback view via the Siri Remote's Menu button (the standard system pattern), so `buttons.doneButton` is not exposed.
+
+On watchOS and tvOS, the state filter is rendered as a single cycle button that loops through the available states on tap — a more remote- and crown-friendly affordance than a segmented control.
 
 ---
 
 ### **Example Project**
 Checkout the [example project](https://github.com/wishkit/wishkit-ios-example) to see how easy it is to set up WishKit!
+
+---
+
+# Migrating from v4 (UIKit)
+
+WishKit 5 is SwiftUI-only. The `WishKit.viewController` entry point that existed in v4 has been removed. If you were presenting `WishKit.viewController.withNavigation()` from a `UIViewController`, switch to wrapping the SwiftUI view yourself:
+
+```swift
+import UIKit
+import SwiftUI
+import WishKit
+
+class HomeViewController: UIViewController {
+
+    @objc func buttonTapped() {
+        let feedback = UIHostingController(rootView: WishKit.FeedbackListView().withNavigation())
+        present(feedback, animated: true)
+    }
+}
+```
+
+Everything else — `WishKit.configure(_:)`, `WishKit.config`, `WishKit.theme`, `WishKit.updateUser(...)` — works the same as before.

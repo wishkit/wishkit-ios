@@ -1,0 +1,16 @@
+//
+//  ApiResult.swift
+//  wishkit-ios
+//
+//  Created by Martin Lasek on 2/21/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
+
+import Foundation
+
+enum ApiResult<Success, Error> {
+
+    case success(Success)
+
+    case failure(Error)
+}
