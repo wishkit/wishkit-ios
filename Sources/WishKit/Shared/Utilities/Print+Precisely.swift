@@ -33,6 +33,7 @@ internal func printDebug<T>(_ type: T, _ text: String, line: Int = #line) {
 
 /// Universal print that modifies the message to be consistent before printing it.
 fileprivate func printu<T>(_ kind: PrintKind, _ type: T, _ line: Int, _ text: String) {
+  guard WishKit.config.showDebugLogs else { return }
   let typeName = cleanUp(type: T.self)
   print("\(kind.rawValue) Line: \(line) | \(typeName) | \(text)")
 }

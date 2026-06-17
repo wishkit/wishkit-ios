@@ -29,6 +29,7 @@ struct WishlistSegmentedControlSectionView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal)
         .padding(.top, 8)
+        .padding(.bottom, 4)
     }
 }
 #endif

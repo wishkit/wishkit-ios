@@ -104,7 +104,7 @@ struct DetailWishView: View {
             do {
                 try await viewModel.submitComment(for: wishResponse.id)
             } catch {
-                print("❌ \(error.localizedDescription)")
+                printError(self, error.localizedDescription)
             }
         }
     }

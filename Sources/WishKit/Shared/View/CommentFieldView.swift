@@ -74,7 +74,7 @@ struct CommentFieldView: View {
             do {
                 try await submitAction()
             } catch {
-                print("❌ \(error.localizedDescription)")
+                printError(self, error.localizedDescription)
             }
         }
     }

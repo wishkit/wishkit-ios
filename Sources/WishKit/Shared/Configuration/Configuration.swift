@@ -39,6 +39,10 @@ public struct Configuration {
 
     public var allowUndoVote: Bool = false
 
+    /// Prints internal debug output (network requests, decode errors, submit failures) to the console.
+    /// Off by default so consumer apps stay quiet in production.
+    public var showDebugLogs: Bool = false
+
     init(
         statusBadgeDisplay: ConfigurationDisplay = .hide,
         localization: ConfigurationLocalization = .default()

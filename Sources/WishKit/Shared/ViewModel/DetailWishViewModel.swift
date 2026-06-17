@@ -55,7 +55,7 @@ final class DetailWishViewModel: ObservableObject {
             }
             newCommentValue = ""
         case .failure(let error):
-            print("❌ \(error.localizedDescription)")
+            printError(self, error.localizedDescription)
         }
     }
 

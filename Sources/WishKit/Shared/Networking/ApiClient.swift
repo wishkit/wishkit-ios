@@ -17,7 +17,7 @@ extension ApiClient {
     static func send<T: Decodable>(request: URLRequest) async -> ApiResult<T, ApiError> {
         let method = request.httpMethod ?? ""
 
-        print("🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
+        printDebug(self, "🌐 API | \(method) | \(request.url?.absoluteString ?? "nil")")
 
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
