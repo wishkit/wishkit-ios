@@ -5,7 +5,7 @@
         	<img src="https://img.shields.io/badge/License-MIT-00c573.svg" alt="MIT License">
 	</a>
 	<a href="https://swift.org">
-        	<img src="https://img.shields.io/badge/Swift-5.6-00c573.svg" alt="Swift 5.6">
+        	<img src="https://img.shields.io/badge/Swift-5.9-00c573.svg" alt="Swift 5.9">
 	</a>
 	<a href="https://twitter.com/mywishkit" target="_blank">
         	<img src="https://img.shields.io/badge/Twitter-@mywishkit-00c573.svg" alt="Twitter">
@@ -27,13 +27,13 @@ WishKit allows your users to request and vote on features in your app that <b>ju
 
 # SwiftUI
 
-## 1. Add WishKit (v4.7.0) as a dependency in Xcode.
+## 1. Add WishKit (v5.0.0) as a dependency in Xcode.
 ```
 https://github.com/wishkit/wishkit-ios.git
 ```
 
 ## 2. Configure WishKit with your API Key in the first view.
-###### You can find your API key in your admin dashboard on <a href="https://wishkit.io" target="_blank">wishkit.io</a>.
+###### You can find your API key in your admin dashboard on <a href="https://www.wishkit.io" target="_blank">wishkit.io</a>.
 ```swift
 import SwiftUI
 import WishKit
@@ -60,11 +60,12 @@ struct ContentView: View {
     }
 
     var body: some View {
-        WishKit.FeedbackListView().withNavigation()
+        WishKit.FeedbackListView()
     }
 }
 ```
-###### NOTE: If one of the parent views is a NavigationView/NavigationStack, you won't need to call `withNavigation()`.
+
+###### NOTE: On iOS and tvOS, `FeedbackListView` expects to live inside a `NavigationStack`. If it's not already inside one, add `.withNavigation()` to wrap it: `WishKit.FeedbackListView().withNavigation()`. On macOS, visionOS, and watchOS, `FeedbackListView` provides its own navigation container — no wrapping needed.
 
 ---
 
@@ -86,9 +87,6 @@ WishKit.config.statusBadge = .show
 
 // Hide the segmented control.
 WishKit.config.buttons.segmentedControl.display = .hide
-
-// Remove drop shadow.
-WishKit.config.dropShadow = .hide
 
 // Show internal debug logs in the console (network requests, errors, etc.).
 // Off by default so production builds stay quiet.
