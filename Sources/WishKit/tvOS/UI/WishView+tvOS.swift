@@ -75,8 +75,8 @@ struct WishView: View {
         switch alertModel.alertReason {
         case .alreadyVoted:
             return Text(WishKit.config.localization.youCanOnlyVoteOnce)
-        case .alreadyImplemented:
-            return Text(WishKit.config.localization.youCanNotVoteForAnImplementedWish)
+        case .alreadyCompleted:
+            return Text(WishKit.config.localization.youCanNotVoteForACompletedWish)
         case .voteReturnedError(let error):
             return Text("Something went wrong during your vote. Try again later.\n\n\(error)")
         default:
@@ -163,8 +163,8 @@ struct WishView: View {
     private func voteAction() {
         guard !isVoting else { return }
 
-        if wishResponse.state == .implemented {
-            alertModel.alertReason = .alreadyImplemented
+        if wishResponse.state == .implemented || wishResponse.state == .completed {
+            alertModel.alertReason = .alreadyCompleted
             alertModel.showAlert = true
             return
         }

@@ -10,7 +10,7 @@ enum AlertReason {
 
     case alreadyVoted
 
-    case alreadyImplemented
+    case alreadyCompleted
 
     case voteReturnedError(String)
 

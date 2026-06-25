@@ -158,7 +158,7 @@ struct WishView: View {
 
     private func voteAction() {
         guard !isVoting else { return }
-        guard wishResponse.state != .implemented else { return }
+        guard wishResponse.state != .implemented && wishResponse.state != .completed else { return }
         if isVotedByCurrentUser && WishKit.config.allowUndoVote == false { return }
 
         let voteDelta = isVotedByCurrentUser ? -1 : 1

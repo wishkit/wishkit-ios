@@ -38,7 +38,7 @@ public struct ConfigurationLocalization {
 
         public var youCanOnlyVoteOnce: String
 
-        public var youCanNotVoteForAnImplementedWish: String
+        public var youCanNotVoteForACompletedWish: String
 
         public var youCanNotVoteForYourOwnWish: String
 
@@ -116,7 +116,7 @@ public struct ConfigurationLocalization {
             upvote: String = ConfigurationLocalization.default().upvote,
             info: String = ConfigurationLocalization.default().info,
             youCanOnlyVoteOnce: String = ConfigurationLocalization.default().youCanOnlyVoteOnce,
-            youCanNotVoteForAnImplementedWish: String = ConfigurationLocalization.default().youCanNotVoteForAnImplementedWish,
+            youCanNotVoteForACompletedWish: String = ConfigurationLocalization.default().youCanNotVoteForACompletedWish,
             youCanNotVoteForYourOwnWish: String = ConfigurationLocalization.default().youCanNotVoteForYourOwnWish,
             poweredBy: String = ConfigurationLocalization.default().poweredBy,
             successfullyCreated: String = ConfigurationLocalization.default().successfullyCreated,
@@ -163,7 +163,7 @@ public struct ConfigurationLocalization {
             self.upvote = upvote
             self.info = info
             self.youCanOnlyVoteOnce = youCanOnlyVoteOnce
-            self.youCanNotVoteForAnImplementedWish = youCanNotVoteForAnImplementedWish
+            self.youCanNotVoteForACompletedWish = youCanNotVoteForACompletedWish
             self.youCanNotVoteForYourOwnWish = youCanNotVoteForYourOwnWish
             self.poweredBy = poweredBy
             self.successfullyCreated = successfullyCreated
@@ -213,7 +213,7 @@ public struct ConfigurationLocalization {
                 upvote: "Upvote",
                 info: "Info",
                 youCanOnlyVoteOnce: "You can only vote once.",
-                youCanNotVoteForAnImplementedWish: "You can not vote for a feature that is already implemented.",
+                youCanNotVoteForACompletedWish: "You can't vote for a feature that is already completed.",
                 youCanNotVoteForYourOwnWish: "You cannot vote for your own feature request.",
                 poweredBy: "Powered by",
                 successfullyCreated: "Successfully submitted",
