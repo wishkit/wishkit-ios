@@ -1,5 +1,5 @@
 <h1 align="center"> <a href="https://www.wishkit.io/?ref=github">wishkit.io</a></h1>
-<h4 align="center"> In-App Feature Requests. Made Easy. </h2>
+<h4 align="center"> The best In-App Feature Request and Feedback Board </h2>
 <p align="center">
 	<a href="LICENSE">
         	<img src="https://img.shields.io/badge/License-MIT-00c573.svg" alt="MIT License">
