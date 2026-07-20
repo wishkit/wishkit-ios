@@ -83,11 +83,15 @@ extension URLRequest {
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
     }
 
-    /// Adds User UUID and Bearer token to URLRequest if given.
+    /// Adds App Metadata as headers to the URLRequest.
     mutating func addSdkInfo() {
         let displayName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "none"
+        let bundleIdentifier = Bundle.main.bundleIdentifier ?? "unknown.bundle"
+        
         self.setValue(displayName, forHTTPHeaderField: "x-wishkit-sdk-app-name")
-        self.setValue("ios", forHTTPHeaderField: "x-wishkit-sdk-kind")
+        self.setValue(bundleIdentifier, forHTTPHeaderField: "x-wishkit-sdk-bundle-id")
+        
+        self.setValue(Platform.name, forHTTPHeaderField: "x-wishkit-sdk-kind")
         self.setValue(ProjectSettings.sdkVersion, forHTTPHeaderField: "x-wishkit-sdk-version")
     }
 
