@@ -202,6 +202,7 @@ struct CreateWishView: View {
                 Text(WishKit.config.localization.ok),
                 action: {
                     createActionCompletion()
+                    closeAction?()
                     dismissAction()
                 }
             )
