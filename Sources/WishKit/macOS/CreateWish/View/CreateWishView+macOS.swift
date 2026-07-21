@@ -10,22 +10,34 @@
 import SwiftUI
 import WishKitShared
 
-struct CreateWishView: View {
+enum ActiveAlert: Identifiable {
+    case success
+    case confirmDiscard
+    case emailRequired
+    case emailFormatWrong
+    case createError(String)
 
-    @Environment(\.presentationMode)
-    var presentationMode
+    var id: String {
+        switch self {
+        case .success: return "success"
+        case .confirmDiscard: return "confirmDiscard"
+        case .emailRequired: return "emailRequired"
+        case .emailFormatWrong: return "emailFormatWrong"
+        case .createError(let text): return "createError-\(text)"
+        }
+    }
+}
+
+struct CreateWishView: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
-
-    @ObservedObject
-    private var alertModel = AlertModel()
 
     @StateObject
     private var viewModel = CreateWishViewModel()
 
     @State
-    private var showConfirmationAlert = false
+    private var activeAlert: ActiveAlert? = nil
 
     @FocusState
     private var titleFieldFocused: Bool
@@ -142,16 +154,37 @@ struct CreateWishView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
-        .alert(isPresented: $alertModel.showAlert, content: makeAlert)
-        .alert(isPresented: $showConfirmationAlert) {
-            let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
-
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.discardEnteredInformation),
-                primaryButton: button,
-                secondaryButton: .cancel()
-            )
+        .alert(item: $activeAlert) { alert in
+            switch alert {
+            case .success:
+                return Alert(
+                    title: Text(WishKit.config.localization.info),
+                    message: Text(WishKit.config.localization.successfullyCreated),
+                    dismissButton: .default(Text(WishKit.config.localization.ok)) {
+                        createActionCompletion()
+                        closeAction?()
+                    }
+                )
+            case .confirmDiscard:
+                return Alert(
+                    title: Text(WishKit.config.localization.info),
+                    message: Text(WishKit.config.localization.discardEnteredInformation),
+                    primaryButton: .default(Text(WishKit.config.localization.ok)) { closeAction?() },
+                    secondaryButton: .cancel()
+                )
+            case .emailRequired:
+                return Alert(title: Text(WishKit.config.localization.info),
+                             message: Text(WishKit.config.localization.emailRequiredText),
+                             dismissButton: .default(Text(WishKit.config.localization.ok)))
+            case .emailFormatWrong:
+                return Alert(title: Text(WishKit.config.localization.info),
+                             message: Text(WishKit.config.localization.emailFormatWrongText),
+                             dismissButton: .default(Text(WishKit.config.localization.ok)))
+            case .createError(let errorText):
+                return Alert(title: Text(WishKit.config.localization.info),
+                             message: Text(errorText),
+                             dismissButton: .default(Text(WishKit.config.localization.ok)))
+            }
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -167,78 +200,27 @@ struct CreateWishView: View {
     }
 
     private func submitAction() {
+        guard !viewModel.isButtonLoading else { return }
         Task { @MainActor in
             let result = await viewModel.submit()
             switch result {
             case .success:
-                alertModel.alertReason = .successfullyCreated
+                activeAlert = .success
             case .emailRequired:
-                alertModel.alertReason = .emailRequired
+                activeAlert = .emailRequired
             case .emailFormatWrong:
-                alertModel.alertReason = .emailFormatWrong
+                activeAlert = .emailFormatWrong
             case .createReturnedError(let errorText):
-                alertModel.alertReason = .createReturnedError(errorText)
+                activeAlert = .createError(errorText)
             }
-            alertModel.showAlert = true
         }
     }
 
     private func dismissViewAction() {
         if !viewModel.titleText.isEmpty || !viewModel.descriptionText.isEmpty || !viewModel.emailText.isEmpty {
-            showConfirmationAlert = true
+            activeAlert = .confirmDiscard
         } else {
             closeAction?()
-        }
-    }
-
-    private func dismissAction() {
-        presentationMode.wrappedValue.dismiss()
-    }
-
-    private func makeAlert() -> Alert {
-        switch alertModel.alertReason {
-        case .successfullyCreated:
-            let button = Alert.Button.default(
-                Text(WishKit.config.localization.ok),
-                action: {
-                    createActionCompletion()
-                    closeAction?()
-                    dismissAction()
-                }
-            )
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.successfullyCreated),
-                dismissButton: button
-            )
-        case .createReturnedError(let errorText):
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(errorText),
-                dismissButton: .default(Text(WishKit.config.localization.ok))
-            )
-        case .emailRequired:
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.emailRequiredText),
-                dismissButton: .default(Text(WishKit.config.localization.ok))
-            )
-        case .emailFormatWrong:
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.emailFormatWrongText),
-                dismissButton: .default(Text(WishKit.config.localization.ok))
-            )
-        case .none:
-            return Alert(
-                title: Text(""),
-                dismissButton: .default(Text(WishKit.config.localization.ok))
-            )
-        default:
-            return Alert(
-                title: Text(""),
-                dismissButton: .default(Text(WishKit.config.localization.ok))
-            )
         }
     }
 }
