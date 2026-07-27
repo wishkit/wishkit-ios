@@ -131,7 +131,7 @@ struct WishView: View {
     private var voteChip: some View {
         Button(action: voteAction) {
             VStack(spacing: 2) {
-                Image(systemName: "arrowtriangle.up.fill")
+                Image(systemName: "chevron.up")
                 Text("\(voteCount)")
             }
             .font(.system(size: 12, weight: .semibold))
@@ -153,7 +153,7 @@ struct WishView: View {
                     ProgressView()
                         .controlSize(.small)
                 } else {
-                    Image(systemName: "arrowtriangle.up.fill")
+                    Image(systemName: "chevron.up")
                     Text("\(voteCount)")
                         .font(.caption.weight(.semibold))
                 }

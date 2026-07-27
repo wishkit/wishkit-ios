@@ -311,9 +311,13 @@ struct WishView: View {
 extension WishView {
     private static let thumbsUpSystemName = "hand.thumbsup.fill"
 
-    private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
+    private static let chevronUpSystemName = "chevron.up"
 
-    var upvoteIconImage: Image {
+    var upvoteIconImage: some View {
+        upvoteIcon.fontWeight(.bold)
+    }
+
+    private var upvoteIcon: Image {
         switch WishKit.config.buttons.voteButton.icon {
         case .systemName(let symbolName):
             let trimmedSymbolName = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -325,18 +329,18 @@ extension WishView {
             return Image(systemName: trimmedSymbolName)
         case .thumbsUpIcon:
             return Image(systemName: Self.thumbsUpSystemName)
-        case .arrowUpvoteIcon:
-            return Image(systemName: Self.arrowUpvoteSystemName)
+        case .chevronUpIcon:
+            return Image(systemName: Self.chevronUpSystemName)
         }
     }
 
     private func fallbackUpvoteImage(reason: String) -> Image {
         printDebug(
             WishView.self,
-            "Falling back to .arrowUpvoteIcon (\(Self.arrowUpvoteSystemName)). Reason: \(reason)"
+            "Falling back to .chevronUpIcon (\(Self.chevronUpSystemName)). Reason: \(reason)"
         )
 
-        return Image(systemName: Self.arrowUpvoteSystemName)
+        return Image(systemName: Self.chevronUpSystemName)
     }
 
     var voteTint: Color {

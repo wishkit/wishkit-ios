@@ -136,7 +136,7 @@ struct WishView: View {
 
     private var voteChip: some View {
         VStack(spacing: 4) {
-            Image(systemName: "arrowtriangle.up.fill")
+            Image(systemName: "chevron.up")
             Text("\(voteCount)")
                 .font(.subheadline.weight(.semibold))
         }
@@ -227,7 +227,7 @@ private struct VoteButtonDetailLabel: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: "arrowtriangle.up.fill")
+            Image(systemName: "chevron.up")
                 .font(.title2)
                 .opacity(isVoting ? 0 : 1)
             Text("\(voteCount)")
