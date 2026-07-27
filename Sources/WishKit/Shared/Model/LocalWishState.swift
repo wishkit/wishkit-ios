@@ -26,7 +26,7 @@ enum LocalWishState: Hashable, Identifiable {
     var description: String {
         switch self {
         case .all:
-            return "All"
+            return WishKit.config.localization.all
         case .open:
             return WishKit.config.localization.open
         case .closed:

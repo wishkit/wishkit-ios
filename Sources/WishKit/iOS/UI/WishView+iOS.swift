@@ -267,11 +267,11 @@ struct WishView: View {
         case .alreadyCompleted:
             return Text(WishKit.config.localization.youCanNotVoteForACompletedWish)
         case .voteReturnedError(let error):
-            return Text("Something went wrong during your vote. Try again later.\n\n\(error)")
+            return Text("\(WishKit.config.localization.somethingWentWrong)\n\n\(error)")
         case .none:
             return Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
         default:
-            return Text("Something went wrong during your vote. Try again later.")
+            return Text(WishKit.config.localization.somethingWentWrong)
         }
     }
 

@@ -104,6 +104,16 @@ public struct ConfigurationLocalization {
 
         public var refreshing: String
 
+        public var somethingWentWrong: String
+
+        public var all: String
+
+        public var notSupported: String
+
+        public var filter: String
+
+        public var activateToSwitchFilter: String
+
         public init(
             requested: String = ConfigurationLocalization.default().requested,
             pending: String = ConfigurationLocalization.default().pending,
@@ -152,7 +162,12 @@ public struct ConfigurationLocalization {
             discardEnteredInformation: String = ConfigurationLocalization.default().discardEnteredInformation,
             addButtonInNavigationBar: String = ConfigurationLocalization.default().addButtonInNavigationBar,
             refresh: String = ConfigurationLocalization.default().refresh,
-            refreshing: String = ConfigurationLocalization.default().refreshing
+            refreshing: String = ConfigurationLocalization.default().refreshing,
+            somethingWentWrong: String = ConfigurationLocalization.default().somethingWentWrong,
+            all: String = ConfigurationLocalization.default().all,
+            notSupported: String = ConfigurationLocalization.default().notSupported,
+            filter: String = ConfigurationLocalization.default().filter,
+            activateToSwitchFilter: String = ConfigurationLocalization.default().activateToSwitchFilter
         ) {
             self.requested = requested
             self.pending = pending
@@ -202,6 +217,11 @@ public struct ConfigurationLocalization {
             self.addButtonInNavigationBar = addButtonInNavigationBar
             self.refresh = refresh
             self.refreshing = refreshing
+            self.somethingWentWrong = somethingWentWrong
+            self.all = all
+            self.notSupported = notSupported
+            self.filter = filter
+            self.activateToSwitchFilter = activateToSwitchFilter
         }
 
         public static func `default`() -> ConfigurationLocalization {
@@ -253,7 +273,12 @@ public struct ConfigurationLocalization {
                 discardEnteredInformation: "Discard changes?",
                 addButtonInNavigationBar: "Create",
                 refresh: "Refresh",
-                refreshing: "Refreshing.."
+                refreshing: "Refreshing..",
+                somethingWentWrong: "Something went wrong. Try again later.",
+                all: "All",
+                notSupported: "Not Supported",
+                filter: "Filter",
+                activateToSwitchFilter: "Activate to switch filter."
             )
         }
     }

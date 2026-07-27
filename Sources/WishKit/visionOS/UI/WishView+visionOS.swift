@@ -262,9 +262,9 @@ struct WishView: View {
         case .alreadyCompleted:
             return WishKit.config.localization.youCanNotVoteForACompletedWish
         case .voteReturnedError(let error):
-            return "Something went wrong during your vote. Try again later.\n\n\(error)"
+            return "\(WishKit.config.localization.somethingWentWrong)\n\n\(error)"
         default:
-            return "Something went wrong during your vote. Try again later."
+            return WishKit.config.localization.somethingWentWrong
         }
     }
 
