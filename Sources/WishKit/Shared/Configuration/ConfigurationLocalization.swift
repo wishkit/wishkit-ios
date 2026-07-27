@@ -24,6 +24,10 @@ public struct ConfigurationLocalization {
 
         public var completed: String
 
+        public var open: String
+
+        public var closed: String
+
         public var wishlist: String
 
         public var save: String
@@ -109,6 +113,8 @@ public struct ConfigurationLocalization {
             planned: String = ConfigurationLocalization.default().planned,
             inProgress: String = ConfigurationLocalization.default().inProgress,
             completed: String = ConfigurationLocalization.default().completed,
+            open: String = ConfigurationLocalization.default().open,
+            closed: String = ConfigurationLocalization.default().closed,
             wishlist: String = ConfigurationLocalization.default().wishlist,
             save: String = ConfigurationLocalization.default().save,
             title: String = ConfigurationLocalization.default().title,
@@ -156,6 +162,8 @@ public struct ConfigurationLocalization {
             self.planned = planned
             self.inProgress = inProgress
             self.completed = completed
+            self.open = open
+            self.closed = closed
             self.wishlist = wishlist
             self.save = save
             self.title = title
@@ -206,6 +214,8 @@ public struct ConfigurationLocalization {
                 planned: "Planned",
                 inProgress: "In Progress",
                 completed: "Completed",
+                open: "Open",
+                closed: "Closed",
                 wishlist: "Feature Requests",
                 save: "Submit",
                 title: "Title",

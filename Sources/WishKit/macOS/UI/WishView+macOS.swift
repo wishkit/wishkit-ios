@@ -147,7 +147,8 @@ struct WishView: View {
 
                     Spacer()
 
-                    if viewKind == .list && WishKit.config.statusBadge == .show {
+                    // Pending always shows its badge — it's how users spot their own unapproved feedback in "Open".
+                    if viewKind == .list && (WishKit.config.statusBadge == .show || wishResponse.state == .pending) {
                         Text(wishResponse.state.description.uppercased())
                             .opacity(0.8)
                             .font(.caption2)

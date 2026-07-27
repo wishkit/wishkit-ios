@@ -32,6 +32,11 @@ struct WishlistView: View {
         switch selectedWishState {
         case .all:
             return wishModel.all
+        case .open:
+            return (wishModel.pendingList + wishModel.approvedList)
+                .sorted { $0.votingUsers.count > $1.votingUsers.count }
+        case .closed:
+            return wishModel.completedList
         case .library(let state):
             switch state {
             case .pending:

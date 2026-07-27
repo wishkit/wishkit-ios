@@ -75,10 +75,18 @@ extension RequestCreatable {
 
 extension URLRequest {
 
-    /// Adds User UUID and Bearer token to URLRequest if given.
+    /// Adds User UUID and API key to URLRequest if given.
     mutating func addAuth() {
         let uuid = UUIDManager.getUUID()
         let token = WishKit.apiKey
+
+        #if DEBUG
+        // Intentionally not gated behind `showDebugLogs` — a missing API key is a setup error.
+        if token.isEmpty {
+            print("⚠️ WishKit: API key is missing. Call `WishKit.configure(with: \"your-api-key\")` before showing any WishKit view. You can find your API key at wishkit.io in your admin dashboard.")
+        }
+        #endif
+
         self.setValue(token, forHTTPHeaderField: "x-wishkit-api-key")
         self.setValue(uuid.uuidString, forHTTPHeaderField: "x-wishkit-uuid")
     }

@@ -77,10 +77,17 @@ struct WishView: View {
             voteChip
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(wishResponse.title)
-                    .font(.caption2.weight(.semibold))
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
+                HStack(spacing: 4) {
+                    Text(wishResponse.title)
+                        .font(.caption2.weight(.semibold))
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+
+                    // Pending always shows its badge — it's how users spot their own unapproved feedback in "Open".
+                    if wishResponse.state == .pending {
+                        pendingBadge
+                    }
+                }
 
                 Text(wishResponse.description)
                     .font(.footnote)
@@ -109,6 +116,16 @@ struct WishView: View {
             voteButtonFullWidth
                 .padding(.top, 4)
         }
+    }
+
+    private var pendingBadge: some View {
+        Text(WishKit.config.localization.pending.uppercased())
+            .opacity(0.8)
+            .font(.system(size: 9))
+            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
+            .foregroundColor(.primary)
+            .background(WishKit.theme.badgeColor.pending.resolved(for: .dark).opacity(1 / 3))
+            .cornerRadius(4)
     }
 
     private var voteChip: some View {

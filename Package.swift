@@ -17,9 +17,15 @@ let package = Package(
         .package(url: "https://github.com/wishkit/wishkit-ios-shared.git", exact: "1.5.0")
     ],
     targets: [
-        .target(name: "WishKit", dependencies: [
-            .product(name: "WishKitShared", package: "wishkit-ios-shared")
-        ]),
+        .target(
+            name: "WishKit",
+            dependencies: [
+                .product(name: "WishKitShared", package: "wishkit-ios-shared")
+            ],
+            resources: [
+                .copy("PrivacyInfo.xcprivacy")
+            ]
+        ),
         .testTarget(name: "WishKitTests", dependencies: [.target(name: "WishKit")]),
     ]
 )

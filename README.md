@@ -23,6 +23,7 @@ WishKit allows your users to request and vote on features in your app! <br/>
 - [User Segmentation](#user-segmentation)
 - [Control UI Elements](#ui-elements)
 - [Localization](#localization)
+- [Privacy](#privacy)
 - [Migrating from v4 (UIKit)](#migrating-from-v4-uikit)
 
 # SwiftUI
@@ -149,6 +150,18 @@ WishKit.config.localization.requested = "Angefragt"
 // You can also assign NSLocalizedString.
 WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment: "")
 ```
+
+# Privacy
+
+WishKit ships a privacy manifest (`PrivacyInfo.xcprivacy`) that Xcode automatically includes in your app's aggregated privacy report. It declares what WishKit collects out of the box:
+
+- **User ID** — an anonymous, randomly generated per-install identifier used to associate votes and feedback. Not linked to the user's identity, not used for tracking.
+- **Product interaction** — votes and feedback activity. App functionality only.
+- **User content** — the feature requests and comments users write. App functionality only.
+
+WishKit does not track users and declares no tracking domains.
+
+If you share additional user information via `updateUser` — email, name, or your own custom ID — that data is sent to WishKit too, but it is *not* part of WishKit's manifest since collecting it is your app's choice. In that case, cover it in your own app's privacy details in App Store Connect (e.g. "Email Address" / "Name" under app functionality).
 
 ### **Platforms**
 

@@ -101,11 +101,7 @@ struct DetailWishView: View {
         submitTask?.cancel()
         submitTask = Task { @MainActor in
             defer { submitTask = nil }
-            do {
-                try await viewModel.submitComment(for: wishResponse.id)
-            } catch {
-                printError(self, error.localizedDescription)
-            }
+            await viewModel.submitComment(for: wishResponse.id)
         }
     }
 }

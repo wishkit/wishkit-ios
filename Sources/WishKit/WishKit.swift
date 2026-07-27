@@ -18,7 +18,7 @@ public struct WishKit {
     
     private static var sendUserTask: Task<Void, Never>?
 
-    static var apiKey = "my-fancy-api-key"
+    static var apiKey = ""
 
     static var user = User()
 

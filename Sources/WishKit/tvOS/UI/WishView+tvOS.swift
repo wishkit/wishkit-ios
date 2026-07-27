@@ -12,6 +12,9 @@ import WishKitShared
 
 struct WishView: View {
 
+    @Environment(\.colorScheme)
+    private var colorScheme
+
     @ObservedObject
     private var alertModel = AlertModel()
 
@@ -88,10 +91,17 @@ struct WishView: View {
         HStack(alignment: .center, spacing: 16) {
             voteChip
             VStack(alignment: .leading, spacing: 4) {
-                Text(wishResponse.title)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
+                HStack(spacing: 12) {
+                    Text(wishResponse.title)
+                        .font(.headline)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+
+                    // Pending always shows its badge — it's how users spot their own unapproved feedback in "Open".
+                    if wishResponse.state == .pending {
+                        pendingBadge
+                    }
+                }
 
                 Text(wishResponse.description)
                     .font(.subheadline)
@@ -142,6 +152,16 @@ struct WishView: View {
 
     private var voteChipBackground: Color {
         isVotedByCurrentUser ? WishKit.theme.primaryColor : Color.gray.opacity(0.6)
+    }
+
+    private var pendingBadge: some View {
+        Text(WishKit.config.localization.pending.uppercased())
+            .opacity(0.8)
+            .font(.caption2)
+            .padding(EdgeInsets(top: 3, leading: 8, bottom: 3, trailing: 8))
+            .foregroundColor(.primary)
+            .background(WishKit.theme.badgeColor.pending.resolved(for: colorScheme).opacity(1 / 3))
+            .cornerRadius(6)
     }
 
     private var voteButtonDetail: some View {
