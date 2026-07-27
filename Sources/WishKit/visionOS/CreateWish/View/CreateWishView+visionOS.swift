@@ -18,8 +18,11 @@ struct CreateWishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
-    private var alertModel = AlertModel()
+    @State
+    private var showAlert = false
+
+    @State
+    private var alertReason: AlertReason = .none
 
     @StateObject
     private var viewModel = CreateWishViewModel()
@@ -123,6 +126,18 @@ struct CreateWishView: View {
                 .buttonStyle(.bordered)
                 .controlSize(.large)
                 .keyboardShortcut(.cancelAction)
+                // Attached here (not on the VStack) so it doesn't conflict with the submit alert —
+                // SwiftUI only reliably honors one `.alert(isPresented:)` per view.
+                .alert(isPresented: $showConfirmationAlert) {
+                    let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
+
+                    return Alert(
+                        title: Text(WishKit.config.localization.info),
+                        message: Text(WishKit.config.localization.discardEnteredInformation),
+                        primaryButton: button,
+                        secondaryButton: .cancel()
+                    )
+                }
 
                 Button(action: submitAction) {
                     HStack {
@@ -139,23 +154,13 @@ struct CreateWishView: View {
                 .tint(WishKit.theme.primaryColor)
                 .keyboardShortcut(.defaultAction)
                 .disabled(viewModel.isButtonDisabled || viewModel.isButtonLoading)
+                .alert(isPresented: $showAlert, content: makeAlert)
             }
             .padding(.horizontal)
             .padding(.bottom)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundColor)
-        .alert(isPresented: $alertModel.showAlert, content: makeAlert)
-        .alert(isPresented: $showConfirmationAlert) {
-            let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
-
-            return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.discardEnteredInformation),
-                primaryButton: button,
-                secondaryButton: .cancel()
-            )
-        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 titleFieldFocused = true
@@ -174,15 +179,15 @@ struct CreateWishView: View {
             let result = await viewModel.submit()
             switch result {
             case .success:
-                alertModel.alertReason = .successfullyCreated
+                alertReason = .successfullyCreated
             case .emailRequired:
-                alertModel.alertReason = .emailRequired
+                alertReason = .emailRequired
             case .emailFormatWrong:
-                alertModel.alertReason = .emailFormatWrong
+                alertReason = .emailFormatWrong
             case .createReturnedError(let errorText):
-                alertModel.alertReason = .createReturnedError(errorText)
+                alertReason = .createReturnedError(errorText)
             }
-            alertModel.showAlert = true
+            showAlert = true
         }
     }
 
@@ -199,13 +204,17 @@ struct CreateWishView: View {
     }
 
     private func makeAlert() -> Alert {
-        switch alertModel.alertReason {
+        switch alertReason {
         case .successfullyCreated:
             let button = Alert.Button.default(
                 Text(WishKit.config.localization.ok),
                 action: {
                     createActionCompletion()
-                    dismissAction()
+                    // Deferred so closing the sheet doesn't race the alert's own dismissal.
+                    DispatchQueue.main.async {
+                        closeAction?()
+                        dismissAction()
+                    }
                 }
             )
             return Alert(

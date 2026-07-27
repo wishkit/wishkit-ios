@@ -86,7 +86,7 @@ struct WishView: View {
                     WishVoteCountTextView(
                         voteCount: voteCount,
                         voteCountScale: voteCountScale,
-                        font: .callout.weight(.semibold)
+                        font: .title3.weight(.semibold)
                     )
                 }
                 .frame(width: 50, height: 50)
@@ -144,10 +144,10 @@ struct WishView: View {
                         Text(wishResponse.state.description.uppercased())
                             .opacity(0.8)
                             .font(.caption2)
-                            .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
+                            .padding(EdgeInsets(top: 3, leading: 8, bottom: 3, trailing: 8))
                             .foregroundColor(.primary)
                             .background(badgeColor(for: wishResponse.state).opacity(1 / 3))
-                            .cornerRadius(6)
+                            .clipShape(Capsule())
                     }
                 }
 
