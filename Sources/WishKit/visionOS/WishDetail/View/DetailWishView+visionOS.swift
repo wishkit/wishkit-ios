@@ -18,6 +18,10 @@ struct DetailWishView: View {
     @StateObject
     private var viewModel: DetailWishViewModel
 
+    /// Non-nil means the vote alert is presented; the value is its content.
+    @State
+    private var voteAlert: AlertReason? = nil
+
     private let wishResponse: WishResponse
 
     private let voteActionCompletion: () -> Void
@@ -43,9 +47,14 @@ struct DetailWishView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
-                    .padding()
-                    .frame(maxWidth: 700)
+                WishView(
+                    wishResponse: wishResponse,
+                    viewKind: .detail,
+                    voteActionCompletion: voteActionCompletion,
+                    onVoteAlert: { reason in voteAlert = reason }
+                )
+                .padding()
+                .frame(maxWidth: 700)
 
                 if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {
                     CommentListView(commentList: $viewModel.commentList)
@@ -55,6 +64,16 @@ struct DetailWishView: View {
             .frame(maxWidth: .infinity)
         }
         .background(backgroundColor)
+        .alert(
+            voteAlert.map { WishView.voteAlertMessage(for: $0) } ?? "",
+            isPresented: Binding(
+                get: { voteAlert != nil },
+                set: { if !$0 { voteAlert = nil } }
+            ),
+            presenting: voteAlert
+        ) { _ in
+            Button(WishKit.config.localization.ok, role: .cancel) { }
+        }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 8) {
                 if WishKit.config.commentSection == .show {

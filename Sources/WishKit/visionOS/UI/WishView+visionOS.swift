@@ -15,9 +15,6 @@ struct WishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
-    private var alertModel = AlertModel()
-
     @State
     private var voteCount: Int
 
@@ -40,6 +37,10 @@ struct WishView: View {
 
     private let voteActionCompletion: () -> Void
 
+    /// Reports vote alerts to the parent view, which presents them outside the `List` —
+    /// row-level presentation is fragile (an alert can vanish when the row is recreated).
+    private let onVoteAlert: (AlertReason) -> Void
+
     private let viewKind: WishViewKind
 
     private var descriptionLineLimit: Int? {
@@ -50,7 +51,12 @@ struct WishView: View {
         return WishKit.config.expandDescriptionInList ? nil : 1
     }
 
-    init(wishResponse: WishResponse, viewKind: WishViewKind, voteActionCompletion: @escaping (() -> Void)) {
+    init(
+        wishResponse: WishResponse,
+        viewKind: WishViewKind,
+        voteActionCompletion: @escaping (() -> Void),
+        onVoteAlert: @escaping (AlertReason) -> Void
+    ) {
         let currentUserUUID = UUIDManager.getUUID()
         let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
             user.uuid == currentUserUUID
@@ -59,6 +65,7 @@ struct WishView: View {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
+        self.onVoteAlert = onVoteAlert
         self._voteCount = .init(initialValue: wishResponse.votingUsers.count)
         self._isVotedByCurrentUser = .init(initialValue: hasVotedByCurrentUser)
     }
@@ -124,9 +131,6 @@ struct WishView: View {
 
                 isVotedByCurrentUser = newValue
             }
-            .alert(isPresented: $alertModel.showAlert) {
-                Alert(title: voteAlertTitle)
-            }
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
@@ -170,14 +174,12 @@ struct WishView: View {
         }
 
         if wishResponse.state == .implemented || wishResponse.state == .completed {
-            alertModel.alertReason = .alreadyCompleted
-            alertModel.showAlert = true
+            onVoteAlert(.alreadyCompleted)
             return
         }
 
         if isVotedByCurrentUser && WishKit.config.allowUndoVote == false {
-            alertModel.alertReason = .alreadyVoted
-            alertModel.showAlert = true
+            onVoteAlert(.alreadyVoted)
             return
         }
 
@@ -208,8 +210,7 @@ struct WishView: View {
                 applyVoteSuccessAnimations(voteDelta: voteDelta)
                 voteActionCompletion()
             case .failure(let error):
-                alertModel.alertReason = .voteReturnedError(error.localizedDescription)
-                alertModel.showAlert = true
+                onVoteAlert(.voteReturnedError(error.localizedDescription))
             }
         }
     }
@@ -252,18 +253,18 @@ struct WishView: View {
         }
     }
 
-    private var voteAlertTitle: Text {
-        switch alertModel.alertReason {
+    /// Message for the vote alert. Presented by the parent views (list / detail),
+    /// outside of `List` rows, driven by an optional `AlertReason`.
+    static func voteAlertMessage(for reason: AlertReason) -> String {
+        switch reason {
         case .alreadyVoted:
-            return Text(WishKit.config.localization.youCanOnlyVoteOnce)
+            return WishKit.config.localization.youCanOnlyVoteOnce
         case .alreadyCompleted:
-            return Text(WishKit.config.localization.youCanNotVoteForACompletedWish)
+            return WishKit.config.localization.youCanNotVoteForACompletedWish
         case .voteReturnedError(let error):
-            return Text("Something went wrong during your vote. Try again later.\n\n\(error)")
-        case .none:
-            return Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+            return "Something went wrong during your vote. Try again later.\n\n\(error)"
         default:
-            return Text("Something went wrong during your vote. Try again later.")
+            return "Something went wrong during your vote. Try again later."
         }
     }
 
@@ -303,6 +304,8 @@ struct WishView: View {
 extension WishView {
     private static let thumbsUpSystemName = "hand.thumbsup.fill"
 
+    private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
+
     private static let chevronUpSystemName = "chevron.up"
 
     var upvoteIconImage: some View {
@@ -321,6 +324,8 @@ extension WishView {
             return Image(systemName: trimmedSymbolName)
         case .thumbsUpIcon:
             return Image(systemName: Self.thumbsUpSystemName)
+        case .arrowUpvoteIcon:
+            return Image(systemName: Self.arrowUpvoteSystemName)
         case .chevronUpIcon:
             return Image(systemName: Self.chevronUpSystemName)
         }

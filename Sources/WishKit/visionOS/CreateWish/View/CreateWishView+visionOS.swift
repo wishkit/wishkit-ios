@@ -132,8 +132,7 @@ struct CreateWishView: View {
                     let button = Alert.Button.default(Text(WishKit.config.localization.ok), action: { closeAction?() })
 
                     return Alert(
-                        title: Text(WishKit.config.localization.info),
-                        message: Text(WishKit.config.localization.discardEnteredInformation),
+                        title: Text(WishKit.config.localization.discardEnteredInformation),
                         primaryButton: button,
                         secondaryButton: .cancel()
                     )
@@ -218,26 +217,22 @@ struct CreateWishView: View {
                 }
             )
             return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.successfullyCreated),
+                title: Text(WishKit.config.localization.successfullyCreated),
                 dismissButton: button
             )
         case .createReturnedError(let errorText):
             return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(errorText),
+                title: Text(errorText),
                 dismissButton: .default(Text(WishKit.config.localization.ok))
             )
         case .emailRequired:
             return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.emailRequiredText),
+                title: Text(WishKit.config.localization.emailRequiredText),
                 dismissButton: .default(Text(WishKit.config.localization.ok))
             )
         case .emailFormatWrong:
             return Alert(
-                title: Text(WishKit.config.localization.info),
-                message: Text(WishKit.config.localization.emailFormatWrongText),
+                title: Text(WishKit.config.localization.emailFormatWrongText),
                 dismissButton: .default(Text(WishKit.config.localization.ok))
             )
         case .none:

@@ -316,6 +316,8 @@ struct WishView: View {
 extension WishView {
     private static let thumbsUpSystemName = "hand.thumbsup.fill"
 
+    private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
+
     private static let chevronUpSystemName = "chevron.up"
 
     var upvoteIconImage: some View {
@@ -334,6 +336,8 @@ extension WishView {
             return Image(systemName: trimmedSymbolName)
         case .thumbsUpIcon:
             return Image(systemName: Self.thumbsUpSystemName)
+        case .arrowUpvoteIcon:
+            return Image(systemName: Self.arrowUpvoteSystemName)
         case .chevronUpIcon:
             return Image(systemName: Self.chevronUpSystemName)
         }
