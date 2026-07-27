@@ -3,6 +3,8 @@
 //  wishkit-ios
 //
 //  Created by Martin Lasek on 7/19/26.
+//  Copyright © 2026 Martin Lasek. All rights reserved.
+//
 
 import Foundation
 

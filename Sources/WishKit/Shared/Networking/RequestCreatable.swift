@@ -87,10 +87,13 @@ extension URLRequest {
     mutating func addSdkInfo() {
         let displayName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "none"
         let bundleIdentifier = Bundle.main.bundleIdentifier ?? "unknown.bundle"
-        
+
         self.setValue(displayName, forHTTPHeaderField: "x-wishkit-sdk-app-name")
-        self.setValue(bundleIdentifier, forHTTPHeaderField: "x-wishkit-sdk-bundle-id")
-        
+
+        if AppEnvironment.isProduction {
+            self.setValue(bundleIdentifier, forHTTPHeaderField: "x-wishkit-sdk-bundle-id")
+        }
+
         self.setValue(Platform.name, forHTTPHeaderField: "x-wishkit-sdk-kind")
         self.setValue(ProjectSettings.sdkVersion, forHTTPHeaderField: "x-wishkit-sdk-version")
     }
