@@ -12,4 +12,6 @@ public enum WishKitUpvoteIcon {
     case thumbsUpIcon
 
     case arrowUpvoteIcon
+
+    case chevronUpIcon
 }

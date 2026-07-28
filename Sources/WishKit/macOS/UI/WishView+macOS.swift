@@ -15,9 +15,6 @@ struct WishView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    @ObservedObject
-    private var alertModel = AlertModel()
-
     @State
     private var voteCount: Int
 
@@ -40,6 +37,10 @@ struct WishView: View {
 
     private let voteActionCompletion: () -> Void
 
+    /// Reports vote alerts to the parent view, which presents them outside the `List` —
+    /// a SwiftUI alert attached inside a macOS `List` row never presents.
+    private let onVoteAlert: (AlertReason) -> Void
+
     private let viewKind: WishViewKind
 
     private var descriptionLineLimit: Int? {
@@ -58,7 +59,12 @@ struct WishView: View {
         }
     }
 
-    init(wishResponse: WishResponse, viewKind: WishViewKind, voteActionCompletion: @escaping (() -> Void)) {
+    init(
+        wishResponse: WishResponse,
+        viewKind: WishViewKind,
+        voteActionCompletion: @escaping (() -> Void),
+        onVoteAlert: @escaping (AlertReason) -> Void
+    ) {
         let currentUserUUID = UUIDManager.getUUID()
         let hasVotedByCurrentUser = wishResponse.votingUsers.contains { user in
             user.uuid == currentUserUUID
@@ -67,6 +73,7 @@ struct WishView: View {
         self.wishResponse = wishResponse
         self.viewKind = viewKind
         self.voteActionCompletion = voteActionCompletion
+        self.onVoteAlert = onVoteAlert
         self._voteCount = .init(initialValue: wishResponse.votingUsers.count)
         self._isVotedByCurrentUser = .init(initialValue: hasVotedByCurrentUser)
     }
@@ -132,9 +139,6 @@ struct WishView: View {
 
                 isVotedByCurrentUser = newValue
             }
-            .alert(isPresented: $alertModel.showAlert) {
-                Alert(title: voteAlertTitle)
-            }
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
@@ -147,7 +151,8 @@ struct WishView: View {
 
                     Spacer()
 
-                    if viewKind == .list && WishKit.config.statusBadge == .show {
+                    // Pending always shows its badge — it's how users spot their own unapproved feedback in "Open".
+                    if viewKind == .list && (WishKit.config.statusBadge == .show || wishResponse.state == .pending) {
                         Text(wishResponse.state.description.uppercased())
                             .opacity(0.8)
                             .font(.caption2)
@@ -178,14 +183,12 @@ struct WishView: View {
         }
 
         if wishResponse.state == .implemented || wishResponse.state == .completed {
-            alertModel.alertReason = .alreadyCompleted
-            alertModel.showAlert = true
+            onVoteAlert(.alreadyCompleted)
             return
         }
 
         if isVotedByCurrentUser && WishKit.config.allowUndoVote == false {
-            alertModel.alertReason = .alreadyVoted
-            alertModel.showAlert = true
+            onVoteAlert(.alreadyVoted)
             return
         }
 
@@ -216,8 +219,7 @@ struct WishView: View {
                 applyVoteSuccessAnimations(voteDelta: voteDelta)
                 voteActionCompletion()
             case .failure(let error):
-                alertModel.alertReason = .voteReturnedError(error.localizedDescription)
-                alertModel.showAlert = true
+                onVoteAlert(.voteReturnedError(error.localizedDescription))
             }
         }
     }
@@ -260,19 +262,22 @@ struct WishView: View {
         }
     }
 
-    private var voteAlertTitle: Text {
-        switch alertModel.alertReason {
+    /// Builds the vote alert. Presented by the parent views (list / detail), never
+    /// inside the row itself — a SwiftUI alert attached inside a macOS `List` row never presents.
+    static func makeVoteAlert(for reason: AlertReason) -> Alert {
+        let message: String
+        switch reason {
         case .alreadyVoted:
-            return Text(WishKit.config.localization.youCanOnlyVoteOnce)
+            message = WishKit.config.localization.youCanOnlyVoteOnce
         case .alreadyCompleted:
-            return Text(WishKit.config.localization.youCanNotVoteForACompletedWish)
+            message = WishKit.config.localization.youCanNotVoteForACompletedWish
         case .voteReturnedError(let error):
-            return Text("Something went wrong during your vote. Try again later.\n\n\(error)")
-        case .none:
-            return Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
+            message = "\(WishKit.config.localization.somethingWentWrong)\n\n\(error)"
         default:
-            return Text("Something went wrong during your vote. Try again later.")
+            message = WishKit.config.localization.somethingWentWrong
         }
+
+        return Alert(title: Text(message))
     }
 
     private func badgeScheme(for wishState: WishState) -> ThemeScheme {
@@ -313,7 +318,13 @@ extension WishView {
 
     private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
 
-    var upvoteIconImage: Image {
+    private static let chevronUpSystemName = "chevron.up"
+
+    var upvoteIconImage: some View {
+        upvoteIcon.fontWeight(.bold)
+    }
+
+    private var upvoteIcon: Image {
         switch WishKit.config.buttons.voteButton.icon {
         case .systemName(let symbolName):
             let trimmedSymbolName = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -327,16 +338,18 @@ extension WishView {
             return Image(systemName: Self.thumbsUpSystemName)
         case .arrowUpvoteIcon:
             return Image(systemName: Self.arrowUpvoteSystemName)
+        case .chevronUpIcon:
+            return Image(systemName: Self.chevronUpSystemName)
         }
     }
 
     private func fallbackUpvoteImage(reason: String) -> Image {
         printDebug(
             WishView.self,
-            "Falling back to .arrowUpvoteIcon (\(Self.arrowUpvoteSystemName)). Reason: \(reason)"
+            "Falling back to .chevronUpIcon (\(Self.chevronUpSystemName)). Reason: \(reason)"
         )
 
-        return Image(systemName: Self.arrowUpvoteSystemName)
+        return Image(systemName: Self.chevronUpSystemName)
     }
 
     var voteTint: Color {

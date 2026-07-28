@@ -21,6 +21,10 @@ struct WishlistView: View {
     @State
     var selectedWish: WishResponse? = nil
 
+    /// Non-nil means the vote alert is presented; the value is its content.
+    @State
+    private var voteAlert: AlertReason? = nil
+
     @Binding
     var selectedWishState: LocalWishState
 
@@ -32,6 +36,11 @@ struct WishlistView: View {
         switch selectedWishState {
         case .all:
             return wishModel.all
+        case .open:
+            return (wishModel.pendingList + wishModel.approvedList)
+                .sorted { $0.votingUsers.count > $1.votingUsers.count }
+        case .closed:
+            return wishModel.completedList
         case .library(let state):
             switch state {
             case .pending:
@@ -74,8 +83,13 @@ struct WishlistView: View {
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
                     Button(action: { selectWish(wish: wish) }) {
-                        WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        WishView(
+                            wishResponse: wish,
+                            viewKind: .list,
+                            voteActionCompletion: { wishModel.fetchList() },
+                            onVoteAlert: { reason in voteAlert = reason }
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.bordered)
                     .listRowInsets(EdgeInsets())
@@ -104,6 +118,18 @@ struct WishlistView: View {
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
                 }.zIndex(0)
             }
+        }
+        // Presented here — outside the List — so a row being recreated
+        // (e.g. by a refresh) can never take a visible alert down with it.
+        .alert(
+            voteAlert.map { WishView.voteAlertMessage(for: $0) } ?? "",
+            isPresented: Binding(
+                get: { voteAlert != nil },
+                set: { if !$0 { voteAlert = nil } }
+            ),
+            presenting: voteAlert
+        ) { _ in
+            Button(WishKit.config.localization.ok, role: .cancel) { }
         }
     }
 

@@ -10,5 +10,5 @@ import SwiftUI
 
 public struct ConfigurationVoteButton {
 
-    public var icon: WishKitUpvoteIcon = .arrowUpvoteIcon
+    public var icon: WishKitUpvoteIcon = .chevronUpIcon
 }

@@ -60,6 +60,39 @@ final class WishFilteringTests: XCTestCase {
         XCTAssertEqual(count, lists.completed.count)
     }
 
+    func testListMergesPendingAndApprovedSortedByVotesForOpen() {
+        let pending = makeWish(state: .pending, votes: 1)
+        let approvedHigh = makeWish(state: .approved, votes: 5)
+        let approvedLow = makeWish(state: .approved, votes: 0)
+        let completed = makeWish(state: .completed, votes: 3)
+        let lists = WishFilteringLists(
+            all: [pending, approvedHigh, approvedLow, completed],
+            pending: [pending],
+            approved: [approvedHigh, approvedLow],
+            completed: [completed]
+        )
+
+        let result = WishFiltering.list(
+            from: lists,
+            selectedState: .open,
+            segmentedControlDisplay: .show
+        )
+
+        XCTAssertEqual(result.map(\.id), [approvedHigh.id, pending.id, approvedLow.id])
+    }
+
+    func testListReturnsCompletedForClosed() {
+        let lists = makeLists()
+
+        let result = WishFiltering.list(
+            from: lists,
+            selectedState: .closed,
+            segmentedControlDisplay: .show
+        )
+
+        XCTAssertEqual(result.map(\.id), lists.completed.map(\.id))
+    }
+
     private func makeLists() -> WishFilteringLists {
         let pending = makeWish(state: .pending)
         let approved = makeWish(state: .approved)
@@ -73,14 +106,14 @@ final class WishFilteringTests: XCTestCase {
         )
     }
 
-    private func makeWish(state: WishState) -> WishResponse {
+    private func makeWish(state: WishState, votes: Int = 0) -> WishResponse {
         WishResponse(
             id: UUID(),
             userUUID: UUID(),
             title: "title",
             description: "description",
             state: state,
-            votingUsers: [],
+            votingUsers: (0..<votes).map { _ in UserResponse(uuid: UUID()) },
             commentList: []
         )
     }

@@ -53,7 +53,7 @@ struct WishlistFilterCycleButton: View {
     private var accessibilityLabel: String {
         let current = selectedWishState.description
         let count = countProvider(selectedWishState)
-        return "Filter: \(current), \(count) items. Activate to switch filter."
+        return "\(WishKit.config.localization.filter): \(current) (\(count)). \(WishKit.config.localization.activateToSwitchFilter)"
     }
 }
 #endif

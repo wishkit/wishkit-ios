@@ -24,12 +24,12 @@ struct CommentFieldView: View {
     @State
     private var submitTask: Task<Void, Never>?
 
-    private let submitAction: () async throws -> ()
+    private let submitAction: () async -> Void
 
     init(
         _ textFieldValue: Binding<String>,
         isLoading: Binding<Bool>,
-        submitAction: @escaping () async throws -> ()
+        submitAction: @escaping () async -> Void
     ) {
         self._textFieldValue = textFieldValue
         self._isLoading = isLoading
@@ -71,11 +71,7 @@ struct CommentFieldView: View {
         submitTask?.cancel()
         submitTask = Task { @MainActor in
             defer { submitTask = nil }
-            do {
-                try await submitAction()
-            } catch {
-                printError(self, error.localizedDescription)
-            }
+            await submitAction()
         }
     }
 }

@@ -14,13 +14,12 @@ import WishKitShared
 final class WishlistViewModel: ObservableObject {
 
     @Published
-    var selectedWishState: LocalWishState = .library(.approved)
+    var selectedWishState: LocalWishState = .open
 
     var feedbackStateSelection: [LocalWishState] {
         [
-            .library(.pending),
-            .library(.approved),
-            .library(.completed),
+            .open,
+            .closed,
         ]
     }
 

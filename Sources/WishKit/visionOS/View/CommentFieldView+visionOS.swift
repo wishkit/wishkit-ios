@@ -23,7 +23,7 @@ struct CommentFieldView: View {
 
     init(
         _ textFieldValue: Binding<String>,
-        isLoading: Binding<Bool>,
+        isLoading: Binding<Bool>
     ) {
         self._textFieldValue = textFieldValue
         self._isLoading = isLoading

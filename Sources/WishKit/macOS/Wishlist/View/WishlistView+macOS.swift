@@ -21,6 +21,12 @@ struct WishlistView: View {
     @State
     var selectedWish: WishResponse? = nil
 
+    @State
+    private var showVoteAlert = false
+
+    @State
+    private var voteAlertReason: AlertReason = .none
+
     @Binding
     var selectedWishState: LocalWishState
 
@@ -46,12 +52,20 @@ struct WishlistView: View {
 
             if getList().count > 0 {
                 List(getList(), id: \.id) { wish in
-                    Button(action: { selectWish(wish: wish) }) {
-                        WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
+                    // A tap gesture instead of a wrapping Button — presentations (like the
+                    // vote alert in WishView) don't fire on macOS from inside a button label.
+                    WishView(
+                        wishResponse: wish,
+                        viewKind: .list,
+                        voteActionCompletion: { wishModel.fetchList() },
+                        onVoteAlert: { reason in
+                            voteAlertReason = reason
+                            showVoteAlert = true
+                        }
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture { selectWish(wish: wish) }
                     .fullWidthListSeparator()
                 }
                 .transition(.opacity)
@@ -75,8 +89,13 @@ struct WishlistView: View {
                 }.zIndex(0)
             }
         }
+        // Presented here — outside the List — because a SwiftUI alert
+        // attached inside a macOS List row never presents.
+        .alert(isPresented: $showVoteAlert) {
+            WishView.makeVoteAlert(for: voteAlertReason)
+        }
     }
-    
+
     func getList() -> [WishResponse] {
         if WishKit.config.buttons.segmentedControl.display == .hide {
             return wishModel.all
@@ -85,6 +104,11 @@ struct WishlistView: View {
         switch selectedWishState {
         case .all:
             return wishModel.all
+        case .open:
+            return (wishModel.pendingList + wishModel.approvedList)
+                .sorted { $0.votingUsers.count > $1.votingUsers.count }
+        case .closed:
+            return wishModel.completedList
         case .library(let state):
             switch state {
             case .pending:

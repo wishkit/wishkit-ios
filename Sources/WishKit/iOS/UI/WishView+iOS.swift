@@ -36,6 +36,15 @@ struct WishView: View {
     @State
     private var voteTask: Task<Void, Never>?
 
+    @State
+    private var translatedTitle: String? = nil
+
+    @State
+    private var translatedDescription: String? = nil
+
+    @State
+    private var isShowingTranslation = false
+
     private let wishResponse: WishResponse
 
     private let voteActionCompletion: () -> Void
@@ -137,7 +146,7 @@ struct WishView: View {
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
-                    Text(wishResponse.title)
+                    Text(displayedTitle)
                         .foregroundColor(textColor)
                         .font(.body)
                         .fontWeight(.semibold)
@@ -146,7 +155,8 @@ struct WishView: View {
 
                     Spacer()
 
-                    if viewKind == .list && WishKit.config.statusBadge == .show {
+                    // Pending always shows its badge — it's how users spot their own unapproved feedback in "Open".
+                    if viewKind == .list && (WishKit.config.statusBadge == .show || wishResponse.state == .pending) {
                         Text(wishResponse.state.description.uppercased())
                             .opacity(0.8)
                             .font(.caption2)
@@ -157,14 +167,33 @@ struct WishView: View {
                     }
                 }
 
-                Text(wishResponse.description)
+                Text(displayedDescription)
                     .foregroundColor(textColor)
                     .font(.footnote)
                     .multilineTextAlignment(.leading)
                     .lineLimit(descriptionLineLimit)
+
+                // Shown in both the list (Instagram-style, under the row's description) and the detail view.
+                if #available(iOS 18.0, *) {
+                    WishTranslateSection(
+                        title: wishResponse.title,
+                        description: wishResponse.description,
+                        translatedTitle: $translatedTitle,
+                        translatedDescription: $translatedDescription,
+                        isShowingTranslation: $isShowingTranslation
+                    )
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+
+    private var displayedTitle: String {
+        isShowingTranslation ? (translatedTitle ?? wishResponse.title) : wishResponse.title
+    }
+
+    private var displayedDescription: String {
+        isShowingTranslation ? (translatedDescription ?? wishResponse.description) : wishResponse.description
     }
 
     func badgeColor(for wishState: WishState) -> Color {
@@ -266,11 +295,11 @@ struct WishView: View {
         case .alreadyCompleted:
             return Text(WishKit.config.localization.youCanNotVoteForACompletedWish)
         case .voteReturnedError(let error):
-            return Text("Something went wrong during your vote. Try again later.\n\n\(error)")
+            return Text("\(WishKit.config.localization.somethingWentWrong)\n\n\(error)")
         case .none:
             return Text(WishKit.config.localization.youCanNotVoteForYourOwnWish)
         default:
-            return Text("Something went wrong during your vote. Try again later.")
+            return Text(WishKit.config.localization.somethingWentWrong)
         }
     }
 
@@ -312,7 +341,13 @@ extension WishView {
 
     private static let arrowUpvoteSystemName = "arrowtriangle.up.fill"
 
-    var upvoteIconImage: Image {
+    private static let chevronUpSystemName = "chevron.up"
+
+    var upvoteIconImage: some View {
+        upvoteIcon.fontWeight(.bold)
+    }
+
+    private var upvoteIcon: Image {
         switch WishKit.config.buttons.voteButton.icon {
         case .systemName(let symbolName):
             let trimmedSymbolName = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -326,16 +361,18 @@ extension WishView {
             return Image(systemName: Self.thumbsUpSystemName)
         case .arrowUpvoteIcon:
             return Image(systemName: Self.arrowUpvoteSystemName)
+        case .chevronUpIcon:
+            return Image(systemName: Self.chevronUpSystemName)
         }
     }
 
     private func fallbackUpvoteImage(reason: String) -> Image {
         printDebug(
             WishView.self,
-            "Falling back to .arrowUpvoteIcon (\(Self.arrowUpvoteSystemName)). Reason: \(reason)"
+            "Falling back to .chevronUpIcon (\(Self.chevronUpSystemName)). Reason: \(reason)"
         )
 
-        return Image(systemName: Self.arrowUpvoteSystemName)
+        return Image(systemName: Self.chevronUpSystemName)
     }
 
     var voteTint: Color {

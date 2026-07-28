@@ -6,6 +6,8 @@
 //  Copyright © 2023 Martin Lasek. All rights reserved.
 //
 
+import Foundation
+
 public struct ConfigurationLocalization {
 
         public var requested: String
@@ -23,6 +25,10 @@ public struct ConfigurationLocalization {
         public var inProgress: String
 
         public var completed: String
+
+        public var open: String
+
+        public var closed: String
 
         public var wishlist: String
 
@@ -100,6 +106,20 @@ public struct ConfigurationLocalization {
 
         public var refreshing: String
 
+        public var somethingWentWrong: String
+
+        public var all: String
+
+        public var notSupported: String
+
+        public var filter: String
+
+        public var activateToSwitchFilter: String
+
+        public var seeTranslation: String
+
+        public var seeOriginal: String
+
         public init(
             requested: String = ConfigurationLocalization.default().requested,
             pending: String = ConfigurationLocalization.default().pending,
@@ -109,6 +129,8 @@ public struct ConfigurationLocalization {
             planned: String = ConfigurationLocalization.default().planned,
             inProgress: String = ConfigurationLocalization.default().inProgress,
             completed: String = ConfigurationLocalization.default().completed,
+            open: String = ConfigurationLocalization.default().open,
+            closed: String = ConfigurationLocalization.default().closed,
             wishlist: String = ConfigurationLocalization.default().wishlist,
             save: String = ConfigurationLocalization.default().save,
             title: String = ConfigurationLocalization.default().title,
@@ -146,7 +168,14 @@ public struct ConfigurationLocalization {
             discardEnteredInformation: String = ConfigurationLocalization.default().discardEnteredInformation,
             addButtonInNavigationBar: String = ConfigurationLocalization.default().addButtonInNavigationBar,
             refresh: String = ConfigurationLocalization.default().refresh,
-            refreshing: String = ConfigurationLocalization.default().refreshing
+            refreshing: String = ConfigurationLocalization.default().refreshing,
+            somethingWentWrong: String = ConfigurationLocalization.default().somethingWentWrong,
+            all: String = ConfigurationLocalization.default().all,
+            notSupported: String = ConfigurationLocalization.default().notSupported,
+            filter: String = ConfigurationLocalization.default().filter,
+            activateToSwitchFilter: String = ConfigurationLocalization.default().activateToSwitchFilter,
+            seeTranslation: String = ConfigurationLocalization.default().seeTranslation,
+            seeOriginal: String = ConfigurationLocalization.default().seeOriginal
         ) {
             self.requested = requested
             self.pending = pending
@@ -156,6 +185,8 @@ public struct ConfigurationLocalization {
             self.planned = planned
             self.inProgress = inProgress
             self.completed = completed
+            self.open = open
+            self.closed = closed
             self.wishlist = wishlist
             self.save = save
             self.title = title
@@ -194,56 +225,78 @@ public struct ConfigurationLocalization {
             self.addButtonInNavigationBar = addButtonInNavigationBar
             self.refresh = refresh
             self.refreshing = refreshing
+            self.somethingWentWrong = somethingWentWrong
+            self.all = all
+            self.notSupported = notSupported
+            self.filter = filter
+            self.activateToSwitchFilter = activateToSwitchFilter
+            self.seeTranslation = seeTranslation
+            self.seeOriginal = seeOriginal
         }
 
+        /// Default values come from the bundled translations (en/de/es/zh-Hans),
+        /// resolved against the host app's language. Consumer overrides always win.
         public static func `default`() -> ConfigurationLocalization {
             ConfigurationLocalization(
-                requested: "Requested",
-                pending: "Pending",
-                approved: "Approved",
-                implemented: "Completed",
-                inReview: "In Review",
-                planned: "Planned",
-                inProgress: "In Progress",
-                completed: "Completed",
-                wishlist: "Feature Requests",
-                save: "Submit",
-                title: "Title",
-                description: "Description",
-                upvote: "Upvote",
-                info: "Info",
-                youCanOnlyVoteOnce: "You can only vote once.",
-                youCanNotVoteForACompletedWish: "You can't vote for a feature that is already completed.",
-                youCanNotVoteForYourOwnWish: "You cannot vote for your own feature request.",
-                poweredBy: "Powered by",
-                successfullyCreated: "Successfully submitted",
-                done: "Done",
-                detail: "Detail View",
-                featureWishlist: "Feature Requests",
-                confirm: "Confirm",
-                cancel: "Cancel",
-                ok: "Ok",
-                titleOfWish: "Title of the feature..",
-                titleDescriptionCannotBeEmpty: "Title/Description cannot be empty.",
-                votes: "Votes",
-                close: "Close",
-                createWish: "New Feature Request",
-                optional: "optional",
-                required: "required",
-                emailRequiredText: "Please enter your email address.",
-                emailFormatWrongText: "Wrong email format.",
-                comments: "Comments",
-                writeAComment: "Write a comment..",
-                submitComment: "Send",
-                admin: "Admin",
-                user: "User",
-                noFeatureRequests: "No feature requests, yet ✨",
-                emailOptional: "Email (optional)",
-                emailRequired: "Email (required)",
-                discardEnteredInformation: "Discard changes?",
-                addButtonInNavigationBar: "Create",
-                refresh: "Refresh",
-                refreshing: "Refreshing.."
+                requested: localized("requested"),
+                pending: localized("pending"),
+                approved: localized("approved"),
+                implemented: localized("implemented"),
+                inReview: localized("inReview"),
+                planned: localized("planned"),
+                inProgress: localized("inProgress"),
+                completed: localized("completed"),
+                open: localized("open"),
+                closed: localized("closed"),
+                wishlist: localized("wishlist"),
+                save: localized("save"),
+                title: localized("title"),
+                description: localized("description"),
+                upvote: localized("upvote"),
+                info: localized("info"),
+                youCanOnlyVoteOnce: localized("youCanOnlyVoteOnce"),
+                youCanNotVoteForACompletedWish: localized("youCanNotVoteForACompletedWish"),
+                youCanNotVoteForYourOwnWish: localized("youCanNotVoteForYourOwnWish"),
+                poweredBy: localized("poweredBy"),
+                successfullyCreated: localized("successfullyCreated"),
+                done: localized("done"),
+                detail: localized("detail"),
+                featureWishlist: localized("featureWishlist"),
+                confirm: localized("confirm"),
+                cancel: localized("cancel"),
+                ok: localized("ok"),
+                titleOfWish: localized("titleOfWish"),
+                titleDescriptionCannotBeEmpty: localized("titleDescriptionCannotBeEmpty"),
+                votes: localized("votes"),
+                close: localized("close"),
+                createWish: localized("createWish"),
+                optional: localized("optional"),
+                required: localized("required"),
+                emailRequiredText: localized("emailRequiredText"),
+                emailFormatWrongText: localized("emailFormatWrongText"),
+                comments: localized("comments"),
+                writeAComment: localized("writeAComment"),
+                submitComment: localized("submitComment"),
+                admin: localized("admin"),
+                user: localized("user"),
+                noFeatureRequests: localized("noFeatureRequests"),
+                emailOptional: localized("emailOptional"),
+                emailRequired: localized("emailRequired"),
+                discardEnteredInformation: localized("discardEnteredInformation"),
+                addButtonInNavigationBar: localized("addButtonInNavigationBar"),
+                refresh: localized("refresh"),
+                refreshing: localized("refreshing"),
+                somethingWentWrong: localized("somethingWentWrong"),
+                all: localized("all"),
+                notSupported: localized("notSupported"),
+                filter: localized("filter"),
+                activateToSwitchFilter: localized("activateToSwitchFilter"),
+                seeTranslation: localized("seeTranslation"),
+                seeOriginal: localized("seeOriginal")
             )
+        }
+
+        private static func localized(_ key: String) -> String {
+            NSLocalizedString(key, bundle: .module, comment: "")
         }
     }

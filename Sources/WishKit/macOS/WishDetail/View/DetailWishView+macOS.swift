@@ -18,6 +18,12 @@ struct DetailWishView: View {
     @StateObject
     private var viewModel: DetailWishViewModel
 
+    @State
+    private var showVoteAlert = false
+
+    @State
+    private var voteAlertReason: AlertReason = .none
+
     private let wishResponse: WishResponse
 
     private let voteActionCompletion: () -> Void
@@ -40,9 +46,17 @@ struct DetailWishView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                WishView(wishResponse: wishResponse, viewKind: .detail, voteActionCompletion: voteActionCompletion)
-                    .padding()
-                    .frame(maxWidth: 700)
+                WishView(
+                    wishResponse: wishResponse,
+                    viewKind: .detail,
+                    voteActionCompletion: voteActionCompletion,
+                    onVoteAlert: { reason in
+                        voteAlertReason = reason
+                        showVoteAlert = true
+                    }
+                )
+                .padding()
+                .frame(maxWidth: 700)
 
                 if WishKit.config.commentSection == .show, $viewModel.commentList.isEmpty == false {
                     CommentListView(commentList: $viewModel.commentList)
@@ -52,6 +66,9 @@ struct DetailWishView: View {
             .frame(maxWidth: .infinity)
         }
         .background(backgroundColor)
+        .alert(isPresented: $showVoteAlert) {
+            WishView.makeVoteAlert(for: voteAlertReason)
+        }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 8) {
                 if WishKit.config.commentSection == .show {

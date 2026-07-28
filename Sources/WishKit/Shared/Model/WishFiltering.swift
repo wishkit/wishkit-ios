@@ -23,6 +23,11 @@ struct WishFiltering {
         switch selectedState {
         case .all:
             return lists.all
+        case .open:
+            return (lists.pending + lists.approved)
+                .sorted { $0.votingUsers.count > $1.votingUsers.count }
+        case .closed:
+            return lists.completed
         case .library(let state):
             switch state {
             case .pending:
