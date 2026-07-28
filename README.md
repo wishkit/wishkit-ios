@@ -141,11 +141,28 @@ WishKit.updateUser(customID: "8AHD1IL03ACIP")
 ---
 
 # Localization
-#### Localize any text used by WishKit by overriding default values.
+#### WishKit ships with built-in translations and follows your app's language.
+
+### **Supported languages**
+
+| Language | Code |
+|---|---|
+| English | `en` |
+| German | `de` |
+| Spanish | `es` |
+| French | `fr` |
+| Japanese | `ja` |
+| Korean | `ko` |
+| Chinese (Simplified) | `zh-Hans` |
+| Chinese (Traditional) | `zh-Hant` |
+
+WishKit uses the language your app runs in — the app's language, not the device language, so your app needs to support a language for WishKit to display it. If the app's language isn't one of the supported ones, WishKit falls back to English. Translations use informal address where the language distinguishes (German "Du", Spanish "tú").
+
+#### You can override any text by assigning your own values.
 
 ```swift
-// Override the segmented control text to the german word for "Requested".
-WishKit.config.localization.requested = "Angefragt"
+// Override the segmented control text for "Open".
+WishKit.config.localization.open = "Offen"
 
 // You can also assign NSLocalizedString.
 WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment: "")
