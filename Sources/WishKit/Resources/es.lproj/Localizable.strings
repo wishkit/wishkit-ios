@@ -52,3 +52,5 @@
 "notSupported" = "No compatible";
 "filter" = "Filtro";
 "activateToSwitchFilter" = "Actívalo para cambiar el filtro.";
+"seeTranslation" = "Ver traducción";
+"seeOriginal" = "Ver original";

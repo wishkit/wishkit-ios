@@ -51,3 +51,5 @@
 "notSupported" = "不支持";
 "filter" = "筛选";
 "activateToSwitchFilter" = "激活以切换筛选条件。";
+"seeTranslation" = "查看翻译";
+"seeOriginal" = "查看原文";

@@ -52,3 +52,5 @@
 "notSupported" = "지원되지 않음";
 "filter" = "필터";
 "activateToSwitchFilter" = "활성화하면 필터가 전환돼요.";
+"seeTranslation" = "번역 보기";
+"seeOriginal" = "원문 보기";

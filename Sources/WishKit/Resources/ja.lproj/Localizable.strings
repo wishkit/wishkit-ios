@@ -52,3 +52,5 @@
 "notSupported" = "非対応";
 "filter" = "フィルタ";
 "activateToSwitchFilter" = "選択するとフィルタを切り替えます。";
+"seeTranslation" = "翻訳を表示";
+"seeOriginal" = "原文を表示";

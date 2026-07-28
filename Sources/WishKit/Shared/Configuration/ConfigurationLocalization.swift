@@ -116,6 +116,10 @@ public struct ConfigurationLocalization {
 
         public var activateToSwitchFilter: String
 
+        public var seeTranslation: String
+
+        public var seeOriginal: String
+
         public init(
             requested: String = ConfigurationLocalization.default().requested,
             pending: String = ConfigurationLocalization.default().pending,
@@ -169,7 +173,9 @@ public struct ConfigurationLocalization {
             all: String = ConfigurationLocalization.default().all,
             notSupported: String = ConfigurationLocalization.default().notSupported,
             filter: String = ConfigurationLocalization.default().filter,
-            activateToSwitchFilter: String = ConfigurationLocalization.default().activateToSwitchFilter
+            activateToSwitchFilter: String = ConfigurationLocalization.default().activateToSwitchFilter,
+            seeTranslation: String = ConfigurationLocalization.default().seeTranslation,
+            seeOriginal: String = ConfigurationLocalization.default().seeOriginal
         ) {
             self.requested = requested
             self.pending = pending
@@ -224,6 +230,8 @@ public struct ConfigurationLocalization {
             self.notSupported = notSupported
             self.filter = filter
             self.activateToSwitchFilter = activateToSwitchFilter
+            self.seeTranslation = seeTranslation
+            self.seeOriginal = seeOriginal
         }
 
         /// Default values come from the bundled translations (en/de/es/zh-Hans),
@@ -282,7 +290,9 @@ public struct ConfigurationLocalization {
                 all: localized("all"),
                 notSupported: localized("notSupported"),
                 filter: localized("filter"),
-                activateToSwitchFilter: localized("activateToSwitchFilter")
+                activateToSwitchFilter: localized("activateToSwitchFilter"),
+                seeTranslation: localized("seeTranslation"),
+                seeOriginal: localized("seeOriginal")
             )
         }
 

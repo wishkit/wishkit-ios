@@ -168,6 +168,22 @@ WishKit.config.localization.open = "Offen"
 WishKit.config.localization.cancel = NSLocalizedString("general.cancel", comment: "")
 ```
 
+#### 🌐 On-device translation of feedback (iOS 18+)
+
+When a feature request is written in a different language than your app runs in, WishKit shows a small "See translation" button below its description — both in the list and in the detail view. Tapping it translates the title and description on-device using Apple's Translation framework — nothing leaves the device — and toggles to "See original".
+
+```swift
+// Default is .automatic — the button only appears when the
+// detected language of a request differs from the app's language.
+WishKit.config.translateButton = .automatic
+
+// Always show the button (covers texts too short to detect reliably).
+WishKit.config.translateButton = .always
+
+// Turn the feature off.
+WishKit.config.translateButton = .hide
+```
+
 # Privacy
 
 WishKit ships a privacy manifest (`PrivacyInfo.xcprivacy`) that Xcode automatically includes in your app's aggregated privacy report. It declares what WishKit collects out of the box:
@@ -200,6 +216,7 @@ If you share additional user information via `updateUser` — email, name, or yo
 | State filter (`buttons.segmentedControl`) | Yes | Yes | Yes | Yes | Yes |
 | Done button (`buttons.doneButton`) | Yes | Yes | Yes | — | — |
 | Add button (`buttons.addButton`) | Yes | Yes | Yes | — | — |
+| Translate feedback (`translateButton`) | iOS 18+ | — | — | — | — |
 
 watchOS and tvOS are intentionally scoped to browse + vote. Config keys for unsupported features are silently ignored on those platforms. On tvOS, users dismiss the feedback view via the Siri Remote's Menu button (the standard system pattern), so `buttons.doneButton` is not exposed.
 

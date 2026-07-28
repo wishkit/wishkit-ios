@@ -51,3 +51,5 @@
 "notSupported" = "Not Supported";
 "filter" = "Filter";
 "activateToSwitchFilter" = "Activate to switch filter.";
+"seeTranslation" = "See translation";
+"seeOriginal" = "See original";
