@@ -148,13 +148,22 @@ WishKit.updateUser(customID: "8AHD1IL03ACIP")
 | Language | Code |
 |---|---|
 | English | `en` |
-| German | `de` |
-| Spanish | `es` |
-| French | `fr` |
-| Japanese | `ja` |
-| Korean | `ko` |
 | Chinese (Simplified) | `zh-Hans` |
 | Chinese (Traditional) | `zh-Hant` |
+| Danish | `da` |
+| Dutch | `nl` |
+| Finnish | `fi` |
+| French | `fr` |
+| German | `de` |
+| Italian | `it` |
+| Japanese | `ja` |
+| Korean | `ko` |
+| Norwegian (Bokmål) | `nb` |
+| Polish | `pl` |
+| Portuguese (Brazil) | `pt-BR` |
+| Spanish | `es` |
+| Swedish | `sv` |
+| Turkish | `tr` |
 
 WishKit uses the language your app runs in — the app's language, not the device language, so your app needs to support a language for WishKit to display it. If the app's language isn't one of the supported ones, WishKit falls back to English. Translations use informal address where the language distinguishes (German "Du", Spanish "tú").
 
