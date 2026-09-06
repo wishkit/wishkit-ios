@@ -31,6 +31,11 @@ final class ChatViewModel: ObservableObject {
     @Published var hasLoaded = false
     @Published var isSending = false
 
+    /// True once any fetch succeeded. While false after the first fetch,
+    /// the view shows an error state instead of an inviting empty chat;
+    /// polling keeps retrying and recovers on its own.
+    @Published var hasLoadedSuccessfully = false
+
     /// Server-controlled kill switch; the composer hides when false.
     @Published var chatAvailable = true
 
@@ -102,6 +107,7 @@ final class ChatViewModel: ObservableObject {
         switch result {
         case .success(let response):
             chatAvailable = response.chatAvailable
+            hasLoadedSuccessfully = true
             appendNewMessages(response.messages)
         case .failure:
             break // Silent; the next poll retries.

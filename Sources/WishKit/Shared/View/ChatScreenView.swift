@@ -50,18 +50,25 @@ struct ChatScreenView: View {
                     }
                 }
                 .overlay {
-                    if viewModel.hasLoaded && viewModel.messages.isEmpty {
+                    if !viewModel.hasLoaded {
+                        ProgressView()
+                    } else if !viewModel.hasLoadedSuccessfully {
+                        // Backend unreachable or without chat support; polling
+                        // keeps retrying and this clears itself on success.
+                        Text(WishKit.config.localization.somethingWentWrong)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(30)
+                    } else if viewModel.messages.isEmpty {
                         Text(WishKit.config.localization.chatEmptyState)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(30)
-                    } else if !viewModel.hasLoaded {
-                        ProgressView()
                     }
                 }
             }
 
-            if viewModel.chatAvailable {
+            if viewModel.chatAvailable && viewModel.hasLoadedSuccessfully {
                 inputBar
             }
         }

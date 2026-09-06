@@ -103,9 +103,14 @@ struct FeedbackChatButton: View {
     private func refreshUnreadStatus() async {
         let result = await ChatService.fetchStatus()
 
-        if case .success(let status) = result {
+        switch result {
+        case .success(let status):
             isChatAvailable = status.chatAvailable
             hasUnread = status.chatAvailable && status.hasUnread
+        case .failure:
+            // Fail closed: no reachable chat backend, no chat button.
+            // Re-checked next time the feedback board appears.
+            isChatAvailable = false
         }
     }
 }
