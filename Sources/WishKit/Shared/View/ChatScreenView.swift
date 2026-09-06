@@ -28,11 +28,12 @@ struct ChatScreenView: View {
         VStack(spacing: 0) {
             ScrollViewReader { scrollProxy in
                 ScrollView {
-                    LazyVStack(spacing: 6) {
-                        ForEach(viewModel.messages) { message in
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(viewModel.messages.enumerated()), id: \.element.id) { messageIndex, message in
                             ChatBubbleView(message: message, retryAction: { failedMessage in
                                 viewModel.retry(failedMessage)
                             })
+                            .padding(.top, topSpacing(for: messageIndex))
                             .id(message.id)
                         }
                     }
@@ -105,6 +106,18 @@ struct ChatScreenView: View {
     private func sendMessage() {
         viewModel.send(text: messageText)
         messageText = ""
+    }
+
+    /// Same-sender bubbles stay tight; a sender change gets double the air.
+    private func topSpacing(for messageIndex: Int) -> CGFloat {
+        guard messageIndex > 0 else {
+            return 0
+        }
+
+        let previousMessage = viewModel.messages[messageIndex - 1]
+        let currentMessage = viewModel.messages[messageIndex]
+
+        return previousMessage.sender == currentMessage.sender ? 6 : 12
     }
 
     private var backgroundColor: Color {
