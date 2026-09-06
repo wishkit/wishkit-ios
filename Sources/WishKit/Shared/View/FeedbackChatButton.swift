@@ -19,7 +19,17 @@ struct FeedbackChatButton: View {
     @State
     private var hasUnread = false
 
+    /// Server-controlled kill switch; the button removes itself when false.
+    @State
+    private var isChatAvailable = true
+
     var body: some View {
+        if isChatAvailable {
+            chatButton
+        }
+    }
+
+    private var chatButton: some View {
         Button(action: openChat) {
             Image(systemName: "bubble.left.and.bubble.right.fill")
                 .font(.system(size: 21, weight: .semibold))
@@ -94,6 +104,7 @@ struct FeedbackChatButton: View {
         let result = await ChatService.fetchStatus()
 
         if case .success(let status) = result {
+            isChatAvailable = status.chatAvailable
             hasUnread = status.chatAvailable && status.hasUnread
         }
     }

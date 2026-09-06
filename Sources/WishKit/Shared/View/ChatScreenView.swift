@@ -61,9 +61,16 @@ struct ChatScreenView: View {
                 }
             }
 
-            inputBar
+            if viewModel.chatAvailable {
+                inputBar
+            }
         }
         .background(backgroundColor.ignoresSafeArea())
+        .onChange(of: messageText) { updatedText in
+            if updatedText.count > ChatViewModel.maxMessageLength {
+                messageText = String(updatedText.prefix(ChatViewModel.maxMessageLength))
+            }
+        }
         .onAppear {
             viewModel.startPolling()
         }

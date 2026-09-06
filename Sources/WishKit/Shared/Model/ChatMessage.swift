@@ -11,6 +11,13 @@ import Foundation
 enum ChatSender: String, Codable {
     case user
     case admin
+
+    /// Unknown future sender kinds must never break decoding for shipped
+    /// versions; anything that isn't the user renders as the other side.
+    init(from decoder: Decoder) throws {
+        let rawValue = try decoder.singleValueContainer().decode(String.self)
+        self = ChatSender(rawValue: rawValue) ?? .admin
+    }
 }
 
 struct ChatMessage: Codable, Identifiable, Equatable {

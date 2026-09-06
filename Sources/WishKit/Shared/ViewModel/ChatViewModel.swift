@@ -25,9 +25,14 @@ struct ChatDisplayMessage: Identifiable, Equatable {
 @MainActor
 final class ChatViewModel: ObservableObject {
 
+    static let maxMessageLength = 2000
+
     @Published var messages: [ChatDisplayMessage] = []
     @Published var hasLoaded = false
     @Published var isSending = false
+
+    /// Server-controlled kill switch; the composer hides when false.
+    @Published var chatAvailable = true
 
     private var seenServerMessageIds = Set<UUID>()
 
@@ -61,7 +66,7 @@ final class ChatViewModel: ObservableObject {
     }
 
     func send(text: String) {
-        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedText = String(text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(Self.maxMessageLength))
 
         guard !trimmedText.isEmpty, !isSending else {
             return
@@ -96,6 +101,7 @@ final class ChatViewModel: ObservableObject {
 
         switch result {
         case .success(let response):
+            chatAvailable = response.chatAvailable
             appendNewMessages(response.messages)
         case .failure:
             break // Silent; the next poll retries.
