@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "選択するとフィルタを切り替えます。";
 "seeTranslation" = "翻訳を表示";
 "seeOriginal" = "原文を表示";
+"chat" = "チャットで相談";
+"writeAMessage" = "メッセージを入力…";
+"send" = "送信";
+"chatEmptyState" = "質問やフィードバックはありますか？メッセージをお送りください。";
+"failedToSendTapToRetry" = "送信に失敗しました。タップして再試行。";

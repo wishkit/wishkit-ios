@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "활성화하면 필터가 전환돼요.";
 "seeTranslation" = "번역 보기";
 "seeOriginal" = "원문 보기";
+"chat" = "채팅하기";
+"writeAMessage" = "메시지를 입력하세요…";
+"send" = "보내기";
+"chatEmptyState" = "질문이나 피드백이 있나요? 메시지를 보내주세요.";
+"failedToSendTapToRetry" = "전송에 실패했습니다. 탭하여 다시 시도하세요.";

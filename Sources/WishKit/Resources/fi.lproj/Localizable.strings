@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Aktivoi vaihtaaksesi suodatinta.";
 "seeTranslation" = "Näytä käännös";
 "seeOriginal" = "Näytä alkuperäinen";
+"chat" = "Juttele kanssamme";
+"writeAMessage" = "Kirjoita viesti…";
+"send" = "Lähetä";
+"chatEmptyState" = "Kysymyksiä tai palautetta? Lähetä meille viesti.";
+"failedToSendTapToRetry" = "Lähetys epäonnistui. Yritä uudelleen napauttamalla.";

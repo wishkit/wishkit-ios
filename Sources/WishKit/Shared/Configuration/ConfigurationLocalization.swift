@@ -120,6 +120,16 @@ public struct ConfigurationLocalization {
 
         public var seeOriginal: String
 
+        public var chat: String
+
+        public var writeAMessage: String
+
+        public var send: String
+
+        public var chatEmptyState: String
+
+        public var failedToSendTapToRetry: String
+
         public init(
             requested: String = ConfigurationLocalization.default().requested,
             pending: String = ConfigurationLocalization.default().pending,
@@ -175,7 +185,12 @@ public struct ConfigurationLocalization {
             filter: String = ConfigurationLocalization.default().filter,
             activateToSwitchFilter: String = ConfigurationLocalization.default().activateToSwitchFilter,
             seeTranslation: String = ConfigurationLocalization.default().seeTranslation,
-            seeOriginal: String = ConfigurationLocalization.default().seeOriginal
+            seeOriginal: String = ConfigurationLocalization.default().seeOriginal,
+            chat: String = ConfigurationLocalization.default().chat,
+            writeAMessage: String = ConfigurationLocalization.default().writeAMessage,
+            send: String = ConfigurationLocalization.default().send,
+            chatEmptyState: String = ConfigurationLocalization.default().chatEmptyState,
+            failedToSendTapToRetry: String = ConfigurationLocalization.default().failedToSendTapToRetry
         ) {
             self.requested = requested
             self.pending = pending
@@ -232,6 +247,11 @@ public struct ConfigurationLocalization {
             self.activateToSwitchFilter = activateToSwitchFilter
             self.seeTranslation = seeTranslation
             self.seeOriginal = seeOriginal
+            self.chat = chat
+            self.writeAMessage = writeAMessage
+            self.send = send
+            self.chatEmptyState = chatEmptyState
+            self.failedToSendTapToRetry = failedToSendTapToRetry
         }
 
         /// Default values come from the bundled translations (en/de/es/zh-Hans),
@@ -292,7 +312,12 @@ public struct ConfigurationLocalization {
                 filter: localized("filter"),
                 activateToSwitchFilter: localized("activateToSwitchFilter"),
                 seeTranslation: localized("seeTranslation"),
-                seeOriginal: localized("seeOriginal")
+                seeOriginal: localized("seeOriginal"),
+                chat: localized("chat"),
+                writeAMessage: localized("writeAMessage"),
+                send: localized("send"),
+                chatEmptyState: localized("chatEmptyState"),
+                failedToSendTapToRetry: localized("failedToSendTapToRetry")
             )
         }
 

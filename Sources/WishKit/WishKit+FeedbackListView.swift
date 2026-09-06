@@ -15,6 +15,18 @@ extension WishKit {
         public init() {}
 
         public var body: some View {
+            feedbackView
+            #if os(iOS) || os(macOS) || os(visionOS)
+                .overlay(alignment: .bottomTrailing) {
+                    if WishKit.config.showChatButtonInFeedbackView {
+                        FeedbackChatButton()
+                    }
+                }
+            #endif
+        }
+
+        @ViewBuilder
+        private var feedbackView: some View {
             #if os(iOS)
                 WishlistView(wishModel: WishModel())
             #elseif os(macOS)

@@ -53,3 +53,8 @@
 "activateToSwitchFilter" = "Activate to switch filter.";
 "seeTranslation" = "See translation";
 "seeOriginal" = "See original";
+"chat" = "Chat with us";
+"writeAMessage" = "Write a message…";
+"send" = "Send";
+"chatEmptyState" = "Questions or feedback? Send us a message.";
+"failedToSendTapToRetry" = "Failed to send. Tap to retry.";

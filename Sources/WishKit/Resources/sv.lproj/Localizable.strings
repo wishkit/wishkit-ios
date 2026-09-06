@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Aktivera för att byta filter.";
 "seeTranslation" = "Visa översättning";
 "seeOriginal" = "Visa original";
+"chat" = "Chatta med oss";
+"writeAMessage" = "Skriv ett meddelande…";
+"send" = "Skicka";
+"chatEmptyState" = "Frågor eller feedback? Skicka ett meddelande till oss.";
+"failedToSendTapToRetry" = "Kunde inte skickas. Tryck för att försöka igen.";

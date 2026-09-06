@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Activeer om het filter te wisselen.";
 "seeTranslation" = "Vertaling bekijken";
 "seeOriginal" = "Origineel bekijken";
+"chat" = "Chat met ons";
+"writeAMessage" = "Schrijf een bericht…";
+"send" = "Versturen";
+"chatEmptyState" = "Vragen of feedback? Stuur ons een bericht.";
+"failedToSendTapToRetry" = "Versturen mislukt. Tik om opnieuw te proberen.";

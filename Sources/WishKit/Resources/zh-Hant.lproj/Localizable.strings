@@ -53,3 +53,8 @@
 "activateToSwitchFilter" = "啟用以切換篩選條件。";
 "seeTranslation" = "查看翻譯";
 "seeOriginal" = "查看原文";
+"chat" = "與我們聊聊";
+"writeAMessage" = "輸入訊息…";
+"send" = "傳送";
+"chatEmptyState" = "有問題或意見回饋？傳訊息給我們。";
+"failedToSendTapToRetry" = "傳送失敗。點按重試。";

@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Aktywuj, aby zmienić filtr.";
 "seeTranslation" = "Zobacz tłumaczenie";
 "seeOriginal" = "Zobacz oryginał";
+"chat" = "Napisz do nas";
+"writeAMessage" = "Napisz wiadomość…";
+"send" = "Wyślij";
+"chatEmptyState" = "Pytania lub opinie? Napisz do nas wiadomość.";
+"failedToSendTapToRetry" = "Nie udało się wysłać. Dotknij, aby ponowić.";

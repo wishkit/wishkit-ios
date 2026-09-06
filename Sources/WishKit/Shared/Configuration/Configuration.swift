@@ -47,6 +47,10 @@ public struct Configuration {
     /// Off by default so consumer apps stay quiet in production.
     public var showDebugLogs: Bool = false
 
+    /// Shows a floating chat button in the feedback board that opens the
+    /// chat between you and your users. On by default.
+    public var showChatButtonInFeedbackView: Bool = true
+
     init(
         statusBadgeDisplay: ConfigurationDisplay = .hide,
         localization: ConfigurationLocalization = .default()

@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Aktivér for at skifte filter.";
 "seeTranslation" = "Se oversættelse";
 "seeOriginal" = "Se original";
+"chat" = "Skriv til os";
+"writeAMessage" = "Skriv en besked…";
+"send" = "Send";
+"chatEmptyState" = "Spørgsmål eller feedback? Send os en besked.";
+"failedToSendTapToRetry" = "Kunne ikke sendes. Tryk for at prøve igen.";

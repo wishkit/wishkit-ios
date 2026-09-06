@@ -53,3 +53,8 @@
 "activateToSwitchFilter" = "激活以切换筛选条件。";
 "seeTranslation" = "查看翻译";
 "seeOriginal" = "查看原文";
+"chat" = "和我们聊聊";
+"writeAMessage" = "输入消息…";
+"send" = "发送";
+"chatEmptyState" = "有问题或反馈？给我们发消息吧。";
+"failedToSendTapToRetry" = "发送失败。点按重试。";

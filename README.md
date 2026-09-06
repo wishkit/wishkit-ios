@@ -19,6 +19,7 @@ WishKit allows your users to request and vote on features in your app! <br/>
 
 ## Index
 - [Setup (SwiftUI)](#swiftui)
+- [Chat](#chat)
 - [Theming](#theming)
 - [User Segmentation](#user-segmentation)
 - [Control UI Elements](#ui-elements)
@@ -67,6 +68,29 @@ struct ContentView: View {
 ```
 
 ###### NOTE: On iOS and tvOS, `FeedbackListView` expects to live inside a `NavigationStack`. If it's not already inside one, add `.withNavigation()` to wrap it: `WishKit.FeedbackListView().withNavigation()`. On macOS, visionOS, and watchOS, `FeedbackListView` provides its own navigation container — no wrapping needed.
+
+---
+
+# Chat
+#### Talk to your users directly, right inside your app. 💬
+
+Your users get a private channel to reach you before they vent in an App Store review. You read and reply from your dashboard on <a href="https://www.wishkit.io" target="_blank">wishkit.io</a>.
+
+The feedback board shows a floating chat button out of the box, so there is nothing to integrate. If you want more control:
+
+```swift
+// Place the chat anywhere in your app with one line.
+WishKit.ChatView()
+
+// Hide the floating chat button in the feedback board.
+WishKit.config.showChatButtonInFeedbackView = false
+
+// Check for unread replies to badge your own chat entry point.
+let status = await WishKit.chatStatus()
+if status.hasUnread {
+    // show a dot on your chat button
+}
+```
 
 ---
 

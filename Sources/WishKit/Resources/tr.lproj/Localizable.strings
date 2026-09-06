@@ -54,3 +54,8 @@
 "activateToSwitchFilter" = "Filtreyi değiştirmek için etkinleştir.";
 "seeTranslation" = "Çeviriyi gör";
 "seeOriginal" = "Orijinali gör";
+"chat" = "Bize yazın";
+"writeAMessage" = "Bir mesaj yazın…";
+"send" = "Gönder";
+"chatEmptyState" = "Soru veya geri bildiriminiz mi var? Bize mesaj gönderin.";
+"failedToSendTapToRetry" = "Gönderilemedi. Yeniden denemek için dokunun.";
