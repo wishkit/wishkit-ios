@@ -12,6 +12,9 @@
 	</a>
 </p>
 <p align="center">
+	<a href="https://www.wishkit.io/docs/ios?ref=github">Documentation</a> · <a href="https://www.wishkit.io/blog/swiftui-feedback-board-tutorial?ref=github">SwiftUI tutorial</a> · <a href="https://www.wishkit.io/pricing?ref=github">Pricing</a>
+</p>
+<p align="center">
 WishKit allows your users to request and vote on features in your app! <br/>
 </p>
 
@@ -35,7 +38,7 @@ https://github.com/wishkit/wishkit-ios.git
 ```
 
 ## 2. Configure WishKit with your API Key in the first view.
-###### You can find your API key in your admin dashboard on <a href="https://www.wishkit.io" target="_blank">wishkit.io</a>.
+###### You can find your API key in your admin dashboard on <a href="https://www.wishkit.io" target="_blank">wishkit.io</a>. The full reference lives at <a href="https://www.wishkit.io/docs/ios?ref=github" target="_blank">wishkit.io/docs/ios</a>.
 ```swift
 import SwiftUI
 import WishKit

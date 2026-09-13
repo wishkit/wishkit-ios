@@ -11,6 +11,9 @@ import SwiftUI
 
 struct WishlistSkeletonView: View {
 
+    @Environment(\.colorScheme)
+    private var colorScheme
+
     private var buttonCornerRadius: CGFloat {
         if #available(iOS 26.0, visionOS 26.0, macOS 26.0, *) {
             return 12
@@ -37,6 +40,9 @@ struct WishlistSkeletonView: View {
             }
             .padding(.vertical, 4)
             .fullWidthListSeparator()
+            #if os(iOS)
+            .listRowBackground(WishKit.theme.secondaryColor?.resolved(for: colorScheme))
+            #endif
         }
         .redacted(reason: .placeholder)
         .disabled(true)

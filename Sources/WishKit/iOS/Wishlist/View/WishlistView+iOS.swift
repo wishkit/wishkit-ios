@@ -44,6 +44,7 @@ struct WishlistView: View {
 
                 if wishModel.isLoading && !wishModel.hasFetched {
                     WishlistSkeletonView()
+                        .scrollContentBackground(WishKit.theme.tertiaryColor == nil ? .automatic : .hidden)
                 } else if !currentList.isEmpty {
                     List(currentList) { wish in
                         NavigationLink(destination: {
@@ -52,7 +53,9 @@ struct WishlistView: View {
                             WishView(wishResponse: wish, viewKind: .list, voteActionCompletion: { wishModel.fetchList() })
                         })
                         .fullWidthListSeparator()
+                        .listRowBackground(WishKit.theme.secondaryColor?.resolved(for: colorScheme))
                     }
+                    .scrollContentBackground(WishKit.theme.tertiaryColor == nil ? .automatic : .hidden)
                     .refreshable { await wishModel.fetchListAsync() }
                 }
             }
