@@ -174,7 +174,7 @@ struct WishView: View {
                     .lineLimit(descriptionLineLimit)
 
                 // Shown in both the list (Instagram-style, under the row's description) and the detail view.
-                if #available(iOS 18.0, *) {
+                if #available(iOS 18.0, macCatalyst 26.0, *) {
                     WishTranslateSection(
                         title: wishResponse.title,
                         description: wishResponse.description,
