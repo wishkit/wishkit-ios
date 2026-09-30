@@ -12,7 +12,7 @@ import Translation
 
 /// A small "See translation" text button (Instagram-style) that translates a
 /// wish's title and description on-device and toggles between translation and original.
-@available(iOS 18.0, *)
+@available(iOS 18.0, macCatalyst 26.0, *)
 struct WishTranslateSection: View {
 
     private let title: String
